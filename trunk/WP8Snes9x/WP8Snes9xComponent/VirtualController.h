@@ -26,6 +26,7 @@ namespace Emulator
 		bool RPressed;
 	};
 
+
 	class VirtualController
 	{
 	public:
@@ -53,9 +54,11 @@ namespace Emulator
 
 		int pressCount;
 		int errCount;
+		Platform::Collections::Map<unsigned int, Platform::String^> ^pointerDescriptions;
 
 	private:
-		Platform::Collections::Map<unsigned int, Windows::UI::Input::PointerPoint ^> ^pointers;
+		Platform::Collections::Map<unsigned int, PointerPoint^> ^pointers;
+		
 		CRITICAL_SECTION cs;
 		ControllerState state;
 		bool virtualControllerOnTop;
