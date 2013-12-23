@@ -1,0 +1,6 @@
+<MarketplaceDetails>
+  <SmallAppTile>FlipCycleTileMedium.png</SmallAppTile>
+  <ScreenShots>wvga_main.png;wvga_import.png;wvga_som_sleep.png;wvga_som_title.png;;;;;</ScreenShots>
+  <ScreenShotsWXGA>wxga_main.png;wxga_import.png;wxga_som_title.png;wxga_som_sleep.png;;;;;</ScreenShotsWXGA>
+  <ScreenShots720P>720p_main.png;720p_import.png;720p_som_title.png;720p_som_sleep.png;;;;;</ScreenShots720P>
+</MarketplaceDetails>

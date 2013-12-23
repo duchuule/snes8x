@@ -1,0 +1,25 @@
+﻿<Application
+    x:Class="PhoneDirect3DXamlAppInterop.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:local="clr-namespace:PhoneDirect3DXamlAppInterop;assembly=Snes8x"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone">
+    
+    <!--Application Resources-->
+    <Application.Resources>
+        <local:LocalizedStrings x:Key="LocalizedStrings"/>
+        <local:IsoImageConverter x:Key="IsoImageConverter"/>
+        <local:LastPlayedConverter x:Key="LastPlayedConverter"/>
+        <local:SavestateConverter x:Key="SavestateConverter"/>
+        <local:LastPlayedShortConverter x:Key="LastPlayedShortConverter"/>
+    </Application.Resources>
+
+    <Application.ApplicationLifetimeObjects>
+        <!--Required object that handles lifetime events for the application-->
+        <shell:PhoneApplicationService
+            Launching="Application_Launching" Closing="Application_Closing"
+            Activated="Application_Activated" Deactivated="Application_Deactivated"/>
+    </Application.ApplicationLifetimeObjects>
+
+</Application>

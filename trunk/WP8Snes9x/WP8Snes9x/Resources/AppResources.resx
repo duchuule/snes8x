@@ -1,0 +1,639 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="aboutText" xml:space="preserve">
+    <value>about</value>
+  </data>
+  <data name="AlreadyDownloadingText" xml:space="preserve">
+    <value>Item is already being downloaded.</value>
+  </data>
+  <data name="ApplicationTitle" xml:space="preserve">
+    <value>Snes8x</value>
+  </data>
+  <data name="AudioSettingsPageTitle" xml:space="preserve">
+    <value>sound</value>
+  </data>
+  <data name="DeleteMenuItemText" xml:space="preserve">
+    <value>delete</value>
+  </data>
+  <data name="DownloadCompleteText" xml:space="preserve">
+    <value>Completed downloading file '{0}'</value>
+  </data>
+  <data name="DownloadErrorText" xml:space="preserve">
+    <value>Error while downloading file '{0}' from SkyDrive: {1}</value>
+  </data>
+  <data name="DownloadingProgressText" xml:space="preserve">
+    <value>Downloading ROM '{0}'</value>
+  </data>
+  <data name="EmulatorBackIcon" xml:space="preserve">
+    <value>hide bar</value>
+  </data>
+  <data name="EnableSoundSetting" xml:space="preserve">
+    <value>Enable Sound</value>
+  </data>
+  <data name="ErrorCaption" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ImportButtonText" xml:space="preserve">
+    <value>import</value>
+  </data>
+  <data name="ImportFromSkyDriveButtonText" xml:space="preserve">
+    <value>import ROMs</value>
+  </data>
+  <data name="ImportInstructionsText" xml:space="preserve">
+    <value>Before you can play, it's necessary to upload ROMs to your SkyDrive folder. Afterwards click on "Sign in" to sign into SkyDrive. After signing in, click on "import ROMs" in order to import ROMs to your phone. </value>
+  </data>
+  <data name="ImportTitle" xml:space="preserve">
+    <value>import&amp;export</value>
+  </data>
+  <data name="InputSettingsPageTitle" xml:space="preserve">
+    <value>input</value>
+  </data>
+  <data name="LoadStateButton" xml:space="preserve">
+    <value>load state</value>
+  </data>
+  <data name="LowFreqModeSetting" xml:space="preserve">
+    <value>Display Refresh Rate</value>
+  </data>
+  <data name="NotSignedInError" xml:space="preserve">
+    <value>You are not signed in. Sign in first to import ROMs from SkyDrive.</value>
+  </data>
+  <data name="RecentTitle" xml:space="preserve">
+    <value>recently played</value>
+  </data>
+  <data name="ResetROMButton" xml:space="preserve">
+    <value>reset</value>
+  </data>
+  <data name="ResumeButtonText" xml:space="preserve">
+    <value>resume</value>
+  </data>
+  <data name="RomListTitle" xml:space="preserve">
+    <value>rom list</value>
+  </data>
+  <data name="SaveStateButton" xml:space="preserve">
+    <value>save state</value>
+  </data>
+  <data name="SelectState0" xml:space="preserve">
+    <value>Select State 0</value>
+  </data>
+  <data name="SelectState1" xml:space="preserve">
+    <value>Select State 1</value>
+  </data>
+  <data name="SelectState2" xml:space="preserve">
+    <value>Select State 2</value>
+  </data>
+  <data name="SelectState3" xml:space="preserve">
+    <value>Select State 3</value>
+  </data>
+  <data name="SelectState4" xml:space="preserve">
+    <value>Select State 4</value>
+  </data>
+  <data name="SelectState5" xml:space="preserve">
+    <value>Select State 5</value>
+  </data>
+  <data name="SelectState6" xml:space="preserve">
+    <value>Select State 6</value>
+  </data>
+  <data name="SelectState7" xml:space="preserve">
+    <value>Select State 7</value>
+  </data>
+  <data name="SelectState8" xml:space="preserve">
+    <value>Select State 8</value>
+  </data>
+  <data name="SelectState9" xml:space="preserve">
+    <value>Select State 9</value>
+  </data>
+  <data name="SelectStateAuto" xml:space="preserve">
+    <value>Select Auto State</value>
+  </data>
+  <data name="SettingsButtonText" xml:space="preserve">
+    <value>settings</value>
+  </data>
+  <data name="SkyDriveGeneralError" xml:space="preserve">
+    <value>Error while accessing SkyDrive: {0}</value>
+  </data>
+  <data name="SkyDriveImportTitle" xml:space="preserve">
+    <value>SkyDrive</value>
+  </data>
+  <data name="StatusLabelContent" xml:space="preserve">
+    <value>Status: </value>
+  </data>
+  <data name="StatusNotSignedIn" xml:space="preserve">
+    <value>not signed in.</value>
+  </data>
+  <data name="StatusSignedIn" xml:space="preserve">
+    <value>signed in.</value>
+  </data>
+  <data name="VControllerBottomSetting" xml:space="preserve">
+    <value>bottom</value>
+  </data>
+  <data name="VControllerLargeSetting" xml:space="preserve">
+    <value>intersecting</value>
+  </data>
+  <data name="VControllerPosSetting" xml:space="preserve">
+    <value>Virtual Controller Position</value>
+  </data>
+  <data name="VControllerSizeSetting" xml:space="preserve">
+    <value>Virtual Controller Buttons</value>
+  </data>
+  <data name="VControllerSmallSetting" xml:space="preserve">
+    <value>dissecting</value>
+  </data>
+  <data name="VControllerTopSetting" xml:space="preserve">
+    <value>top</value>
+  </data>
+  <data name="VideoSettingsPageTitle" xml:space="preserve">
+    <value>video</value>
+  </data>
+  <data name="AboutSnes9x" xml:space="preserve">
+    <value>This app is based on the source code provided by M.k, which is in turn based on the Snes9x source code. 
+
+The author is not responsible for any illegal use of this software. Furthermore, there is no warranty for this software and the author is not liable for any damages.</value>
+  </data>
+  <data name="AboutSnes9xLicense" xml:space="preserve">
+    <value>Snes9x license:</value>
+  </data>
+  <data name="AboutSnes9xLicenseText" xml:space="preserve">
+    <value>Permission to use, copy, modify and/or distribute Snes9x in both binary and source form, for non-commercial purposes, is hereby granted without  fee, providing that this license information and copyright notice appear  with all copies and any derived work.  
+
+This software is provided 'as-is', without any express or implied warranty. In no event shall the authors be held liable for any damages arising from the use of this software or it's derivatives. 
+
+Snes9x is freeware for PERSONAL USE only. Commercial users should seek permission of the copyright holders first. Commercial use includes, but is not limited to, charging money for Snes9x or software derived from Snes9x, including Snes9x or derivatives in commercial game bundles, and/or using Snes9x as a promotion for your commercial product. 
+
+The copyright holders request that bug fixes and improvements to the code should be forwarded to them so everyone can benefit from the modifications in future versions. 
+
+Super NES and Super Nintendo Entertainment System are trademarks of Nintendo Co., Limited and its subsidiary companies.</value>
+  </data>
+  <data name="AboutSnes9xLink" xml:space="preserve">
+    <value>http://www.snes9x.com/</value>
+  </data>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>about</value>
+  </data>
+  <data name="AboutSnes9xLinkLabel" xml:space="preserve">
+    <value>Snes9x homepage: </value>
+  </data>
+  <data name="AboutContact" xml:space="preserve">
+    <value>store.support@outlook.com</value>
+  </data>
+  <data name="AboutVersion" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="VirtualControllerButtonColored" xml:space="preserve">
+    <value>colored</value>
+  </data>
+  <data name="VirtualControllerButtonGray" xml:space="preserve">
+    <value>gray</value>
+  </data>
+  <data name="VirtualControllerButtonStyle" xml:space="preserve">
+    <value>Virtual Controller Button Style</value>
+  </data>
+  <data name="OrientationBoth" xml:space="preserve">
+    <value>landscape or portrait</value>
+  </data>
+  <data name="OrientationLandscape" xml:space="preserve">
+    <value>landscape locked</value>
+  </data>
+  <data name="OrientationPortrait" xml:space="preserve">
+    <value>portrait locked</value>
+  </data>
+  <data name="OrientationSettingText" xml:space="preserve">
+    <value>Orientation</value>
+  </data>
+  <data name="LastPlayedLabel" xml:space="preserve">
+    <value>Last played: </value>
+  </data>
+  <data name="NeverPlayedText" xml:space="preserve">
+    <value>never</value>
+  </data>
+  <data name="RenameMenuItemText" xml:space="preserve">
+    <value>rename</value>
+  </data>
+  <data name="RenameEmptyString" xml:space="preserve">
+    <value>You must enter a name for the ROM.</value>
+  </data>
+  <data name="RenameNameAlreadyExisting" xml:space="preserve">
+    <value>A ROM with that name already exists.</value>
+  </data>
+  <data name="RenamePromptMessage" xml:space="preserve">
+    <value>Change the displayed name of the ROM:</value>
+  </data>
+  <data name="RenamePromptTitle" xml:space="preserve">
+    <value>Rename ROM</value>
+  </data>
+  <data name="ROMAlreadyExistingError" xml:space="preserve">
+    <value>That ROM has been downloaded before: {0}</value>
+  </data>
+  <data name="BackupAndRestoreInstructions" xml:space="preserve">
+    <value>Export and import savegames:</value>
+  </data>
+  <data name="BackupButton" xml:space="preserve">
+    <value>export</value>
+  </data>
+  <data name="RestoreButton" xml:space="preserve">
+    <value>import</value>
+  </data>
+  <data name="SkyDriveError" xml:space="preserve">
+    <value>SkyDriveError: {0}</value>
+  </data>
+  <data name="BackupErrorUpload" xml:space="preserve">
+    <value>Error while uploading a file: {0}. Try to sign out from SkyDrive and sign back in if this error persists.</value>
+  </data>
+  <data name="BackupInstructions" xml:space="preserve">
+    <value>To export saves, click on the name of the ROM in the list below. The savestates and SRAM will be uploaded to a SkyDrive directory. The save files are fully compatible with Snes8x for Windows 8/RT.</value>
+  </data>
+  <data name="BackupPageTitle" xml:space="preserve">
+    <value>export saves</value>
+  </data>
+  <data name="BackupUploadProgressText" xml:space="preserve">
+    <value>Exporting '{0}' saves</value>
+  </data>
+  <data name="BackupUploadSuccessful" xml:space="preserve">
+    <value>Upload completed.</value>
+  </data>
+  <data name="BackupUploadUnsuccessful" xml:space="preserve">
+    <value>Upload completed with errors.</value>
+  </data>
+  <data name="BackupWaitForUpload" xml:space="preserve">
+    <value>Please wait for the upload to complete.</value>
+  </data>
+  <data name="CreateBackupFolderError" xml:space="preserve">
+    <value>Error while creating the backup folder.</value>
+  </data>
+  <data name="RestorePageTitle" xml:space="preserve">
+    <value>import saves</value>
+  </data>
+  <data name="FullscreenStretchOption" xml:space="preserve">
+    <value>Stretch to fullscreen</value>
+  </data>
+  <data name="OpacitySetting" xml:space="preserve">
+    <value>Virtual Controller Opacity</value>
+  </data>
+  <data name="ControllerScaleSettings" xml:space="preserve">
+    <value>Virtual Joystick Scale</value>
+  </data>
+  <data name="PinToStartText" xml:space="preserve">
+    <value>pin to start screen</value>
+  </data>
+  <data name="MaximumTilesPinned" xml:space="preserve">
+    <value>The selected ROM is pinned already or you have reached the maximum number of tiles to pin.</value>
+  </data>
+  <data name="FileAssociationError" xml:space="preserve">
+    <value>Error importing and opening ROM file.</value>
+  </data>
+  <data name="TileOpenError" xml:space="preserve">
+    <value>Error opening the ROM associated with the tile.</value>
+  </data>
+  <data name="SkyDriveInternetLost" xml:space="preserve">
+    <value>Cannot connect to SkyDrive. Check your internet connection.</value>
+  </data>
+  <data name="BackgroundImageSetting" xml:space="preserve">
+    <value>Background image</value>
+  </data>
+  <data name="ChooseBackgroundButtonText" xml:space="preserve">
+    <value>Choose</value>
+  </data>
+  <data name="ClearBackgroundButtonText" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="AboutContactLabel" xml:space="preserve">
+    <value>Contact: </value>
+  </data>
+  <data name="FrameSkipAutoSetting" xml:space="preserve">
+    <value>automatic</value>
+  </data>
+  <data name="FrameSkipSetting" xml:space="preserve">
+    <value>Skip Frames (increase emulation speed)</value>
+  </data>
+  <data name="PowerFrameSkipText" xml:space="preserve">
+    <value>Skip Frames (same emulation speed)</value>
+  </data>
+  <data name="SyncSoundSetting" xml:space="preserve">
+    <value>Synchronize Audio</value>
+  </data>
+  <data name="SyncSoundSetting2" xml:space="preserve">
+    <value>(better quality, but may be slower)</value>
+  </data>
+  <data name="TurboFrameSkipText" xml:space="preserve">
+    <value>Turbo Mode Frame Skip</value>
+  </data>
+  <data name="HelpDownloadROMsHeader" xml:space="preserve">
+    <value>How to import ROMs</value>
+  </data>
+  <data name="HelpHowToHeader" xml:space="preserve">
+    <value>how to</value>
+  </data>
+  <data name="HelpImportEmailHeader" xml:space="preserve">
+    <value>Alternative 2: importing from E-Mails</value>
+  </data>
+  <data name="HelpImportEmailText" xml:space="preserve">
+    <value>Send an E-Mail to any E-Mail address that is accessible from your phone, containing one or more ROM(s) as file attachments. You can either attach the ROMs as *.smc or *.sfc files or contained within a *.zip archive. Open the E-Mail on your phone and tap on the attachment to download the file. If your attachment was a *.zip archive, the E-Mail client allows you to navigate through the archive. Locate the ROM inside the archive and tap on it to launch the emulator. The emulator will automatically import the ROM from the E-Mail attachment and start the game. If the attachment was not a *.zip archive but a *.smc or *.sfc file, just tap on it to start the emulator and import the ROM.</value>
+  </data>
+  <data name="HelpImportSkyDriveHeader" xml:space="preserve">
+    <value>Alternative 1: importing from SkyDrive</value>
+  </data>
+  <data name="HelpImportSkyDriveText" xml:space="preserve">
+    <value>Store your ROMs in a folder on your SkyDrive. If your ROMs are in *.zip file format, don't forget to extract them first, because Snes8x only supports *.smc and *.sfc files. Afterwards navigate to the SkyDrive section on the main page of the emulator (swipe left from the ROM list). If you are not signed in yet, click on "Sign in" first and enter your credentials if you are asked for it. When you are signed in, click on the button labeled "import ROMs" on the emulators main page. The following page allows you to navigate through SkyDrive to locate the folder where you put your ROMs into. In the folder containing the ROMs, tap on any *.smc or *.sfc file to start the download. Wait for the download to complete before you leave the page. A confirmation message will be shown when the download is completed.</value>
+  </data>
+  <data name="HelpImportWebHeader" xml:space="preserve">
+    <value>Alternative 3: importing from Web Browser</value>
+  </data>
+  <data name="HelpImportWebText" xml:space="preserve">
+    <value>In your web browser, open any web site that offers ROM downloads and start the download of the desired game. If the download was a *.zip archive, the browser allows you to navigate through the archive when the download is done. Locate the *.smc or *.sfc file contained in the archive and tap on it to start the emulator. The emulator will automatically import the ROM you downloaded using your web browser. If the downloaded file was a *.smc or *.sfc file, just tap on it and the emulator will start and import the ROM.</value>
+  </data>
+  <data name="HelpIssuesHeader" xml:space="preserve">
+    <value>issues</value>
+  </data>
+  <data name="HelpIssuesWhiteScreenHeader" xml:space="preserve">
+    <value>Blank screen after loading ROM</value>
+  </data>
+  <data name="HelpIssuesWhiteScreenText" xml:space="preserve">
+    <value>- Make sure the downloads are completed before you leave the SkyDrive import page (wait for confirmation message). If you leave too early, the ROMs may remain in a corrupted state and cannot load correctly. If this happens, delete them (tap and hold in the ROM list) and re-download.
+- Try other methods to import ROMs. There are 3 methods of importing ROMs (SkyDrive, E-Mail, Web Browser) described in the "how to" section of this page.</value>
+  </data>
+  <data name="HelpIssuesWhiteScreenTextContact" xml:space="preserve">
+    <value>- If nothing helps, contact the developer:</value>
+  </data>
+  <data name="HelpTipsHeader" xml:space="preserve">
+    <value>tips</value>
+  </data>
+  <data name="HelpTipsPerformanceHeader" xml:space="preserve">
+    <value>Games are running slowly</value>
+  </data>
+  <data name="HelpTIpsPerformanceText" xml:space="preserve">
+    <value>- Open the video settings and increase the value of the option "Skip Frames (same emulation speed)". This option reduces the number of frames the emulator needs to display and therefore leaves more resources to keep the emulation speed up. The games might appear less smooth when increasing the frame skip value.
+- Open the sound settings and switch off audio synchronization. This might increase the performance, but the sound quality may suffer.
+- Open the sound settings and switch the sound completely off.</value>
+  </data>
+  <data name="HelpTipsSoundHeader" xml:space="preserve">
+    <value>Scratchy sound</value>
+  </data>
+  <data name="HelpTipsSoundText" xml:space="preserve">
+    <value>- Open the sound settings and switch on audio synchronization. This might increase the audio quality, but the performance may suffer.
+- If the emulation speed is too low, the sound quality can also suffer. Follow the above tips for games that are running slowly.</value>
+  </data>
+  <data name="HelpTipsTurboHeader" xml:space="preserve">
+    <value>Activate turbo mode</value>
+  </data>
+  <data name="HelpTipsTurboText" xml:space="preserve">
+    <value>- Press the camera button to toggle turbo mode.
+- Half-press the camera button to activate turbo mode while holding the camera button half-pressed.</value>
+  </data>
+  <data name="HelpTitle" xml:space="preserve">
+    <value>help</value>
+  </data>
+  <data name="HelpButtonText" xml:space="preserve">
+    <value>help</value>
+  </data>
+  <data name="ImportWaitComplete" xml:space="preserve">
+    <value>Please wait for the download to complete.</value>
+  </data>
+  <data name="SkyDriveFileFormatHint" xml:space="preserve">
+    <value>Note: The emulator only supports *.smc and *.sfc files.</value>
+  </data>
+  <data name="DPadAnalogueDynamic" xml:space="preserve">
+    <value>dynamic analogue stick</value>
+  </data>
+  <data name="DPadAnalogueFixed" xml:space="preserve">
+    <value>fixed analogue stick</value>
+  </data>
+  <data name="DPadStandard" xml:space="preserve">
+    <value>4-way</value>
+  </data>
+  <data name="DPadStyleHeader" xml:space="preserve">
+    <value>D-Pad Style</value>
+  </data>
+  <data name="DeadzoneHeader" xml:space="preserve">
+    <value>Deadzone (analogue stick only)</value>
+  </data>
+  <data name="ImageScaleSetting" xml:space="preserve">
+    <value>Scale Image (landscape only)</value>
+  </data>
+  <data name="RefreshRate30" xml:space="preserve">
+    <value>30Hz</value>
+  </data>
+  <data name="RefreshRate60" xml:space="preserve">
+    <value>60Hz</value>
+  </data>
+  <data name="TurboModeTip" xml:space="preserve">
+    <value>Note: Turbo Mode will be assigned to L or R if the camera button is assigned to L or R.</value>
+  </data>
+  <data name="CameraAssignL" xml:space="preserve">
+    <value>L-Button</value>
+  </data>
+  <data name="CameraAssignR" xml:space="preserve">
+    <value>R-Button</value>
+  </data>
+  <data name="CameraAssignTurbo" xml:space="preserve">
+    <value>Turbo Mode</value>
+  </data>
+  <data name="CameraButtonAssignment" xml:space="preserve">
+    <value>Assign to camera button</value>
+  </data>
+  <data name="ActiveSavestateText" xml:space="preserve">
+    <value> (active)</value>
+  </data>
+  <data name="AutoIncSavestateSetting" xml:space="preserve">
+    <value>Automatically increment save state</value>
+  </data>
+  <data name="CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ConfirmationCheckBoxText" xml:space="preserve">
+    <value>Do not show this again</value>
+  </data>
+  <data name="ConfirmButtonText" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ConfirmLoadText" xml:space="preserve">
+    <value>Are you sure you want to load the last saved state?</value>
+  </data>
+  <data name="ConfirmSaveText" xml:space="preserve">
+    <value>Are you sure you want to save? This will overwrite the selected save state.</value>
+  </data>
+  <data name="GeneralSettingsTitle" xml:space="preserve">
+    <value>general</value>
+  </data>
+  <data name="HideConfirmationLoadSetting" xml:space="preserve">
+    <value>Disable confirmation on load state</value>
+  </data>
+  <data name="HideConfirmationSetting" xml:space="preserve">
+    <value>Disable confirmation on save state</value>
+  </data>
+  <data name="RestoreLastStateSetting" xml:space="preserve">
+    <value>Select last state when loading ROM</value>
+  </data>
+  <data name="CameraAssignLR" xml:space="preserve">
+    <value>L-Button and R-Button</value>
+  </data>
+  <data name="DeleteSavesEntry" xml:space="preserve">
+    <value>delete save file</value>
+  </data>
+  <data name="ManageAutoSlotLabel" xml:space="preserve">
+    <value>Automatic </value>
+  </data>
+  <data name="ManageDeleteUnknownError" xml:space="preserve">
+    <value>There was an unknown error while removing the save state.</value>
+  </data>
+  <data name="ManageRemoveState" xml:space="preserve">
+    <value>remove</value>
+  </data>
+  <data name="ManageSavestateMenuItem" xml:space="preserve">
+    <value>manage save states</value>
+  </data>
+  <data name="ManageSavestatesTitle" xml:space="preserve">
+    <value>save states</value>
+  </data>
+  <data name="ManageSaveTimeLabel" xml:space="preserve">
+    <value>Created:</value>
+  </data>
+  <data name="ManageSlotLabel" xml:space="preserve">
+    <value>Slot </value>
+  </data>
+  <data name="RemoveStateNoSelection" xml:space="preserve">
+    <value>You must select a save state first.</value>
+  </data>
+  <data name="CreateSnapshotMenuItem" xml:space="preserve">
+    <value>create snapshot for tiles</value>
+  </data>
+  <data name="ManualSnapshotSetting" xml:space="preserve">
+    <value>Create tile pictures manually</value>
+  </data>
+  <data name="ReviewText" xml:space="preserve">
+    <value>review</value>
+  </data>
+  <data name="DonateText" xml:space="preserve">
+    <value>donate</value>
+  </data>
+  <data name="ImportCompleteText" xml:space="preserve">
+    <value>Completed importing file '{0}'</value>
+  </data>
+  <data name="ImportingProgressText" xml:space="preserve">
+    <value>Importing ROM '{0}'</value>
+  </data>
+  <data name="ButtonScaleSettings" xml:space="preserve">
+    <value>Virtual Button Scale</value>
+  </data>
+  <data name="UseMogaControllerText" xml:space="preserve">
+    <value>Use Moga controller</value>
+  </data>
+  <data name="DPad8way" xml:space="preserve">
+    <value>8-way</value>
+  </data>
+</root>

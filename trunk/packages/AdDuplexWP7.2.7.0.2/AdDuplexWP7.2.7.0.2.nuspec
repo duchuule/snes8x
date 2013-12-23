@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>AdDuplexWP7</id>
+    <version>2.7.0.2</version>
+    <title>AdDuplex for Windows Phone 7.1/7.5</title>
+    <authors>AdDuplex</authors>
+    <owners>AdDuplex</owners>
+    <projectUrl>http://www.adduplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>AdDuplex (cross-promotion network for Windows Phone and Windows 8 apps) SDK for Silverlight based Windows Phone 7.1 (Mango) apps</description>
+    <releaseNotes>BUGFIX: in rare occasions an exception was thrown when switching rapidly between pages with AdDuplex control</releaseNotes>
+    <copyright>AdDuplex</copyright>
+    <language />
+    <tags>wp7 windowsphone</tags>
+  </metadata>
+</package>
