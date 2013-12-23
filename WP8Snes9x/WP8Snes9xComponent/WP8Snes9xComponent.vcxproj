@@ -199,15 +199,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="Moga.Windows.Phone" Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
-      <HintPath>..\..\..\WP8_MOGA-SDK_v1.0_20130621\Library\ARM\Moga.Windows.Phone.winmd</HintPath>
+      <HintPath>..\..\packages\WP8_MOGA-SDK_v1.0_20130621\ARM\Moga.Windows.Phone.winmd</HintPath>
       <IsWinMDFile>true</IsWinMDFile>
     </Reference>
     <Reference Include="Moga.Windows.Phone" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      <HintPath>..\..\..\WP8_MOGA-SDK_v1.0_20130621\Library\x86\Moga.Windows.Phone.winmd</HintPath>
+      <HintPath>..\..\packages\WP8_MOGA-SDK_v1.0_20130621\x86\Moga.Windows.Phone.winmd</HintPath>
       <IsWinMDFile>true</IsWinMDFile>
     </Reference>
     <Reference Include="Moga.Windows.Phone" Condition="'$(Configuration)|$(Platform)'=='DebugDevice|ARM'">
-      <HintPath>..\..\..\WP8_MOGA-SDK_v1.0_20130621\Library\ARM\Moga.Windows.Phone.winmd</HintPath>
+      <HintPath>..\..\packages\WP8_MOGA-SDK_v1.0_20130621\ARM\Moga.Windows.Phone.winmd</HintPath>
       <IsWinMDFile>true</IsWinMDFile>
     </Reference>
     <Reference Include="platform.winmd">
