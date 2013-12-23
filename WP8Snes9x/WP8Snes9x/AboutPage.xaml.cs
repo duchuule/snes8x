@@ -36,5 +36,12 @@ namespace PhoneDirect3DXamlAppInterop
             emailcomposer.Body = "Insert your bug report or feature request here.";
             emailcomposer.Show();
         }
+
+        private void sourceButton_Click(object sender, RoutedEventArgs e)
+        {
+            WebBrowserTask wbt = new WebBrowserTask();
+            wbt.URL = AppResources.SourceLink;
+            wbt.Show();
+        }
     }
 }

@@ -14,7 +14,8 @@ namespace Emulator
 		: virtualControllerOnTop(false), stickFingerDown(false)
 	{
 		InitializeCriticalSectionEx(&this->cs, 0, 0);
-		this->pointers = ref new Platform::Collections::Map<unsigned int, PointerPoint ^>();
+		this->pointers = ref new Platform::Collections::Map<unsigned int, PointerPoint^>();
+		this->pointerDescriptions = ref new Platform::Collections::Map<unsigned int, String^>();
 	}
 
 	VirtualController::~VirtualController(void)
@@ -693,10 +694,13 @@ namespace Emulator
 		this->UpdateFormat(this->format);
 	}
 
-	void VirtualController::PointerPressed(PointerPoint ^point)
+	void VirtualController::PointerPressed(PointerPoint^ point)
 	{
 		EnterCriticalSection(&this->cs);
+
 		this->pointers->Insert(point->PointerId, point);
+		this->pointerDescriptions->Insert(point->PointerId, "");
+
 		this->pressCount++;
 
 		int dpad = EmulatorSettings::Current->DPadStyle;
@@ -746,6 +750,8 @@ namespace Emulator
 	void VirtualController::PointerMoved(PointerPoint ^point)
 	{
 		EnterCriticalSection(&this->cs);
+
+
 		if(this->pointers->HasKey(point->PointerId))
 		{
 			this->pointers->Insert(point->PointerId, point);
@@ -780,20 +786,47 @@ namespace Emulator
 	{
 		EnterCriticalSection(&this->cs);
 		
+		
 		if(this->pointers->HasKey(point->PointerId))
 		{
-			this->pointers->Remove(point->PointerId);
-			this->pressCount--;
-		}
-		else
-		{
-			this->errCount++;
-			
+			//get the description
 
-			//error, remove all points
-			//this->pointers->Clear();
+
+			String^ desc = pointerDescriptions->Lookup(point->PointerId);
+			unsigned int key2 = point->PointerId;
+
+			this->pointers->Remove(point->PointerId);
+			this->pointerDescriptions->Remove(point->PointerId);
+			this->pressCount--;
+
+			//find point that may not be removed due to released event not triggered and mark it
+			if (desc != "")
+			{
+				for (auto i = this->pointerDescriptions->First(); i->HasCurrent; i->MoveNext())
+				{
+					String ^desc2= i->Current->Value;
+					unsigned int key2 = i->Current->Key;
+
+					//if (desc2 == desc)
+					//{
+
+					//	//mark the point
+					//	this->pointerDescriptions->Insert(key2, desc2 + "+");
+					//}
+
+					if (desc2 == desc ) 
+					{
+						//remove the points
+						this->pointerDescriptions->Remove(key2);
+						this->pointers->Remove(key2);
+						break; //has to break or the loop will cause Changed_state exception
+					}
+
+				}
+			}
+			
 		}
-		
+
 		
 
 		int dpad = EmulatorSettings::Current->DPadStyle;
@@ -824,6 +857,7 @@ namespace Emulator
 		for (auto i = this->pointers->First(); i->HasCurrent; i->MoveNext())
 		{
 			PointerPoint ^p = i->Current->Value;
+			
 			Windows::Foundation::Point point = Windows::Foundation::Point(p->Position.Y, p->Position.X);
 			if(this->orientation == ORIENTATION_LANDSCAPE_RIGHT)
 			{
@@ -836,18 +870,24 @@ namespace Emulator
 				if(this->leftRect.Contains(point))
 				{
 					state.LeftPressed = true;
+					//add the description for this point
+					this->pointerDescriptions->Insert(i->Current->Key, "joystick");
+					
 				}
 				if(this->upRect.Contains(point))
 				{
 					state.UpPressed = true;
+					this->pointerDescriptions->Insert(i->Current->Key, "joystick");
 				}
 				if(this->rightRect.Contains(point))
 				{
 					state.RightPressed = true;
+					this->pointerDescriptions->Insert(i->Current->Key, "joystick");
 				}
 				if(this->downRect.Contains(point))
 				{
 					state.DownPressed = true;
+					this->pointerDescriptions->Insert(i->Current->Key, "joystick");
 				}
 
 				if (dpad == 0)
@@ -952,34 +992,42 @@ namespace Emulator
 			if(this->startRect.Contains(point))
 			{
 				state.StartPressed = true;
+				this->pointerDescriptions->Insert(i->Current->Key, "start");
 			}
 			if(this->selectRect.Contains(point))
 			{
 				state.SelectPressed = true;
+				this->pointerDescriptions->Insert(i->Current->Key, "select");
 			}
 			if(this->lRect.Contains(point))
 			{
 				state.LPressed = true;
+				this->pointerDescriptions->Insert(i->Current->Key, "l");
 			}
 			if(this->rRect.Contains(point))
 			{
 				state.RPressed = true;
+				this->pointerDescriptions->Insert(i->Current->Key, "r");
 			}
 			if(this->aRect.Contains(point))
 			{
 				state.APressed = true;
+				this->pointerDescriptions->Insert(i->Current->Key, "a");
 			}
 			if(this->bRect.Contains(point))
 			{
 				state.BPressed = true;
+				this->pointerDescriptions->Insert(i->Current->Key, "b");
 			}
 			if(this->xRect.Contains(point))
 			{
 				state.XPressed = true;
+				this->pointerDescriptions->Insert(i->Current->Key, "x");
 			}
 			if(this->yRect.Contains(point))
 			{
 				state.YPressed = true;
+				this->pointerDescriptions->Insert(i->Current->Key, "y");
 			}
 		}
 		LeaveCriticalSection(&this->cs);

@@ -48,6 +48,7 @@
                                    Text="{Binding LocalizedResources.AboutContact, Source={StaticResource LocalizedStrings}}" />
                     </StackPanel>
                 </ListBoxItem>
+                
                 <ListBoxItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsHitTestVisible="False">
                     <TextBlock TextWrapping="Wrap" FontSize="22" Margin="0,15,0,0"
                         Text="{Binding LocalizedResources.AboutSnes9x, Source={StaticResource LocalizedStrings}}" />
@@ -68,6 +69,13 @@
                                          NavigateUri="{Binding LocalizedResources.AboutSnes9xLink, Source={StaticResource LocalizedStrings}}"
                                          TargetName="_anything" />
                     </StackPanel>
+                </ListBoxItem>
+
+                <ListBoxItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsHitTestVisible="True">
+                    <Button
+                        Content="{Binding LocalizedResources.SourceButtonText, Source={StaticResource LocalizedStrings}}" 
+                        Click="sourceButton_Click" 
+                        Name="sourceButton" />
                 </ListBoxItem>
             </ListBox>
         </Grid>

@@ -1413,6 +1413,24 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Source.
+        /// </summary>
+        public static string SourceButtonText {
+            get {
+                return ResourceManager.GetString("SourceButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://sourceforge.net/projects/snes8x/.
+        /// </summary>
+        public static string SourceLink {
+            get {
+                return ResourceManager.GetString("SourceLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status: .
         /// </summary>
         public static string StatusLabelContent {

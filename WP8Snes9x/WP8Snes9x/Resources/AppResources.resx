@@ -636,4 +636,10 @@ Super NES and Super Nintendo Entertainment System are trademarks of Nintendo Co.
   <data name="DPad8way" xml:space="preserve">
     <value>8-way</value>
   </data>
+  <data name="SourceButtonText" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="SourceLink" xml:space="preserve">
+    <value>http://sourceforge.net/projects/snes8x/</value>
+  </data>
 </root>
