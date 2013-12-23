@@ -1,0 +1,225 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="PhoneDirect3DXamlAppInterop.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Controls="clr-namespace:Microsoft.Live.Controls;assembly=Microsoft.Live.Controls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:local="clr-namespace:PhoneDirect3DXamlAppInterop"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator IsIndeterminate="False" 
+                                 IsVisible="True" 
+                                 Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
+                                  />
+    </shell:SystemTray.ProgressIndicator>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--ad control-->
+        <!--<local:AdControl Grid.Row="1" />-->
+        
+        <phone:Panorama Grid.Row="0">
+           
+            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.RomListTitle, Source={StaticResource LocalizedStrings}}">
+                <ListBox x:Name="romList" 
+                         SelectionChanged="romList_SelectionChanged"
+                         toolkit:TiltEffect.IsTiltEnabled="True">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Height="60">
+                                <Image Source="{Binding SnapshotURI, Converter={StaticResource IsoImageConverter}}" Stretch="Fill" Width="60" Height="52" />
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Margin="14,0,0,0"  Text="{Binding DisplayName}" FontSize="26" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Margin="14,0,0,0"  Text="{Binding Path=LocalizedResources.LastPlayedLabel, Source={StaticResource LocalizedStrings}}" FontSize="14" />
+                                        <TextBlock Margin="14,0,0,0"  Text="{Binding LastPlayed, Converter={StaticResource LastPlayedConverter}}" FontSize="14" />
+                                    </StackPanel>
+                                </StackPanel>
+                                <toolkit:ContextMenuService.ContextMenu>
+                                    <toolkit:ContextMenu Name="ROMContextMenu"
+                                                          >
+                                        <toolkit:MenuItem 
+                                            Name="PinToStartMenuItem"
+                                            Header="{Binding Path=LocalizedResources.PinToStartText, Source={StaticResource LocalizedStrings}}" 
+                                            Click="PinToStartMenuItem_Click_1"/>
+                                        <toolkit:MenuItem 
+                                            Name="RenameMenuItem"
+                                            Header="{Binding Path=LocalizedResources.RenameMenuItemText, Source={StaticResource LocalizedStrings}}" 
+                                            Click="RenameMenuItem_Click_1"/>
+                                        <toolkit:MenuItem 
+                                            Name="DeleteMenuItem"
+                                            Header="{Binding Path=LocalizedResources.DeleteMenuItemText, Source={StaticResource LocalizedStrings}}" 
+                                            Click="DeleteMenuItem_Click_1"/>
+                                        <toolkit:MenuItem 
+                                            Name="DeleteSaveMenuItem"
+                                            Header="{Binding Path=LocalizedResources.DeleteSavesEntry, Source={StaticResource LocalizedStrings}}" 
+                                            Click="DeleteSaveMenuItem_Click_1"/>
+                                        <toolkit:MenuItem 
+                                            Name="SaveStateMenuItem"
+                                            Header="{Binding Path=LocalizedResources.ManageSavestateMenuItem, Source={StaticResource LocalizedStrings}}" 
+                                            Click="SaveStateMenuItem_Click"/>
+                                    </toolkit:ContextMenu>
+                                </toolkit:ContextMenuService.ContextMenu>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <!--<Grid />-->
+            </phone:PanoramaItem>
+
+            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.RecentTitle, Source={StaticResource LocalizedStrings}}">
+                <ListBox Name="recentList" 
+                         SelectionChanged="recentList_SelectionChanged_1"
+                         toolkit:TiltEffect.IsTiltEnabled="True">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding SnapshotURI, Converter={StaticResource IsoImageConverter}}" Stretch="Fill" Width="130" Height="114" />
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Margin="14,0,0,0"  Text="{Binding DisplayName}" Width="320" TextWrapping="Wrap" FontSize="26" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Margin="14,0,0,0"  Text="{Binding Path=LocalizedResources.LastPlayedLabel, Source={StaticResource LocalizedStrings}}" FontSize="14" />
+                                        <TextBlock Margin="14,0,0,0"  Text="{Binding LastPlayed, Converter={StaticResource LastPlayedShortConverter}}" FontSize="14" />
+                                    </StackPanel>
+                                </StackPanel>
+                                <toolkit:ContextMenuService.ContextMenu>
+                                    <toolkit:ContextMenu Name="ROMContextMenu"
+                                                          >
+                                        <toolkit:MenuItem 
+                                            Name="PinToStartMenuItem"
+                                            Header="{Binding Path=LocalizedResources.PinToStartText, Source={StaticResource LocalizedStrings}}" 
+                                            Click="PinToStartMenuItem_Click_1"/>
+                                        <toolkit:MenuItem 
+                                            Name="RenameMenuItem"
+                                            Header="{Binding Path=LocalizedResources.RenameMenuItemText, Source={StaticResource LocalizedStrings}}" 
+                                            Click="RenameMenuItem_Click_1"/>
+                                        <toolkit:MenuItem 
+                                            Name="DeleteMenuItem"
+                                            Header="{Binding Path=LocalizedResources.DeleteMenuItemText, Source={StaticResource LocalizedStrings}}" 
+                                            Click="DeleteMenuItem_Click_1"/>
+                                        <toolkit:MenuItem 
+                                            Name="DeleteSaveMenuItem"
+                                            Header="{Binding Path=LocalizedResources.DeleteSavesEntry, Source={StaticResource LocalizedStrings}}" 
+                                            Click="DeleteSaveMenuItem_Click_1"/>
+                                        <toolkit:MenuItem 
+                                            Name="SaveStateMenuItem"
+                                            Header="{Binding Path=LocalizedResources.ManageSavestateMenuItem, Source={StaticResource LocalizedStrings}}" 
+                                            Click="SaveStateMenuItem_Click"/>
+                                    </toolkit:ContextMenu>
+                                </toolkit:ContextMenuService.ContextMenu>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </phone:PanoramaItem>
+
+            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.ImportTitle, Source={StaticResource LocalizedStrings}}" >
+                <StackPanel Margin="0,0,0,0">
+                    <Button x:Name="ImportSD" 
+                                    Click="ImportSD_Click"
+                                    Content="Import ROMs from SD Card"/>
+                    <ListBox x:Name="ContentPanel" Margin="12,0,12,0">
+                        <ListBoxItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsHitTestVisible="False">
+                            <TextBlock TextWrapping="Wrap" FontSize="24"
+                            Text="{Binding Path=LocalizedResources.ImportInstructionsText, Source={StaticResource LocalizedStrings}}" />
+                        </ListBoxItem>
+                        <ListBoxItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                    Margin="0,0,0,0">
+                                <Controls:SignInButton Content="SignInButton" Name="signinButton"
+                                ClientId="000000004810C3D3"
+                                Branding="Skydrive"
+                                Scopes="wl.signin wl.skydrive_update wl.offline_access"
+                                SessionChanged="btnSignin_SessionChanged" Width="200" Height="72" VerticalAlignment="Top"/>
+                                <Button Name="gotoImportButton" Width="200"
+                                    IsEnabled="False" Click="gotoImportButton_Click_1"
+                                    Content="{Binding Path=LocalizedResources.ImportFromSkyDriveButtonText, Source={StaticResource LocalizedStrings}}"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsHitTestVisible="False">
+                            <TextBlock TextWrapping="Wrap" FontSize="24"
+                            Text="{Binding Path=LocalizedResources.BackupAndRestoreInstructions, Source={StaticResource LocalizedStrings}}" />
+                        </ListBoxItem>
+                        <ListBoxItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                    Margin="0,0,0,0">
+                                <Button Name="gotoBackupButton" Width="200"
+                                        IsEnabled="False" Click="gotoBackupButton_Click_1"
+                                        Content="{Binding Path=LocalizedResources.BackupButton, Source={StaticResource LocalizedStrings}}"/>
+                                <Button Name="gotoRestoreButton"  Width="200"
+                                        IsEnabled="False" Click="gotoRestoreButton_Click_1"
+                                        Content="{Binding Path=LocalizedResources.RestoreButton, Source={StaticResource LocalizedStrings}}"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <!--<ListBoxItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsHitTestVisible="False">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontSize="24"
+                                       Text="{Binding Path=LocalizedResources.StatusLabelContent, Source={StaticResource LocalizedStrings}}" />
+                            <TextBlock FontSize="24" 
+                                       Name="statusLabel" 
+                                       Text="{Binding Path=LocalizedResources.StatusNotSignedIn, Source={StaticResource LocalizedStrings}}" />
+                        </StackPanel>
+                    </ListBoxItem>-->
+
+                    </ListBox>
+                </StackPanel>
+            </phone:PanoramaItem>
+
+            <phone:PanoramaItem Header="help&amp;guides" >
+
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              >
+                    <StackPanel Margin="12,0,0,0">
+                        <TextBlock Text="Video: MOGA controller instruction" 
+                           TextWrapping="Wrap"
+                           Margin="0,0,12,12"
+                                TextDecorations="Underline" Tap="TextBlock_Tap_1" 
+                           />
+ 
+                        <TextBlock Text="Guide: 4 ways to import ROMs" 
+                           TextWrapping="Wrap"
+                           Margin="0,0,12,12"
+                                TextDecorations="Underline" Tap="TextBlock_Tap_3"
+                           />
+                        <TextBlock Text="Guide: how to improve performance" 
+                           TextWrapping="Wrap"
+                           Margin="0,0,12,12"
+                                TextDecorations="Underline" Tap="TextBlock_Tap_4" 
+                           />
+                        <TextBlock Text="Guide: troubleshoot blank screen" 
+                           TextWrapping="Wrap"
+                           Margin="0,0,12,12"
+                                TextDecorations="Underline" Tap="TextBlock_Tap_5" 
+                           />
+                        <TextBlock Text="Forum dicussions" 
+                           TextWrapping="Wrap"
+                           Margin="0,0,12,12"
+                                TextDecorations="Underline" Tap="TextBlock_Tap_2"  
+                           />
+
+                        <TextBlock TextWrapping="Wrap" Tap="contactBlock_Tap_1" 
+                                       TextDecorations="Underline" 
+                                       Text="Contact developer" />
+                    </StackPanel>
+                </ScrollViewer>
+            </phone:PanoramaItem>
+        </phone:Panorama>
+    </Grid>
+
+</phone:PhoneApplicationPage>
