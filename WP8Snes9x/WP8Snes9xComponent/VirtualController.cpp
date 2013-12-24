@@ -824,26 +824,29 @@ namespace Emulator
 
 				}
 			}
+
+
+			int dpad = EmulatorSettings::Current->DPadStyle;
+			if(dpad >= 2)
+			{
+				if(this->stickFingerDown && desc == "joystick")
+				{
+					this->stickFingerDown = false;
+					this->stickFingerID = 0;
+
+					this->stickOffset.X = 0;
+					this->stickOffset.Y = 0;
+
+					this->visibleStickOffset.x = 0;
+					this->visibleStickOffset.y = 0;
+				}
+			}
 			
 		}
 
 		
 
-		int dpad = EmulatorSettings::Current->DPadStyle;
-		if(dpad >= 2)
-		{
-			if(this->stickFingerDown && point->PointerId == this->stickFingerID)
-			{
-				this->stickFingerDown = false;
-				this->stickFingerID = 0;
-
-				this->stickOffset.X = 0;
-				this->stickOffset.Y = 0;
-
-				this->visibleStickOffset.x = 0;
-				this->visibleStickOffset.y = 0;
-			}
-		}
+		
 		LeaveCriticalSection(&this->cs);
 	}
 
@@ -939,6 +942,9 @@ namespace Emulator
 				}
 			}else
 			{
+				if (this->stickBoundaries.Contains(p->Position))
+					this->pointerDescriptions->Insert(i->Current->Key, "joystick");
+
 				if(this->stickFingerDown && p->PointerId == this->stickFingerID)
 				{
 					float deadzone = EmulatorSettings::Current->Deadzone;
@@ -973,18 +979,22 @@ namespace Emulator
 						if((rad >= 0 && rad < 1.046f) || (rad > 5.234f && rad < 6.28f))
 						{
 							state.RightPressed = true;
+
 						}
 						if(rad >= 0.523f && rad < 2.626f)
 						{
 							state.UpPressed = true;
+
 						}
 						if(rad >= 2.093f && rad < 4.186f)
 						{
 							state.LeftPressed = true;
+
 						}
 						if(rad >= 3.663f && rad < 5.756f)
 						{
 							state.DownPressed = true;
+
 						}
 					}
 				}
