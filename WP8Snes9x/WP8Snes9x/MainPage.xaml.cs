@@ -20,7 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using Microsoft.Phone.Tasks;
 
-//"C:\Program Files (x86)\Microsoft SDKs\Windows Phone\v8.0\Tools\IsolatedStorageExplorerTool\ISETool.exe" ts xd e6470260-50e5-4b4b-aaac-223ee7485237 "D:\Duc\Documents\Visual Studio 2012\Projects\WP8Snes8x"
+//"C:\Program Files (x86)\Microsoft SDKs\Windows Phone\v8.0\Tools\IsolatedStorageExplorerTool\ISETool.exe" ts xd ed3cc816-1ab0-418a-9bb8-11505804f6b4 "D:\Duc\Documents\Visual Studio 2012\Projects\WP8Snes8x\trunk"
 
 
 namespace PhoneDirect3DXamlAppInterop

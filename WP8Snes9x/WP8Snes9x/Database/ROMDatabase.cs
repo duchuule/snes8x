@@ -90,15 +90,15 @@ namespace PhoneDirect3DXamlAppInterop.Database
                 .Count() == 0;
         }
 
-        public bool SavestateEntryExisting(string filename)
+        public SavestateEntry SavestateEntryExisting(string filename, int slot)
         {
             if (!context.DatabaseExists())
             {
                 throw new InvalidOperationException("Database does not exist.");
             }
-            return this.context.SavestateTable
-                .Where(s => s.FileName.ToLower().Equals(filename.ToLower()))
-                .Count() > 0;
+
+            return this.context.SavestateTable.Where(s => s.ROMFileName.ToLower().Equals(filename.ToLower())).Where(s => s.Slot == slot).FirstOrDefault();
+
         }
 
         public SavestateEntry GetSavestate(string filename)
@@ -167,11 +167,24 @@ namespace PhoneDirect3DXamlAppInterop.Database
             {
                 throw new InvalidOperationException("Database does not exist.");
             }
-            String name = savestateName.Substring(0, savestateName.Length - 3).ToLower();
-            return this.context.ROMTable
-                .Where(r => r.FileName.Substring(0, r.FileName.Length - 3).ToLower().Equals(name))
+            String name = savestateName.Substring(0, savestateName.Length - 4).ToLower();
+            ROMDBEntry entry = this.context.ROMTable
+                .Where(r => r.FileName.Substring(0, r.FileName.Length - 4).ToLower().Equals(name))
                 .FirstOrDefault();
+
+            if (entry != null)
+                return entry;
+            else
+            {
+                //check display name
+                return this.context.ROMTable
+                .Where(r => (r.DisplayName.ToLower().Equals(name)))
+                .FirstOrDefault();
+            }
         }
+
+
+       
 
         public int GetLastSavestateSlotByFileNameExceptAuto(string filename)
         {
