@@ -342,6 +342,10 @@ namespace PhoneDirect3DXamlAppInterop
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
+
+            //disable lock screen
+            PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
+
             CameraButtons.ShutterKeyPressed += CameraButtons_ShutterKeyPressed;
             CameraButtons.ShutterKeyHalfPressed += CameraButtons_ShutterKeyHalfPressed;
             CameraButtons.ShutterKeyReleased += CameraButtons_ShutterKeyReleased;
@@ -439,6 +443,10 @@ namespace PhoneDirect3DXamlAppInterop
 
         protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
         {
+
+            //disable lock screen
+            PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
+
             if (initialized && this.m_d3dBackground.IsROMLoaded())
             {
                 this.m_d3dBackground.PauseEmulation();
@@ -450,6 +458,9 @@ namespace PhoneDirect3DXamlAppInterop
                 entry.LastPlayed = DateTime.Now;
                 db.CommitChanges();
             }
+
+            
+
             base.OnNavigatingFrom(e);
         }
 

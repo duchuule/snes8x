@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using PhoneDirect3DXamlAppInterop.Database;
 using Windows.Storage.Streams;
+using System.IO;
 
 namespace PhoneDirect3DXamlAppInterop
 {
@@ -77,6 +78,17 @@ namespace PhoneDirect3DXamlAppInterop
                 }
                 else if (item.Type == SkyDriveItemType.Savestate || item.Type == SkyDriveItemType.SRAM)
                 {
+                    //check to make sure there is a rom with matching name
+                    ROMDatabase db = ROMDatabase.Current;
+                    ROMDBEntry entry = db.GetROMFromSavestateName(item.Name);
+
+                    if (entry == null) //no matching file name
+                    {
+                        MessageBox.Show("Please make sure the name of the save file matches the name of the ROM", AppResources.ErrorCaption, MessageBoxButton.OK);
+                        return;
+                    }
+                    
+
                     // Download
                     if (!item.Downloading)
                     {
@@ -127,7 +139,32 @@ namespace PhoneDirect3DXamlAppInterop
             if (e != null)
             {
                 byte[] tmpBuf = new byte[e.Stream.Length];
-                StorageFile destinationFile = await saveFolder.CreateFileAsync(item.Name, CreationCollisionOption.ReplaceExisting);
+
+                
+                StorageFile destinationFile = null;
+
+                ROMDBEntry entry = db.GetROMFromSavestateName(item.Name);
+
+                if (item.Type == SkyDriveItemType.SRAM)
+                {
+                    if (entry != null)
+                        destinationFile = await saveFolder.CreateFileAsync(Path.GetFileNameWithoutExtension(entry.FileName) + ".srm", CreationCollisionOption.ReplaceExisting);
+
+                    else
+                        destinationFile = await saveFolder.CreateFileAsync(item.Name, CreationCollisionOption.ReplaceExisting);
+                }
+                else if (item.Type == SkyDriveItemType.Savestate)
+                {
+
+                    if (entry != null)
+                        destinationFile = await saveFolder.CreateFileAsync(Path.GetFileNameWithoutExtension(entry.FileName) + item.Name.Substring(item.Name.Length - 4), CreationCollisionOption.ReplaceExisting);
+                    else
+                        destinationFile = await saveFolder.CreateFileAsync(item.Name, CreationCollisionOption.ReplaceExisting);
+                }
+
+
+
+                
                 using (IRandomAccessStream destStream = await destinationFile.OpenAsync(FileAccessMode.ReadWrite))
                 using (DataWriter writer = new DataWriter(destStream))
                 {
@@ -145,24 +182,29 @@ namespace PhoneDirect3DXamlAppInterop
 
                 if (item.Type == SkyDriveItemType.Savestate)
                 {
-                    if (!db.SavestateEntryExisting(item.Name))
+                    String number = item.Name.Substring(item.Name.Length - 3);
+                    int slot = int.Parse(number);
+
+                    if (entry != null) // Null = No ROM existing for this file -> skip inserting into database.
                     {
-                        String number = item.Name.Substring(item.Name.Length - 2);
-                        int slot = int.Parse(number);
-                        ROMDBEntry entry = db.GetROMFromSavestateName(item.Name);
-                        // Null = No ROM existing for this file -> skip inserting into database. The file will be inserted when the corresponding ROM is downloaded.
-                        if (entry != null)
+                        SavestateEntry saveentry = db.SavestateEntryExisting(entry.FileName, slot);
+                        if (saveentry != null)
                         {
-                            SavestateEntry ssEntry = new SavestateEntry()
-                            {
-                                ROM = entry,
-                                Savetime = DateTime.Now,
-                                Slot = slot,
-                                FileName = item.Name
-                            };
-                            db.Add(ssEntry);
-                            db.CommitChanges();
+                            //delete entry
+                            db.RemoveSavestateFromDB(saveentry);
+
                         }
+
+                        SavestateEntry ssEntry = new SavestateEntry()
+                        {
+                            ROM = entry,
+                            Savetime = DateTime.Now,
+                            Slot = slot,
+                            FileName = item.Name
+                        };
+                        db.Add(ssEntry);
+                        db.CommitChanges();
+                        
                     }
                 }
 
