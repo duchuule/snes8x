@@ -313,7 +313,7 @@ void EmulatorRenderer::Update(float timeTotal, float timeDelta)
 	if(EmulatorSettings::Current->UseMogaController && ctrl != nullptr && ctrl->GetState(Moga::Windows::Phone::ControllerState::Connection) == ControllerResult::Connected)
 	{
 		//pro only, the pocket version has the left joy stick output to both Axis and directional Keycode.
-		if (ctrl->GetState(Moga::Windows::Phone::ControllerState::SelectedVersion) == ControllerResult::VersionMoga ) 
+		if (ctrl->GetState(Moga::Windows::Phone::ControllerState::SelectedVersion) != ControllerResult::VersionMoga ) 
 		{
 			float axis_x = ctrl->GetAxisValue(Axis::X);
 			float axis_y = ctrl->GetAxisValue(Axis::Y);
