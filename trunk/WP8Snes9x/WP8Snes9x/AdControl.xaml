@@ -17,7 +17,7 @@
 
 
         <adduplex:AdControl x:Name="AdDuplexAdControl" 
-                            AppId="64707" 
+                            AppId="76963" 
                             Height="80" 
                             VerticalAlignment="Bottom" 
                             VerticalContentAlignment="Bottom"

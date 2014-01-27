@@ -135,6 +135,9 @@
     <Compile Include="ConfirmationPage.xaml.cs">
       <DependentUpon>ConfirmationPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomizeControllerPage.xaml.cs">
+      <DependentUpon>CustomizeControllerPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Database\ROMDBEntry.cs" />
     <Compile Include="Database\SavestateEntry.cs" />
     <Compile Include="DonatePage.xaml.cs">
@@ -159,6 +162,9 @@
     </Compile>
     <Compile Include="ManageSavestatePage.xaml.cs">
       <DependentUpon>ManageSavestatePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MogaMappingPage.xaml.cs">
+      <DependentUpon>MogaMappingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenameBox.xaml.cs">
@@ -206,6 +212,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="CustomizeControllerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DonatePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -227,6 +237,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ManageSavestatePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MogaMappingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -252,6 +266,32 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\pad_a_buttons.dds">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\pad_b_buttons.dds">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\pad_x_buttons.dds">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\pad_y_buttons.dds">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\pad_a_buttons_gray.dds">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\pad_b_buttons_gray.dds">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\pad_select.dds" />
+    <Content Include="Assets\pad_start.dds" />
+    <Content Include="Assets\pad_x_buttons_gray.dds">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\pad_y_buttons_gray.dds">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Icons\appbar.gift.png" />
     <Content Include="Assets\Icons\appbar.lock.png" />
     <Content Include="Assets\Icons\appbar.unlock.png" />
@@ -278,6 +318,7 @@
     <Content Include="Assets\pad_start_select.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\resumetext.dds" />
     <Content Include="Assets\Tiles\icon176x176.png" />
     <Content Include="Assets\Tiles\icon33x33.png" />
     <Content Include="Assets\Tiles\icon69x69.png" />

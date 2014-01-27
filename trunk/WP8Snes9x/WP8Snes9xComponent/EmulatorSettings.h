@@ -382,6 +382,58 @@ namespace PhoneDirect3DXamlAppComponent
 			}
 		}
 
+
+		property int PadCenterXP;
+		property int PadCenterYP;
+		property int ACenterXP;
+		property int ACenterYP;
+		property int BCenterXP;
+		property int BCenterYP;
+		property int XCenterXP;
+		property int XCenterYP;
+		property int YCenterXP;
+		property int YCenterYP;
+		property int StartLeftP;
+		property int StartTopP;
+		property int SelectRightP;
+		property int SelectTopP;
+		property int LLeftP;
+		property int LTopP;
+		property int RRightP;
+		property int RTopP;
+
+		property int PadCenterXL;
+		property int PadCenterYL;
+		property int ACenterXL;
+		property int ACenterYL;
+		property int BCenterXL;
+		property int BCenterYL;
+		property int XCenterXL;
+		property int XCenterYL;
+		property int YCenterXL;
+		property int YCenterYL;
+		property int StartLeftL;
+		property int StartTopL;
+		property int SelectRightL;
+		property int SelectTopL;
+		property int LLeftL;
+		property int LTopL;
+		property int RRightL;
+		property int RTopL;
+
+
+		property int MogaA;
+		property int MogaB;
+		property int MogaX;
+		property int MogaY;
+		property int MogaL1;
+		property int MogaR1;
+		property int MogaL2;
+		property int MogaR2;
+		property int MogaLeftJoystick;
+		property int MogaRightJoystick;
+
+
 		EmulatorSettings(void);
 	private:
 		bool soundEnabled;
@@ -412,6 +464,8 @@ namespace PhoneDirect3DXamlAppComponent
 		bool shouldShowAds;
 
 		static EmulatorSettings ^instance;
+
+
 	};
 }
 

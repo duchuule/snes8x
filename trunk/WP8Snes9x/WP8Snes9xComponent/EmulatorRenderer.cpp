@@ -10,14 +10,6 @@ using namespace Windows::Foundation;
 using namespace Windows::UI::Core;
 using namespace Windows::Graphics::Display;
 
-#define CROSS_TEXTURE_FILE_NAME						L"Assets/pad_cross.dds"
-#define BUTTONS_TEXTURE_FILE_NAME					L"Assets/pad_buttons.dds"
-#define BUTTONS_GRAY_TEXTURE_FILE_NAME				L"Assets/pad_buttons_gray.dds"
-#define SS_TEXTURE_FILE_NAME						L"Assets/pad_start_select.dds"
-#define L_TEXTURE_FILE_NAME							L"Assets/pad_l_button.dds"
-#define R_TEXTURE_FILE_NAME							L"Assets/pad_r_button.dds"
-#define STICK_TEXTURE_FILE_NAME						L"Assets/ThumbStick.dds"
-#define STICK_CENTER_TEXTURE_FILE_NAME				L"Assets/ThumbStickCenter.dds"
 
 #define AUTOSAVE_INTERVAL			60.0f
 
@@ -27,10 +19,18 @@ extern bool turbo;
 extern bool enableTurboMode;
 
 EmulatorRenderer::EmulatorRenderer()
-	: emulator(EmulatorGame::GetInstance()),
-	frontbuffer(0), controller(nullptr), autosaving(false),
-	elapsedTime(0.0f), settings(EmulatorSettings::Current), frames(0)
 { 
+	emulator = EmulatorGame::GetInstance();
+	frontbuffer = 0;
+	controller = nullptr; 
+	autosaving = false;
+	elapsedTime = 0.0f;
+	settings = EmulatorSettings::Current;
+	frames = 0;
+	should_show_resume_text = false;
+
+	useButtonColor = !settings->GrayVControllerButtons;
+
 	this->waitEvent = CreateEventEx(NULL, NULL, NULL, EVENT_ALL_ACCESS);
 }
 
@@ -52,131 +52,24 @@ EmulatorRenderer::~EmulatorRenderer(void)
 
 void EmulatorRenderer::CreateDeviceResources()
 {
-	Direct3DBase::CreateDeviceResources();
+	Renderer::CreateDeviceResources();
 
-	if(this->spriteBatch)
-	{
-		delete this->spriteBatch;
-		this->spriteBatch = nullptr;
-	}
-	this->m_d3dDevice->GetImmediateContext1(this->m_d3dContext.GetAddressOf());
-	this->spriteBatch = new SpriteBatch(this->m_d3dContext.Get());
 
-	if(this->commonStates)
+	if(this->controller)
 	{
-		delete this->commonStates;
-		this->commonStates = nullptr;
+		this->controller->UpdateFormat(this->format);
 	}
-	this->commonStates = new CommonStates(this->m_d3dDevice.Get());
+
 	
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), STICK_TEXTURE_FILE_NAME,
-		this->stickResource.GetAddressOf(),
-		this->stickSRV.GetAddressOf())
-		);
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), STICK_CENTER_TEXTURE_FILE_NAME,
-		this->stickCenterResource.GetAddressOf(),
-		this->stickCenterSRV.GetAddressOf())
-		);
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), CROSS_TEXTURE_FILE_NAME,
-		this->crossResource.GetAddressOf(),
-		this->crossSRV.GetAddressOf())
-		);
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), BUTTONS_TEXTURE_FILE_NAME,
-		this->buttonsResource.GetAddressOf(),
-		this->buttonsSRV.GetAddressOf())
-		);
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), BUTTONS_GRAY_TEXTURE_FILE_NAME,
-		this->buttonsGrayResource.GetAddressOf(),
-		this->buttonsGraySRV.GetAddressOf())
-		);
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), SS_TEXTURE_FILE_NAME,
-		this->startSelectResource.GetAddressOf(),
-		this->startSelectSRV.GetAddressOf())
-		);
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), L_TEXTURE_FILE_NAME,
-		this->lButtonResource.GetAddressOf(),
-		this->lButtonSRV.GetAddressOf())
-		);
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), R_TEXTURE_FILE_NAME,
-		this->rButtonResource.GetAddressOf(),
-		this->rButtonSRV.GetAddressOf())
-		);
-
-	// Create Textures and SRVs for front and backbuffer
-	D3D11_TEXTURE2D_DESC desc;
-	ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
-
-	desc.ArraySize = 1;
-	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	desc.Format = DXGI_FORMAT_B5G6R5_UNORM;
-	desc.Width = EXT_WIDTH;
-	desc.Height = EXT_HEIGHT;
-	desc.MipLevels = 1;
-	desc.SampleDesc.Count = 1;
-	desc.SampleDesc.Quality = 0;
-	desc.Usage = D3D11_USAGE_DYNAMIC;
-
-	DX::ThrowIfFailed(
-		this->m_d3dDevice->CreateTexture2D(&desc, nullptr, this->buffers[0].GetAddressOf())
-		);
-	DX::ThrowIfFailed(
-		this->m_d3dDevice->CreateTexture2D(&desc, nullptr, this->buffers[1].GetAddressOf())
-		);
-
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	ZeroMemory(&srvDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
-	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	srvDesc.Texture2D.MipLevels = 1;
-	srvDesc.Texture2D.MostDetailedMip = 0;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-
-	DX::ThrowIfFailed(
-		this->m_d3dDevice->CreateShaderResourceView(this->buffers[0].Get(), &srvDesc, this->bufferSRVs[0].GetAddressOf())
-		);
-	DX::ThrowIfFailed(
-		this->m_d3dDevice->CreateShaderResourceView(this->buffers[1].Get(), &srvDesc, this->bufferSRVs[1].GetAddressOf())
-		);
 
 	// Map backbuffer so it can be unmapped on first update
 	int backbuffer = (this->frontbuffer + 1) % 2;
 	this->backbufferPtr = (uint16 *) this->MapBuffer(backbuffer, &this->pitch);
 
-	D3D11_BLEND_DESC blendDesc;
-	ZeroMemory(&blendDesc, sizeof(D3D11_BLEND_DESC));
-
-	blendDesc.RenderTarget[0].BlendEnable = true;
-	blendDesc.RenderTarget[0].SrcBlend = blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
-	blendDesc.RenderTarget[0].DestBlend = blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
-	blendDesc.RenderTarget[0].BlendOp = blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-
-	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-	DX::ThrowIfFailed(
-		this->m_d3dDevice->CreateBlendState(&blendDesc, this->alphablend.GetAddressOf())
-		);
+	
 }
 
-void EmulatorRenderer::CreateWindowSizeDependentResources()
-{
-	Direct3DBase::CreateWindowSizeDependentResources();
-}
+
 
 void EmulatorRenderer::UpdateForWindowSizeChange(float width, float height)
 {
@@ -232,22 +125,6 @@ void EmulatorRenderer::ChangeOrientation(int orientation)
 	this->CreateTransformMatrix();
 }
 
-void EmulatorRenderer::CreateTransformMatrix(void)
-{
-	this->outputTransform = XMMatrixIdentity();
-
-	if(this->orientation != ORIENTATION_PORTRAIT)
-	{
-		if(this->orientation == ORIENTATION_LANDSCAPE_RIGHT)
-		{
-			this->outputTransform = XMMatrixMultiply(XMMatrixTranslation(-this->width/2, -this->height/2, 0.0f), XMMatrixRotationZ(XM_PI));
-			this->outputTransform = XMMatrixMultiply(this->outputTransform, XMMatrixTranslation(this->width/2, this->height/2, 0.0f));
-		}
-
-		this->outputTransform = XMMatrixMultiply(this->outputTransform, XMMatrixRotationZ(XM_PIDIV2));
-		this->outputTransform = XMMatrixMultiply(this->outputTransform, XMMatrixTranslation(this->height, 0.0f, 0.0f));
-	}
-}
 
 void EmulatorRenderer::Update(float timeTotal, float timeDelta)
 {
@@ -386,26 +263,6 @@ void EmulatorRenderer::Update(float timeTotal, float timeDelta)
 		}
 
 		
-		if(ctrl->GetKeyCode(KeyCode::A) == ControllerAction::Pressed )
-		{
-			b = true;
-		}
-
-		if(ctrl->GetKeyCode(KeyCode::B) == ControllerAction::Pressed)
-		{
-			a = true;
-		}
-
-		if(ctrl->GetKeyCode(KeyCode::X) == ControllerAction::Pressed)
-		{
-			y = true;
-		}
-
-		if( ctrl->GetKeyCode(KeyCode::Y) == ControllerAction::Pressed)
-		{
-			x = true;
-		}
-
 		if(ctrl->GetKeyCode(KeyCode::Start) == ControllerAction::Pressed)
 		{
 			start = true;
@@ -436,15 +293,42 @@ void EmulatorRenderer::Update(float timeTotal, float timeDelta)
 			down = true;
 		}
 
-		if(ctrl->GetKeyCode(KeyCode::L1) == ControllerAction::Pressed || ctrl->GetKeyCode(KeyCode::L2) == ControllerAction::Pressed)
+		if(ctrl->GetKeyCode(KeyCode::A) == ControllerAction::Pressed )
 		{
-			l = true;
+			GetMogaMapping(settings->MogaA, &a, &b, &x, &y, &l, &r );
 		}
 
-		if(ctrl->GetKeyCode(KeyCode::R1) == ControllerAction::Pressed || ctrl->GetKeyCode(KeyCode::R2) == ControllerAction::Pressed)
-		{
-			r = true;
-		}
+		
+		if(ctrl->GetKeyCode(KeyCode::B) == ControllerAction::Pressed)
+			GetMogaMapping(settings->MogaB, &a, &b, &x, &y, &l, &r );
+
+
+		if (ctrl->GetKeyCode(KeyCode::X) == ControllerAction::Pressed)
+			GetMogaMapping(settings->MogaX, &a, &b, &x, &y, &l, &r );
+
+
+		if(ctrl->GetKeyCode(KeyCode::Y) == ControllerAction::Pressed)
+			GetMogaMapping(settings->MogaY, &a, &b, &x, &y, &l, &r );
+
+		if(ctrl->GetKeyCode(KeyCode::L1) == ControllerAction::Pressed )
+			GetMogaMapping(settings->MogaL1, &a, &b, &x, &y, &l, &r );
+
+		if (abs(ctrl->GetAxisValue(Axis::LeftTrigger)) > 0.5f)
+			GetMogaMapping(settings->MogaL2, &a, &b, &x, &y, &l, &r );
+
+
+		if(ctrl->GetKeyCode(KeyCode::R1) == ControllerAction::Pressed )
+			GetMogaMapping(settings->MogaR1, &a, &b, &x, &y, &l, &r );
+
+
+		if (abs(ctrl->GetAxisValue(Axis::RightTrigger)) > 0.5f)
+			GetMogaMapping(settings->MogaR2, &a, &b, &x, &y, &l, &r );
+
+		if(ctrl->GetKeyCode(KeyCode::ThumbLeft) == ControllerAction::Pressed )
+			GetMogaMapping(settings->MogaLeftJoystick, &a, &b, &x, &y, &l, &r );
+
+		if(ctrl->GetKeyCode(KeyCode::ThumbRight) == ControllerAction::Pressed )
+			GetMogaMapping(settings->MogaRightJoystick, &a, &b, &x, &y, &l, &r );
 
 	}
 
@@ -525,6 +409,50 @@ void EmulatorRenderer::Update(float timeTotal, float timeDelta)
 	this->emulator->SetButtonState(JOYPAD_Y, y);
 	this->emulator->SetButtonState(JOYPAD_L, l);
 	this->emulator->SetButtonState(JOYPAD_R, r);
+
+
+	//set render parameter
+	float opacity = this->settings->ControllerOpacity / 100.0f;
+	XMFLOAT4A color = XMFLOAT4A(1.0f, 1.0f, 1.0f, opacity);
+	XMFLOAT4A color2 = XMFLOAT4A(1.0f, 1.0f, 1.0f, opacity + 0.2f);
+	joystick_color = color;
+	joystick_center_color = color2;
+	l_color = color;
+	r_color = color;
+	select_color = color;
+	start_color = color;
+	a_color = color;
+	b_color = color;
+	x_color = color;
+	y_color = color;
+
+	float text_opacity = (sinf(timeTotal*2) + 1.0f) / 2.0f;
+	resume_text_color = XMFLOAT4A(1.0f, 0.0f, 0.0f, text_opacity);
+
+	if(settings->DPadStyle == 0 || settings->DPadStyle == 1)
+		pad_to_draw = 0;
+	else if(settings->DPadStyle == 2 || (settings->DPadStyle == 3 && this->controller->StickFingerDown()))
+		pad_to_draw = 1;
+	else
+		pad_to_draw = -1;
+}
+
+
+void EmulatorRenderer::GetMogaMapping(int pressedButton, bool* a, bool* b, bool* x, bool* y, bool* l, bool* r )
+{
+	if (pressedButton & 1)
+		*a = true;
+	if (pressedButton & 2)
+		*b = true;
+	if (pressedButton & 4)
+		*x = true;
+	if (pressedButton & 8)
+		*y = true;
+	if (pressedButton & 16) 
+		*l = true;
+	if (pressedButton & 32)
+		*r = true;
+	
 }
 
 void EmulatorRenderer::Render()
@@ -620,11 +548,17 @@ void EmulatorRenderer::Render()
 	source.top = 0;
 	source.bottom = EmulatorGame::SnesImageHeight;
 			
-	this->controller->GetButtonsRectangle(&buttonsRectangle);
+	this->controller->GetARectangle(&aRectangle);
+	this->controller->GetBRectangle(&bRectangle);
+	this->controller->GetXRectangle(&xRectangle);
+	this->controller->GetYRectangle(&yRectangle);
 	this->controller->GetCrossRectangle(&crossRectangle);
-	this->controller->GetStartSelectRectangle(&startSelectRectangle);
+	this->controller->GetStartRectangle(&startRectangle);
+	this->controller->GetSelectRectangle(&selectRectangle);
 	this->controller->GetLRectangle(&lRectangle);
 	this->controller->GetRRectangle(&rRectangle);
+	this->controller->GetStickRectangle(&stickRect);
+	this->controller->GetStickCenterRectangle(&centerRect);
 
 	float opacity = this->settings->ControllerOpacity / 100.0f;
 	XMFLOAT4A colorf = XMFLOAT4A(1.0f, 1.0f, 1.0f, opacity);
@@ -643,35 +577,25 @@ void EmulatorRenderer::Render()
 		this->outputTransform);
 	this->spriteBatch->Draw(this->bufferSRVs[this->frontbuffer].Get(), rect, &source);
 
+	//display resume text if paused
+	if(should_show_resume_text)
+	{
+		int textWidth = 0.5*width;
+		int textHeight = textWidth / 480.0f * 80.0f;
+
+		RECT resume_text_rect = {(width - textWidth) / 2, (height - textHeight) / 2, (width + textWidth) / 2, (height + textHeight) / 2};
+
+		this->spriteBatch->Draw(this->resumeTextSRV.Get(), resume_text_rect, nullptr, XMLoadFloat4A(&resume_text_color));
+
+
+	}
 
 	//===draw virtual controller if moga controller is not loaded
 	using namespace Moga::Windows::Phone;
 	Moga::Windows::Phone::ControllerManager^ ctrl = Direct3DBackground::getController();
 	if (!(EmulatorSettings::Current->UseMogaController && ctrl != nullptr && ctrl->GetState(Moga::Windows::Phone::ControllerState::Connection) == ControllerResult::Connected))
 	{
-		if(settings->GrayVControllerButtons)
-		{
-			this->spriteBatch->Draw(this->buttonsGraySRV.Get(), this->buttonsRectangle, nullptr, colorv);
-		}else
-		{
-			this->spriteBatch->Draw(this->buttonsSRV.Get(), this->buttonsRectangle, nullptr, colorv);
-		}
-		if(settings->DPadStyle == 0 || settings->DPadStyle == 1)
-		{
-			this->spriteBatch->Draw(this->crossSRV.Get(), this->crossRectangle, nullptr, colorv);
-		}else if(settings->DPadStyle == 2 || (settings->DPadStyle == 3 && this->controller->StickFingerDown()))
-		{
-			RECT centerRect;
-			RECT stickRect;
-			this->controller->GetStickRectangle(&stickRect);
-			this->controller->GetStickCenterRectangle(&centerRect);
-
-			this->spriteBatch->Draw(this->stickCenterSRV.Get(), centerRect, nullptr, colorv2);
-			this->spriteBatch->Draw(this->stickSRV.Get(), stickRect, nullptr, colorv);
-		}
-		this->spriteBatch->Draw(this->startSelectSRV.Get(), this->startSelectRectangle, nullptr, colorv);
-		this->spriteBatch->Draw(this->lButtonSRV.Get(), this->lRectangle, nullptr, colorv);
-		this->spriteBatch->Draw(this->rButtonSRV.Get(), this->rRectangle, nullptr, colorv);
+		this->DrawController();
 	}
 
 	this->spriteBatch->End();

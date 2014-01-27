@@ -275,6 +275,19 @@
     <ClCompile Include="EmulatorFileHandler.cpp" />
     <ClCompile Include="VirtualController.cpp" />
     <ClCompile Include="EmulatorSettings.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="CPositionComponent.cpp">
+      <Filter>controllerposition</Filter>
+    </ClCompile>
+    <ClCompile Include="CPositionContentProvider.cpp">
+      <Filter>controllerposition</Filter>
+    </ClCompile>
+    <ClCompile Include="CPositionVirtualController.cpp">
+      <Filter>controllerposition</Filter>
+    </ClCompile>
+    <ClCompile Include="CPositionRenderer.cpp">
+      <Filter>controllerposition</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicTimer.h" />
@@ -598,6 +611,19 @@
     <ClInclude Include="VirtualController.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="EmulatorSettings.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="CPositionComponent.h">
+      <Filter>controllerposition</Filter>
+    </ClInclude>
+    <ClInclude Include="CPositionContentProvider.h">
+      <Filter>controllerposition</Filter>
+    </ClInclude>
+    <ClInclude Include="CPositionVirtualController.h">
+      <Filter>controllerposition</Filter>
+    </ClInclude>
+    <ClInclude Include="CPositionRenderer.h">
+      <Filter>controllerposition</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DXTK">
@@ -620,6 +646,9 @@
     </Filter>
     <Filter Include="Snes9x\Sound">
       <UniqueIdentifier>{354fea18-6a16-4867-92bc-da0daeb6fe36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="controllerposition">
+      <UniqueIdentifier>{744058a3-468e-4609-9d2e-6f467bcb44be}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

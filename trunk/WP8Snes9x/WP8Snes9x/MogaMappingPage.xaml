@@ -1,0 +1,265 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="PhoneDirect3DXamlAppInterop.MogaMappingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--app bar -->
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+
+            <shell:ApplicationBarIconButton 
+                x:Name="appBarOkButton" 
+                IconUri="/Assets/Icons/check.png" 
+                Text="ok" 
+                Click="appBarOkButton_Click"
+                />
+
+            <shell:ApplicationBarIconButton 
+                x:Name="appBarCancelButton" 
+                IconUri="/Assets/Icons/cancel.png" 
+                Text="cancel" 
+                Click="appBarCancelButton_Click" />
+
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <Style x:Key="MogaTextStyle" TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="25.333" />
+            </Style>
+
+            <Style x:Key="AppFunctionStyle" TargetType="toolkit:ListPicker">
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Margin" Value="0, -4, 0, 4" />
+            </Style>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="MOGA mapping" 
+                       Margin="9,-7,0,0" Style="{StaticResource MyTitle1Style}"/>
+        </StackPanel>
+
+        <!--ContentPanel - place additional content here-->
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                      Grid.Row="1" Margin="12,0,12,0">
+            <Grid x:Name="ContentPanel" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="MOGA BUTTON" 
+                       Margin="0,0,0,12"
+                       FontSize="26"/>
+
+                <TextBlock Text="APP FUNCTION"
+                        Grid.Column="1"
+                        Margin="0,0,0,12"
+                       FontSize="26"/>
+
+                <TextBlock Text="A button" 
+                       Style="{StaticResource MogaTextStyle}"
+                       Grid.Row="1"
+                       />
+
+                <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
+					            FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
+                                Grid.Column="1"
+                                Style="{StaticResource AppFunctionStyle}"
+                                Grid.Row="1"
+                                Name="Abtn"
+                                >
+                </toolkit:ListPicker>
+
+                <TextBlock Text="B button" 
+                       Style="{StaticResource MogaTextStyle}"
+                       Grid.Row="2"
+                       />
+
+                <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
+					        FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
+                            Grid.Column="1"
+                                Style="{StaticResource AppFunctionStyle}"
+                            Grid.Row="2"
+                            Name="Bbtn"
+                            >
+
+                </toolkit:ListPicker>
+
+                <TextBlock Text="X button" 
+                       Style="{StaticResource MogaTextStyle}"
+                       Grid.Row="3"
+                       />
+
+                <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
+					        FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
+                            Grid.Column="1"
+                                Style="{StaticResource AppFunctionStyle}"
+                            Grid.Row="3"
+                           Name="Xbtn"
+                            >
+
+                </toolkit:ListPicker>
+                <TextBlock Text="Y button" 
+                       Style="{StaticResource MogaTextStyle}"
+                       Grid.Row="4"
+                       />
+
+                <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
+					        FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
+                            Grid.Column="1"
+                            Grid.Row="4"
+                            Style="{StaticResource AppFunctionStyle}"
+                                Name="Ybtn"
+                            >
+
+                </toolkit:ListPicker>
+                <TextBlock Text="L1 button" 
+                       Style="{StaticResource MogaTextStyle}"
+                       Grid.Row="5"
+                       />
+
+                <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
+					        FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
+                            Grid.Column="1"
+                            Grid.Row="5"
+                                Style="{StaticResource AppFunctionStyle}"
+                                Name="L1btn"
+                            >
+
+                </toolkit:ListPicker>
+
+
+                <TextBlock Text="L2 button" 
+                       Style="{StaticResource MogaTextStyle}"
+                       Grid.Row="6"
+                       />
+
+                <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
+					        FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
+                            Grid.Column="1"
+                                Style="{StaticResource AppFunctionStyle}"
+                            Grid.Row="6"
+                             Name="L2btn"
+                            >
+
+                </toolkit:ListPicker>
+
+                <TextBlock Text="R1 button" 
+                       Style="{StaticResource MogaTextStyle}"
+                       Grid.Row="7"
+                       />
+
+                <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
+					        FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
+                            Grid.Column="1"
+                                Style="{StaticResource AppFunctionStyle}"
+                            Grid.Row="7"
+                             Name="R1btn"
+                            >
+
+                </toolkit:ListPicker>
+
+
+
+                <TextBlock Text="R2 button" 
+                       Style="{StaticResource MogaTextStyle}"
+                       Grid.Row="8"
+                       />
+
+                <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
+					        FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
+                            Grid.Column="1"
+                                Style="{StaticResource AppFunctionStyle}"
+                            Grid.Row="8"
+                             Name="R2btn"
+                            >
+
+                </toolkit:ListPicker>
+
+                <TextBlock Text="Left joystick click" 
+                       Style="{StaticResource MogaTextStyle}"
+                       Grid.Row="9"
+                       />
+
+                <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
+					        FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
+                            Grid.Column="1"
+                                Style="{StaticResource AppFunctionStyle}"
+                            Grid.Row="9"
+                             Name="LeftJoystickbtn"
+                            >
+
+                </toolkit:ListPicker>
+
+                <TextBlock Text="Right joystick click" 
+                       Style="{StaticResource MogaTextStyle}"
+                       Grid.Row="10"
+                       />
+
+                <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
+					        FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
+                            Grid.Column="1"
+                                Style="{StaticResource AppFunctionStyle}"
+                            Grid.Row="10"
+                             Name="RightJoystickbtn"
+                            >
+
+                </toolkit:ListPicker>
+
+                <TextBlock Text="Note: Emulator Menu function will be implemented at a later date." 
+                           Grid.Row="11"
+                           FontSize="20"
+                           TextWrapping="Wrap"
+                           Grid.ColumnSpan="2"
+                           Foreground="Red"
+                           Margin="0,12,0,0"
+                           />
+            </Grid>
+
+
+        </ScrollViewer>
+
+
+
+    </Grid>
+
+</phone:PhoneApplicationPage>

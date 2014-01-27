@@ -9,7 +9,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Landscape"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
 
@@ -23,20 +23,22 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="{Binding LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="{Binding LocalizedResources.RestorePageTitle, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+
+            <TextBlock Text="{Binding LocalizedResources.RestorePageTitle, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource MyTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,-12,12,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Name="currentFolderBox" FontSize="34" Margin="14,0,0,0" Height="50" VerticalAlignment="Top"/>
+
+            <TextBlock Grid.Row="0" Name="currentFolderBox" FontSize="34" Margin="14,0,0,0" Height="40" VerticalAlignment="Top"/>
             <Line Grid.Row="1" Margin="0,20,0,0" X1="0" Y1="0" X2="800" Y2="0" Stroke="Gray" StrokeThickness="4" />
+
             <TextBlock Grid.Row="2" Name="statusLabel" TextWrapping="Wrap" />
             <ListBox Grid.Row="3" Margin="0,5,0,0" Name="skydriveList" SelectionChanged="skydriveList_SelectionChanged">
                 <ListBox.ItemTemplate>

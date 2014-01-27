@@ -105,7 +105,7 @@ namespace PhoneDirect3DXamlAppInterop
             else
             {
                 // No SD card is present.
-                MessageBox.Show("The SD card is mssing. Insert an SD card try again.");
+                MessageBox.Show("The SD card is missing. Insert an SD card try again.");
             }
         }
 

@@ -12,7 +12,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Landscape"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
 
@@ -36,10 +36,16 @@
         
         <phone:Panorama Grid.Row="0">
            
-            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.RomListTitle, Source={StaticResource LocalizedStrings}}">
+            <phone:PanoramaItem >
+                <phone:PanoramaItem.Header >
+                    <TextBlock Text="{Binding Path=LocalizedResources.RomListTitle, Source={StaticResource LocalizedStrings}}"
+                               Style="{StaticResource MyTitle1Style}" 
+                               />
+                </phone:PanoramaItem.Header>
                 <ListBox x:Name="romList" 
                          SelectionChanged="romList_SelectionChanged"
-                         toolkit:TiltEffect.IsTiltEnabled="True">
+                         toolkit:TiltEffect.IsTiltEnabled="True"
+                         Margin="0, -24, 0, 0">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Height="60">
@@ -83,10 +89,16 @@
                 <!--<Grid />-->
             </phone:PanoramaItem>
 
-            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.RecentTitle, Source={StaticResource LocalizedStrings}}">
+            <phone:PanoramaItem >
+                <phone:PanoramaItem.Header >
+                    <TextBlock Text="{Binding Path=LocalizedResources.RecentTitle, Source={StaticResource LocalizedStrings}}"
+                               Style="{StaticResource MyTitle1Style}" 
+                               />
+                </phone:PanoramaItem.Header>
                 <ListBox Name="recentList" 
                          SelectionChanged="recentList_SelectionChanged_1"
-                         toolkit:TiltEffect.IsTiltEnabled="True">
+                         toolkit:TiltEffect.IsTiltEnabled="True"
+                         Margin="0,-24,0,0">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -129,63 +141,66 @@
                 </ListBox>
             </phone:PanoramaItem>
 
-            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.ImportTitle, Source={StaticResource LocalizedStrings}}" >
-                <StackPanel Margin="0,0,0,0">
-                    <Button x:Name="ImportSD" 
+            <phone:PanoramaItem >
+                <phone:PanoramaItem.Header >
+                    <TextBlock Text="{Binding Path=LocalizedResources.ImportTitle, Source={StaticResource LocalizedStrings}}"
+                               Style="{StaticResource MyTitle1Style}" 
+                               />
+                </phone:PanoramaItem.Header>
+                
+                <ScrollViewer Margin="0,-24,0,0">
+                    <StackPanel Margin="0,0,0,0">
+                        <Button x:Name="ImportSD" 
                                     Click="ImportSD_Click"
                                     Content="Import ROMs from SD Card"/>
-                    <ListBox x:Name="ContentPanel" Margin="12,0,12,0">
-                        <ListBoxItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsHitTestVisible="False">
-                            <TextBlock TextWrapping="Wrap" FontSize="24"
-                            Text="{Binding Path=LocalizedResources.ImportInstructionsText, Source={StaticResource LocalizedStrings}}" />
-                        </ListBoxItem>
-                        <ListBoxItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                        
+                        <TextBlock TextWrapping="Wrap" FontSize="24"
+                                Text="{Binding Path=LocalizedResources.ImportInstructionsText, Source={StaticResource LocalizedStrings}}" />
+                           
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                     Margin="0,0,0,0">
-                                <Controls:SignInButton Content="SignInButton" Name="signinButton"
+                                    <Controls:SignInButton Content="SignInButton" Name="signinButton"
                                 ClientId="000000004810C3D3"
                                 Branding="Skydrive"
                                 Scopes="wl.signin wl.skydrive_update wl.offline_access"
                                 SessionChanged="btnSignin_SessionChanged" Width="200" Height="72" VerticalAlignment="Top"/>
-                                <Button Name="gotoImportButton" Width="200"
+                                    <Button Name="gotoImportButton" Width="200"
                                     IsEnabled="False" Click="gotoImportButton_Click_1"
                                     Content="{Binding Path=LocalizedResources.ImportFromSkyDriveButtonText, Source={StaticResource LocalizedStrings}}"/>
-                            </StackPanel>
-                        </ListBoxItem>
-                        <ListBoxItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsHitTestVisible="False">
-                            <TextBlock TextWrapping="Wrap" FontSize="24"
-                            Text="{Binding Path=LocalizedResources.BackupAndRestoreInstructions, Source={StaticResource LocalizedStrings}}" />
-                        </ListBoxItem>
-                        <ListBoxItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                                    Margin="0,0,0,0">
-                                <Button Name="gotoBackupButton" Width="200"
-                                        IsEnabled="False" Click="gotoBackupButton_Click_1"
-                                        Content="{Binding Path=LocalizedResources.BackupButton, Source={StaticResource LocalizedStrings}}"/>
-                                <Button Name="gotoRestoreButton"  Width="200"
-                                        IsEnabled="False" Click="gotoRestoreButton_Click_1"
-                                        Content="{Binding Path=LocalizedResources.RestoreButton, Source={StaticResource LocalizedStrings}}"/>
-                            </StackPanel>
-                        </ListBoxItem>
-                        <!--<ListBoxItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsHitTestVisible="False">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontSize="24"
-                                       Text="{Binding Path=LocalizedResources.StatusLabelContent, Source={StaticResource LocalizedStrings}}" />
-                            <TextBlock FontSize="24" 
-                                       Name="statusLabel" 
-                                       Text="{Binding Path=LocalizedResources.StatusNotSignedIn, Source={StaticResource LocalizedStrings}}" />
                         </StackPanel>
-                    </ListBoxItem>-->
+                            
+                            
+                        <TextBlock TextWrapping="Wrap" FontSize="24"
+                            Text="{Binding Path=LocalizedResources.BackupAndRestoreInstructions, Source={StaticResource LocalizedStrings}}" />
+                            
+                            
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                            Margin="0,0,0,0">
+                            <Button Name="gotoBackupButton" Width="200"
+                                IsEnabled="False" Click="gotoBackupButton_Click_1"
+                                Content="{Binding Path=LocalizedResources.BackupButton, Source={StaticResource LocalizedStrings}}"/>
+                            <Button Name="gotoRestoreButton"  Width="200"
+                                IsEnabled="False" Click="gotoRestoreButton_Click_1"
+                                Content="{Binding Path=LocalizedResources.RestoreButton, Source={StaticResource LocalizedStrings}}"/>
+                        </StackPanel>
+                            
+                           
 
-                    </ListBox>
-                </StackPanel>
+                     
+                    </StackPanel>
+                </ScrollViewer>
             </phone:PanoramaItem>
 
-            <phone:PanoramaItem Header="help&amp;guides" >
-
+            <phone:PanoramaItem  >
+                <phone:PanoramaItem.Header >
+                    <TextBlock Text="help&amp;guides"
+                               Style="{StaticResource MyTitle1Style}" 
+                               />
+                </phone:PanoramaItem.Header>
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                               Margin="12,-24,0,0"
                               >
-                    <StackPanel Margin="12,0,0,0">
+                    <StackPanel Margin="0,0,0,0">
                         <TextBlock Text="Video: MOGA controller instruction" 
                            TextWrapping="Wrap"
                            Margin="0,0,12,12"

@@ -34,7 +34,7 @@ namespace PhoneDirect3DXamlAppComponent
 	IDrawingSurfaceBackgroundContentProvider^ Direct3DBackground::CreateContentProvider()
 	{
 		ComPtr<Direct3DContentProvider> provider = Make<Direct3DContentProvider>(this);
-		return reinterpret_cast<IDrawingSurfaceBackgroundContentProvider^>(provider.Detach());
+		return reinterpret_cast<IDrawingSurfaceBackgroundContentProvider^>(provider.Get());
 	}
 
 	// IDrawingSurfaceManipulationHandler
@@ -109,11 +109,14 @@ namespace PhoneDirect3DXamlAppComponent
 	void Direct3DBackground::PauseEmulation(void)
 	{
 		this->emulator->Pause();
+		this->m_renderer->should_show_resume_text = true;
 	}
 
 	void Direct3DBackground::UnpauseEmulation(void)
 	{
+		this->m_renderer->should_show_resume_text = false;
 		this->emulator->Unpause();
+
 	}
 
 	void Direct3DBackground::SelectSaveState(int slot)
@@ -129,6 +132,8 @@ namespace PhoneDirect3DXamlAppComponent
 
 	void Direct3DBackground::SaveState(void)
 	{
+		this->m_renderer->should_show_resume_text = false;
+
 		SaveStateAsync().then([this]()
 		{
 			this->emulator->Unpause();
@@ -150,6 +155,8 @@ namespace PhoneDirect3DXamlAppComponent
 
 	void Direct3DBackground::LoadState(void)
 	{
+		this->m_renderer->should_show_resume_text = false;
+
 		LoadStateAsync().then([this]()
 		{
 			this->emulator->Unpause();
@@ -159,6 +166,8 @@ namespace PhoneDirect3DXamlAppComponent
 
 	void Direct3DBackground::Reset(void)
 	{
+		this->m_renderer->should_show_resume_text = false;
+
 		if(emulator->IsROMLoaded())
 		{
 			Emulator::ResetAsync();

@@ -32,7 +32,7 @@ namespace PhoneDirect3DXamlAppInterop
         {
             EmailComposeTask emailcomposer = new EmailComposeTask();
             emailcomposer.To = AppResources.AboutContact;
-            emailcomposer.Subject = "bug report or feature suggestion";
+            emailcomposer.Subject = "Snes8x bug report or feature suggestion";
             emailcomposer.Body = "Insert your bug report or feature request here.";
             emailcomposer.Show();
         }

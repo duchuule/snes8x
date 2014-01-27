@@ -81,7 +81,11 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         /// <summary>
         ///   Looks up a localized string similar to This app is based on the source code provided by M.k, which is in turn based on the Snes9x source code. 
         ///
-        ///The author is not responsible for any illegal use of this software. Furthermore, there is no warranty for this software and the author is not liable for any damages..
+        ///The author is not responsible for any illegal use of this software. Furthermore, there is no warranty for this software and the author is not liable for any damages.
+        ///
+        ///Credits:
+        ///- Eddi Bento for the logo.
+        ///- Moga company for the surprised gift..
         /// </summary>
         public static string AboutSnes9x {
             get {
@@ -1368,6 +1372,15 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SETTINGS.
+        /// </summary>
+        public static string SettingsPageTitle {
+            get {
+                return ResourceManager.GetString("SettingsPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SkyDriveError: {0}.
         /// </summary>
         public static string SkyDriveError {
@@ -1395,7 +1408,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SkyDrive.
+        ///   Looks up a localized string similar to import ROMs.
         /// </summary>
         public static string SkyDriveImportTitle {
             get {
@@ -1499,6 +1512,15 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         public static string TurboModeTip {
             get {
                 return ResourceManager.GetString("TurboModeTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporting &apos;{0}&apos;.
+        /// </summary>
+        public static string UploadProgressText {
+            get {
+                return ResourceManager.GetString("UploadProgressText", resourceCulture);
             }
         }
         
