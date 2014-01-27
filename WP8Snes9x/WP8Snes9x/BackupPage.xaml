@@ -9,7 +9,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Landscape"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
 
@@ -23,22 +23,21 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="{Binding Path=LocalizedResources.BackupPageTitle, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.BackupPageTitle, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource MyTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,-12,12,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Stretch">
+            <!--<StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Stretch">
                 <TextBlock Text="{Binding Path=LocalizedResources.BackupInstructions, Source={StaticResource LocalizedStrings}}" 
                            TextWrapping="Wrap" FontSize="24"/>
                 <Line Margin="0,20,0,0" X1="0" Y1="0" X2="800" Y2="0" Stroke="Gray" StrokeThickness="4" />
-            </StackPanel>
+            </StackPanel>-->
             <ListBox Grid.Row="1" Name="romList" SelectionChanged="romList_SelectionChanged_1">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

@@ -89,6 +89,10 @@ namespace PhoneDirect3DXamlAppInterop
                 bool errors = false;
                 foreach (var savestate in entry.Savestates)
                 {
+                    ProgressIndicator indicator2 = SystemTray.GetProgressIndicator(this);
+
+                    indicator2.Text = String.Format(AppResources.UploadProgressText, savestate.FileName);
+
                     String path = FileHandler.ROM_DIRECTORY + "/" + FileHandler.SAVE_DIRECTORY + "/" + savestate.FileName;
                     try
                     {
@@ -114,6 +118,10 @@ namespace PhoneDirect3DXamlAppInterop
                 {
                     if (iso.FileExists(sramPath))
                     {
+                        ProgressIndicator indicator2 = SystemTray.GetProgressIndicator(this);
+
+                        indicator2.Text = String.Format(AppResources.UploadProgressText, sramName);
+
                         using (IsolatedStorageFileStream fs = iso.OpenFile(sramPath, FileMode.Open))
                         {
                             await client.UploadAsync(folderID, sramName, fs, OverwriteOption.Overwrite);

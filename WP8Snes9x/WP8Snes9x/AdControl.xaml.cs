@@ -20,9 +20,6 @@ namespace PhoneDirect3DXamlAppInterop
             InitializeComponent();
 
 
-#if GBC
-            AdDuplexAdControl.AppId = "71883";
-#endif
 
             mobFoxadControl.NewAd += mobFoxadControl_NewAd;
             mobFoxadControl.NoAd += mobFoxadControl_NoAd;

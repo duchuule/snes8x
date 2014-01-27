@@ -229,7 +229,7 @@
     <value>Error while accessing SkyDrive: {0}</value>
   </data>
   <data name="SkyDriveImportTitle" xml:space="preserve">
-    <value>SkyDrive</value>
+    <value>import ROMs</value>
   </data>
   <data name="StatusLabelContent" xml:space="preserve">
     <value>Status: </value>
@@ -264,7 +264,11 @@
   <data name="AboutSnes9x" xml:space="preserve">
     <value>This app is based on the source code provided by M.k, which is in turn based on the Snes9x source code. 
 
-The author is not responsible for any illegal use of this software. Furthermore, there is no warranty for this software and the author is not liable for any damages.</value>
+The author is not responsible for any illegal use of this software. Furthermore, there is no warranty for this software and the author is not liable for any damages.
+
+Credits:
+- Eddi Bento for the logo.
+- Moga company for the surprised gift.</value>
   </data>
   <data name="AboutSnes9xLicense" xml:space="preserve">
     <value>Snes9x license:</value>
@@ -641,5 +645,11 @@ Super NES and Super Nintendo Entertainment System are trademarks of Nintendo Co.
   </data>
   <data name="SourceLink" xml:space="preserve">
     <value>http://sourceforge.net/projects/snes8x/</value>
+  </data>
+  <data name="UploadProgressText" xml:space="preserve">
+    <value>Exporting '{0}'</value>
+  </data>
+  <data name="SettingsPageTitle" xml:space="preserve">
+    <value>SETTINGS</value>
   </data>
 </root>

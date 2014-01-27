@@ -8,11 +8,30 @@
     
     <!--Application Resources-->
     <Application.Resources>
-        <local:LocalizedStrings x:Key="LocalizedStrings"/>
-        <local:IsoImageConverter x:Key="IsoImageConverter"/>
-        <local:LastPlayedConverter x:Key="LastPlayedConverter"/>
-        <local:SavestateConverter x:Key="SavestateConverter"/>
-        <local:LastPlayedShortConverter x:Key="LastPlayedShortConverter"/>
+        <ResourceDictionary>
+            <local:LocalizedStrings x:Key="LocalizedStrings"/>
+            <local:IsoImageConverter x:Key="IsoImageConverter"/>
+            <local:LastPlayedConverter x:Key="LastPlayedConverter"/>
+            <local:SavestateConverter x:Key="SavestateConverter"/>
+            <local:LastPlayedShortConverter x:Key="LastPlayedShortConverter"/>
+
+            <DataTemplate x:Name="ListPickerTemplate">
+                <!--For short list of items-->
+                <TextBlock Text="{Binding}"/>
+            </DataTemplate>
+            <DataTemplate x:Name="ListPickerFullTemplate">
+                <!--For long list of items-->
+                <TextBlock Text="{Binding}" 
+                       FontSize="36"
+                           Margin="0,0,0,12"
+                          />
+            </DataTemplate>
+
+            <Style x:Key="MyTitle1Style" TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilySemiLight}" />
+                <Setter Property="FontSize" Value="54" />
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>

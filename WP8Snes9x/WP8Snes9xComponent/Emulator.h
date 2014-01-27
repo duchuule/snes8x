@@ -75,6 +75,7 @@ namespace Emulator
 		HANDLE swapEvent;
 		HANDLE updateEvent;
 		HANDLE sleepEvent;
+		HANDLE endEvent;  //end of an Emulator loop 
 		bool stopThread;
 		
 		CXAudio2 audio;

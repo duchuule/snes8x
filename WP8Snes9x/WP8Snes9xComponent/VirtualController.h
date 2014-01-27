@@ -12,6 +12,7 @@ namespace Emulator
 
 	struct ControllerState
 	{
+		bool JoystickPressed;
 		bool LeftPressed;
 		bool UpPressed;
 		bool RightPressed;
@@ -35,20 +36,25 @@ namespace Emulator
 		void UpdateFormat(int format);
 		void VirtualControllerOnTop(bool onTop);	
 		void SetOrientation(int orientation);
+		virtual void SetControllerPositionFromSettings(void);
 
 		void PointerPressed(PointerPoint ^point);
 		void PointerMoved(PointerPoint ^point);
 		void PointerReleased(PointerPoint ^point);
 
-		const ControllerState *GetControllerState(void);
+		virtual const ControllerState *GetControllerState(void);
 
 		void GetStickRectangle(RECT *rect);
 		void GetStickCenterRectangle(RECT *rect);
 		bool StickFingerDown(void);
 
 		void GetCrossRectangle(RECT *rect);
-		void GetButtonsRectangle(RECT *rect);
-		void GetStartSelectRectangle(RECT *rect);
+		void GetARectangle(RECT *rect);
+		void GetBRectangle(RECT *rect);
+		void GetXRectangle(RECT *rect);
+		void GetYRectangle(RECT *rect);
+		void GetStartRectangle(RECT *rect);
+		void GetSelectRectangle(RECT *rect);
 		void GetLRectangle(RECT *rect);
 		void GetRRectangle(RECT *rect);
 
@@ -56,7 +62,7 @@ namespace Emulator
 		int errCount;
 		Platform::Collections::Map<unsigned int, Platform::String^> ^pointerDescriptions;
 
-	private:
+	protected:
 		Platform::Collections::Map<unsigned int, PointerPoint^> ^pointers;
 		
 		CRITICAL_SECTION cs;
@@ -66,6 +72,7 @@ namespace Emulator
 		int format;
 		int width, height;
 		int touchWidth, touchHeight;
+		float hscale;
 
 		bool stickFingerDown;
 		int stickFingerID;
@@ -76,8 +83,12 @@ namespace Emulator
 		Windows::Foundation::Rect stickBoundaries;
 
 		RECT padCrossRectangle;
-		RECT startSelectRectangle;
-		RECT buttonsRectangle;
+		RECT startRectangle;
+		RECT selectRectangle;
+		RECT aRectangle;
+		RECT bRectangle;
+		RECT xRectangle;
+		RECT yRectangle;
 		RECT lRectangle;
 		RECT rRectangle;
 		Windows::Foundation::Rect leftRect;
@@ -92,15 +103,31 @@ namespace Emulator
 		Windows::Foundation::Rect bRect;
 		Windows::Foundation::Rect xRect;
 		Windows::Foundation::Rect yRect;
+
+		int padCenterX;
+		int padCenterY;
+		int aCenterX;
+		int aCenterY;
+		int bCenterX;
+		int bCenterY;
+		int xCenterX;
+		int xCenterY;
+		int yCenterX;
+		int yCenterY;
+		int startLeft;
+		int startTop;
+		int selectRight;
+		int selectTop;
+		int lLeft;
+		int lTop;
+		int rRight;
+		int rTop;
 		
-		void CreateWXGARectangles(void);
-		void CreateWVGARectangles(void);
-		void Create720PRectangles(void);
-		void CreateWXGAPortraitRectangles(void);
-		void CreateWVGAPortraitRectangles(void);
-		void Create720PPortraitRectangles(void);
+		void CreateRenderRectangles(void);
+		
 		void CreateTouchLandscapeRectangles(void);
 		void CreateTouchPortraitRectangles(void);
+
 		double CalculateDistanceDiff(Windows::Foundation::Point point1, Windows::Foundation::Point point2, Windows::Foundation::Point target);
 		
 	};

@@ -57,6 +57,8 @@ namespace Emulator
 		this->swapEvent = CreateEventEx(NULL, NULL, CREATE_EVENT_INITIAL_SET, EVENT_ALL_ACCESS);
 		this->updateEvent = CreateEventEx(NULL, NULL, NULL, EVENT_ALL_ACCESS);
 		this->sleepEvent = CreateEventEx(NULL, NULL, NULL, EVENT_ALL_ACCESS);
+		this->endEvent = CreateEventEx(NULL, NULL, NULL, EVENT_ALL_ACCESS);
+
 		InitializeCriticalSectionEx(&this->cs, 0, 0);
 		InitializeCriticalSectionEx(&this->pauseSync, NULL, NULL);
 
@@ -166,7 +168,7 @@ namespace Emulator
 		SetEvent(this->updateEvent);
 
 		// Wait for thread termination
-		WaitForSingleObjectEx(this->swapEvent, INFINITE, false);
+		WaitForSingleObjectEx(this->endEvent, INFINITE, false);
 
 		this->threadAction = nullptr;
 
@@ -350,7 +352,7 @@ namespace Emulator
 		}
 		
 		// Signal for terminated thread
-		SetEvent(this->swapEvent);
+		SetEvent(this->endEvent);
 	}
 
 	void EmulatorGame::Update(void *buffer, size_t rowPitch, float lastElapsed)

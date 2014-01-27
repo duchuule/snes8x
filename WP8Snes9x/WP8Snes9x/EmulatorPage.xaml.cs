@@ -25,7 +25,7 @@ namespace PhoneDirect3DXamlAppInterop
     public partial class EmulatorPage : PhoneApplicationPage
     {
         public static bool ROMLoaded = false;
-        private Direct3DBackground m_d3dBackground = new Direct3DBackground();
+        private Direct3DBackground m_d3dBackground = null;
         private LoadROMParameter cache = null;
         private bool initialized = false;
         private bool confirmPopupOpened = false;
@@ -39,11 +39,8 @@ namespace PhoneDirect3DXamlAppInterop
             InitializeComponent();
             this.BackKeyPress += EmulatorPage_BackKeyPress;
             this.OrientationChanged += EmulatorPage_OrientationChanged;
-            this.m_d3dBackground.SetContinueNotifier(this.ContinueEmulation);
-            this.m_d3dBackground.SnapshotAvailable = FileHandler.CaptureSnapshot;
-            this.m_d3dBackground.SavestateCreated = FileHandler.CreateSavestate;
-            this.m_d3dBackground.SavestateSelected = this.savestateSelected;
-            this.InitAppBar();
+            
+
             switch (EmulatorSettings.Current.Orientation)
             {
                 case 0:
@@ -174,11 +171,25 @@ namespace PhoneDirect3DXamlAppInterop
             };
             loadstateButton.Click += loadstateButton_Click;
 
+            var configButton = new ApplicationBarIconButton(new Uri("/Assets/Icons/feature.settings.png", UriKind.Relative))
+            {
+                Text = AppResources.SettingsButtonText
+            };
+            configButton.Click += configButton_Click;
+
             ApplicationBar.Buttons.Add(loadstateButton);
             ApplicationBar.Buttons.Add(resetButton);
             ApplicationBar.Buttons.Add(savestateButton);
-            ApplicationBar.Buttons.Add(backButton);
+            ApplicationBar.Buttons.Add(configButton); 
+            //ApplicationBar.Buttons.Add(backButton);
         }
+
+        private void configButton_Click(object sender, EventArgs e)
+        {
+            ApplicationBar.IsVisible = false;
+            NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
+        }
+
 
         private void savestateSelected(int slot, int oldSlot)
         {
@@ -319,7 +330,13 @@ namespace PhoneDirect3DXamlAppInterop
         {
             if (!confirmPopupOpened)
             {
-                if (!this.ApplicationBar.IsVisible)
+                if (m_d3dBackground == null || m_d3dBackground.IsROMLoaded() == false)
+                {
+                    MessageBox.Show("Please wait until ROM finishes loading");
+                    e.Cancel = true;
+                }
+
+                else  if (!this.ApplicationBar.IsVisible)
                 {
                     e.Cancel = true;
                     this.ChangeAppBarVisibility(!this.ApplicationBar.IsVisible);
@@ -337,6 +354,17 @@ namespace PhoneDirect3DXamlAppInterop
             else
             {
                 this.m_d3dBackground.UnpauseEmulation();
+            }
+        }
+
+
+        protected override void OnTap(System.Windows.Input.GestureEventArgs e)
+        {
+            if (this.ApplicationBar.IsVisible)
+            {
+                this.ApplicationBar.IsVisible = false;
+                this.m_d3dBackground.UnpauseEmulation();
+                base.OnTap(e);
             }
         }
 
@@ -358,7 +386,7 @@ namespace PhoneDirect3DXamlAppInterop
 
             if (initialized && this.m_d3dBackground.IsROMLoaded() && romInfo == null)
             {
-                this.m_d3dBackground.UnpauseEmulation();
+                //this.m_d3dBackground.UnpauseEmulation();  //this will produce exception when returning from Settings page
             }
             else if (romInfo != null)
             {
@@ -449,81 +477,96 @@ namespace PhoneDirect3DXamlAppInterop
 
             if (initialized && this.m_d3dBackground.IsROMLoaded())
             {
-                this.m_d3dBackground.PauseEmulation();
+                //this.m_d3dBackground.PauseEmulation(); //don't need this
             }
-            ROMDatabase db = ROMDatabase.Current;
-            var entry = db.GetROM(this.m_d3dBackground.LoadadROMFile.Name);
-            if (entry != null)
+            if (this.m_d3dBackground.LoadadROMFile == null)
             {
-                entry.LastPlayed = DateTime.Now;
-                db.CommitChanges();
+                base.OnNavigatingFrom(e);
             }
-
-            
-
-            base.OnNavigatingFrom(e);
+            else
+            {
+                ROMDatabase db = ROMDatabase.Current;
+                var entry = db.GetROM(this.m_d3dBackground.LoadadROMFile.Name);
+                if (entry != null)
+                {
+                    entry.LastPlayed = DateTime.Now;
+                    db.CommitChanges();
+                }
+                base.OnNavigatingFrom(e);
+            }
         }
 
         private void DrawingSurfaceBackground_Loaded(object sender, RoutedEventArgs e)
         {
-            // Set window bounds in dips
-            m_d3dBackground.WindowBounds = new Windows.Foundation.Size(
-                (float)Application.Current.Host.Content.ActualWidth,
-                (float)Application.Current.Host.Content.ActualHeight
-                );
-
-            // Set native resolution in pixels
-            m_d3dBackground.NativeResolution = new Windows.Foundation.Size(
-                (float)Math.Floor(Application.Current.Host.Content.ActualWidth * Application.Current.Host.Content.ScaleFactor / 100.0f + 0.5f),
-                (float)Math.Floor(Application.Current.Host.Content.ActualHeight * Application.Current.Host.Content.ScaleFactor / 100.0f + 0.5f)
-                );
-
-            // Set render resolution to the full native resolution
-            m_d3dBackground.RenderResolution = m_d3dBackground.NativeResolution;
-
-            // Hook-up native component to DrawingSurfaceBackgroundGrid
-            DrawingSurfaceBackground.SetBackgroundContentProvider(m_d3dBackground.CreateContentProvider());
-            DrawingSurfaceBackground.SetBackgroundManipulationHandler(m_d3dBackground);
-
-            this.initialized = true;
-
-            if (ROMLoaded && this.cache == null)
+            if (m_d3dBackground == null)
             {
-                this.m_d3dBackground.UnpauseEmulation();
-            }
-            else if (this.cache != null && this.cache.file != null && this.cache.folder != null)
-            {
-                if (ROMLoaded && this.m_d3dBackground.LoadadROMFile.Name.Equals(this.cache.file.Name))
+                this.m_d3dBackground = new Direct3DBackground();
+
+                this.m_d3dBackground.SetContinueNotifier(this.ContinueEmulation);
+                this.m_d3dBackground.SnapshotAvailable = FileHandler.CaptureSnapshot;
+                this.m_d3dBackground.SavestateCreated = FileHandler.CreateSavestate;
+                this.m_d3dBackground.SavestateSelected = this.savestateSelected;
+                this.InitAppBar();
+
+                // Set window bounds in dips
+                m_d3dBackground.WindowBounds = new Windows.Foundation.Size(
+                    (float)Application.Current.Host.Content.ActualWidth,
+                    (float)Application.Current.Host.Content.ActualHeight
+                    );
+
+                // Set native resolution in pixels
+                m_d3dBackground.NativeResolution = new Windows.Foundation.Size(
+                    (float)Math.Floor(Application.Current.Host.Content.ActualWidth * Application.Current.Host.Content.ScaleFactor / 100.0f + 0.5f),
+                    (float)Math.Floor(Application.Current.Host.Content.ActualHeight * Application.Current.Host.Content.ScaleFactor / 100.0f + 0.5f)
+                    );
+
+                // Set render resolution to the full native resolution
+                m_d3dBackground.RenderResolution = m_d3dBackground.NativeResolution;
+
+                // Hook-up native component to DrawingSurfaceBackgroundGrid
+                DrawingSurfaceBackground.SetBackgroundContentProvider(m_d3dBackground.CreateContentProvider());
+                DrawingSurfaceBackground.SetBackgroundManipulationHandler(m_d3dBackground);
+
+                this.initialized = true;
+
+                if (ROMLoaded && this.cache == null)
                 {
                     this.m_d3dBackground.UnpauseEmulation();
                 }
-                else
+                else if (this.cache != null && this.cache.file != null && this.cache.folder != null)
                 {
-                    this.m_d3dBackground.LoadROMAsync(this.cache.file, this.cache.folder);
-                    if (EmulatorSettings.Current.SelectLastState)
+                    if (ROMLoaded && this.m_d3dBackground.LoadadROMFile.Name.Equals(this.cache.file.Name))
                     {
-                        RestoreLastSavestate(this.cache.file.Name);
+                        this.m_d3dBackground.UnpauseEmulation();
                     }
-                    ROMLoaded = true;
+                    else
+                    {
+                        this.m_d3dBackground.LoadROMAsync(this.cache.file, this.cache.folder);
+                        if (EmulatorSettings.Current.SelectLastState)
+                        {
+                            RestoreLastSavestate(this.cache.file.Name);
+                        }
+                        ROMLoaded = true;
+                    }
                 }
-            }
 
-            int orientation = 0;
-            switch (this.Orientation)
-            {
-                case PageOrientation.LandscapeLeft:
-                case PageOrientation.Landscape:
-                    orientation = 0;
-                    break;
-                case PageOrientation.LandscapeRight:
-                    orientation = 1;
-                    break;
-                case PageOrientation.PortraitUp:
-                case PageOrientation.Portrait:
-                    orientation = 2;
-                    break;
+                int orientation = 0;
+                switch (this.Orientation)
+                {
+                    case PageOrientation.LandscapeLeft:
+                    case PageOrientation.Landscape:
+                        orientation = 0;
+                        break;
+                    case PageOrientation.LandscapeRight:
+                        orientation = 1;
+                        break;
+                    case PageOrientation.PortraitUp:
+                    case PageOrientation.Portrait:
+                        orientation = 2;
+                        break;
+                }
+                this.m_d3dBackground.ChangeOrientation(orientation);
             }
-            this.m_d3dBackground.ChangeOrientation(orientation);
         }
 
         private void RestoreLastSavestate(string filename)

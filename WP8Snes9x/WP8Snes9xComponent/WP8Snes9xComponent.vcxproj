@@ -217,6 +217,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicTimer.h" />
+    <ClInclude Include="CPositionRenderer.h" />
+    <ClInclude Include="CPositionVirtualController.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="DXTK\AlignedNew.h" />
     <ClInclude Include="DXTK\Bezier.h" />
@@ -239,6 +241,9 @@
     <ClInclude Include="Emulator.h" />
     <ClInclude Include="EmulatorFileHandler.h" />
     <ClInclude Include="EmulatorSettings.h" />
+    <ClInclude Include="CPositionComponent.h" />
+    <ClInclude Include="CPositionContentProvider.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="snes9x-1.53-src\65c816.h" />
     <ClInclude Include="snes9x-1.53-src\apu\apu.h" />
     <ClInclude Include="snes9x-1.53-src\apu\blargg_common.h" />
@@ -354,6 +359,8 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CPositionRenderer.cpp" />
+    <ClCompile Include="CPositionVirtualController.cpp" />
     <ClCompile Include="DXTK\AlphaTestEffect.cpp" />
     <ClCompile Include="DXTK\BasicEffect.cpp" />
     <ClCompile Include="DXTK\BinaryReader.cpp" />
@@ -372,6 +379,7 @@
     <ClCompile Include="Emulator.cpp" />
     <ClCompile Include="EmulatorFileHandler.cpp" />
     <ClCompile Include="EmulatorSettings.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="S9xFunctions.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugDevice|ARM'">NotUsing</PrecompiledHeader>
@@ -980,6 +988,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugDevice|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="CPositionComponent.cpp" />
+    <ClCompile Include="CPositionContentProvider.cpp" />
     <ClCompile Include="VirtualController.cpp" />
     <ClCompile Include="WP8Snes9xComponent.cpp" />
     <ClCompile Include="EmulatorRenderer.cpp" />
