@@ -412,7 +412,11 @@ void EmulatorRenderer::Update(float timeTotal, float timeDelta)
 
 
 	//set render parameter
-	float opacity = this->settings->ControllerOpacity / 100.0f;
+	float opacity = 1.0f;
+	if(this->orientation != ORIENTATION_PORTRAIT || !this->useButtonColor) //only opacity in landscape or when using simple button
+		opacity = this->settings->ControllerOpacity / 100.0f;
+
+
 	XMFLOAT4A color = XMFLOAT4A(1.0f, 1.0f, 1.0f, opacity);
 	XMFLOAT4A color2 = XMFLOAT4A(1.0f, 1.0f, 1.0f, opacity + 0.2f);
 	joystick_color = color;
@@ -469,10 +473,19 @@ void EmulatorRenderer::Render()
 		m_depthStencilView.Get()
 		);
 
-	const float black[] = { 0.0f, 0.0f, 0.0f, 1.000f };
+
+	float bgcolor[] = { 0.0f, 0.0f, 0.0f, 1.000f }; //black
+	if (this->useButtonColor && this->orientation == ORIENTATION_PORTRAIT)
+	{
+		bgcolor[0] = (float)this->settings->BgcolorR / 255;
+		bgcolor[1] = (float)this->settings->BgcolorG / 255;
+		bgcolor[2] = (float)this->settings->BgcolorB / 255;
+	}
+
+
 	m_d3dContext->ClearRenderTargetView(
 		m_renderTargetView.Get(),
-		black
+		bgcolor
 		);
 
 	m_d3dContext->ClearDepthStencilView(
@@ -481,6 +494,7 @@ void EmulatorRenderer::Render()
 		1.0f,
 		0
 		);
+
 
 	if(!this->emulator->IsPaused())
 	{

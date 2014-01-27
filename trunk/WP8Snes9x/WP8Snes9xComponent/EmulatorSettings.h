@@ -382,6 +382,45 @@ namespace PhoneDirect3DXamlAppComponent
 			}
 		}
 
+		property int BgcolorR
+		{
+			int get(void) { return this->bgcolorR; }
+			void set(int value) 
+			{ 
+				this->bgcolorR = value; 
+				if(this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
+		property int BgcolorG
+		{
+			int get(void) { return this->bgcolorG; }
+			void set(int value) 
+			{ 
+				this->bgcolorG = value; 
+				if(this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
+
+		property int BgcolorB
+		{
+			int get(void) { return this->bgcolorB; }
+			void set(int value) 
+			{ 
+				this->bgcolorB = value; 
+				if(this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
 
 		property int PadCenterXP;
 		property int PadCenterYP;
@@ -462,6 +501,9 @@ namespace PhoneDirect3DXamlAppComponent
 		bool selectLastState;
 		bool manualSnapshots;
 		bool shouldShowAds;
+		int bgcolorR;
+		int bgcolorG;
+		int bgcolorB;
 
 		static EmulatorSettings ^instance;
 

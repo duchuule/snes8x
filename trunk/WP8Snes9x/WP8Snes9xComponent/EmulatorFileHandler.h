@@ -7,8 +7,8 @@ using namespace concurrency;
 using namespace Windows::Storage;
 using namespace Windows::Storage::Streams;
 
-#define MAX_SAVESTATE_SLOTS 11
-#define AUTOSAVE_SLOT		10
+#define MAX_SAVESTATE_SLOTS 10
+#define AUTOSAVE_SLOT		9
 
 namespace Emulator
 {

@@ -132,6 +132,9 @@
     <Compile Include="BackupPage.xaml.cs">
       <DependentUpon>BackupPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ColorChooserControl.xaml.cs">
+      <DependentUpon>ColorChooserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ConfirmationPage.xaml.cs">
       <DependentUpon>ConfirmationPage.xaml</DependentUpon>
     </Compile>
@@ -208,6 +211,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ColorChooserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ConfirmationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -266,12 +273,19 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\ApplicationBar.Cancel.png" />
+    <Content Include="Assets\ApplicationBar.Check.png" />
     <Content Include="Assets\pad_a_buttons.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\pad_b_buttons.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\pad_cross_gray.dds" />
+    <Content Include="Assets\pad_l_button.dds" />
+    <Content Include="Assets\pad_r_button.dds" />
+    <Content Include="Assets\pad_select.dds" />
+    <Content Include="Assets\pad_start.dds" />
     <Content Include="Assets\pad_x_buttons.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -284,8 +298,8 @@
     <Content Include="Assets\pad_b_buttons_gray.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\pad_select.dds" />
-    <Content Include="Assets\pad_start.dds" />
+    <Content Include="Assets\pad_select_gray.dds" />
+    <Content Include="Assets\pad_start_gray.dds" />
     <Content Include="Assets\pad_x_buttons_gray.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -303,22 +317,17 @@
     <Content Include="Assets\no_snapshot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\pad_buttons.dds">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\pad_cross.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\pad_l_button.dds">
+    <Content Include="Assets\pad_l_button_gray.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\pad_r_button.dds">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\pad_start_select.dds">
+    <Content Include="Assets\pad_r_button_gray.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\resumetext.dds" />
+    <Content Include="Assets\ThumbStick.dds" />
     <Content Include="Assets\Tiles\icon176x176.png" />
     <Content Include="Assets\Tiles\icon33x33.png" />
     <Content Include="Assets\Tiles\icon69x69.png" />
@@ -329,10 +338,7 @@
     <Content Include="README_FIRST.txt" />
     <Content Include="tileIcon.png" />
     <Content Include="Assets\Airwolf 92 %28Demo%29.smc" />
-    <Content Include="Assets\pad_buttons_gray.dds">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\ThumbStick.dds">
+    <Content Include="Assets\ThumbStick_gray.dds">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\ThumbStickCenter.dds">
@@ -429,14 +435,8 @@
     <Reference Include="AdDuplex.WindowsPhone">
       <HintPath>..\..\packages\AdDuplexWP7.2.7.0.2\lib\sl4-windowsphone71\AdDuplex.WindowsPhone.dll</HintPath>
     </Reference>
-    <Reference Include="Coding4Fun.Phone.Controls">
-      <HintPath>..\..\packages\Coding4FunPhoneControls\Coding4Fun.Phone.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="Coding4Fun.Phone.Controls.Toolkit">
-      <HintPath>..\..\packages\Coding4FunPhoneControls\Coding4Fun.Phone.Controls.Toolkit.dll</HintPath>
-    </Reference>
-    <Reference Include="Coding4Fun.Phone.Site.Controls">
-      <HintPath>..\..\packages\Coding4FunPhoneControls\Coding4Fun.Phone.Site.Controls.dll</HintPath>
+    <Reference Include="Coding4Fun.Toolkit.Controls">
+      <HintPath>..\..\packages\Coding4Fun.Toolkit.Controls.2.0.7\lib\windowsphone8\Coding4Fun.Toolkit.Controls.dll</HintPath>
     </Reference>
     <Reference Include="GoogleAds">
       <HintPath>..\..\packages\AdMob WP8\windowsphone8\GoogleAds.dll</HintPath>

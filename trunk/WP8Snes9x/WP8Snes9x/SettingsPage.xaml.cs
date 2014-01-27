@@ -13,11 +13,14 @@ using Microsoft.Phone.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.IO.IsolatedStorage;
+using System.Windows.Controls.Primitives;
 
 namespace PhoneDirect3DXamlAppInterop
 {
     public partial class SettingsPage : PhoneApplicationPage
     {
+        public Popup popupWindow = null;
+
         private String[] frameskiplist = { AppResources.FrameSkipAutoSetting, "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
         private String[] frameskiplist2 = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
@@ -48,7 +51,9 @@ namespace PhoneDirect3DXamlAppInterop
         public const String CreateManualSnapshotKey = "ManualSnapshotKey";
         public const String UseMogaControllerKey = "UseMogaControllerKey";
         public const String ShouldShowAdsKey = "ShouldShowAdsKey";
-
+        public const String BgcolorRKey = "BgcolorRKey";
+        public const String BgcolorGKey = "BgcolorGKey";
+        public const String BgcolorBKey = "BgcolorBKey";
 
         public const String PadCenterXPKey = "PadCenterXPKey";
         public const String PadCenterYPKey = "PadCenterYPKey";
@@ -122,15 +127,35 @@ namespace PhoneDirect3DXamlAppInterop
             }
         }
 
+
+        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        {
+            //Check if the PopUp window is open
+            if (popupWindow != null && popupWindow.IsOpen)
+            {
+                //Close the PopUp Window
+                popupWindow.IsOpen = false;
+
+                //Keep the back button from navigating away from the current page
+                e.Cancel = true;
+            }
+
+            else
+            {
+                //There is no PopUp open, use the back button normally
+                base.OnBackKeyPress(e);
+            }
+
+        }
+
+
         private void ReadSettings()
         {
             EmulatorSettings emuSettings = EmulatorSettings.Current;
 
-            //this.vcontrollerPosSwitch.IsChecked = emuSettings.VirtualControllerOnTop;
+
             this.enableSoundSwitch.IsChecked = emuSettings.SoundEnabled;
             this.lowFreqSwitch.IsChecked = emuSettings.LowFrequencyMode;
-            //this.vcontrollerSizeSwitch.IsChecked = emuSettings.LargeVController;
-            this.vcontrollerStyleSwitch.IsChecked = emuSettings.GrayVControllerButtons;
             this.stretchToggle.IsChecked = emuSettings.FullscreenStretch;
             this.scaleSlider.Value = emuSettings.ControllerScale;
             this.buttonScaleSlider.Value = emuSettings.ButtonScale;
@@ -143,6 +168,13 @@ namespace PhoneDirect3DXamlAppInterop
             this.confirmationLoadSwitch.IsChecked = emuSettings.HideLoadConfirmationDialogs;
             this.restoreLastStateSwitch.IsChecked = emuSettings.SelectLastState;
             this.manualSnapshotSwitch.IsChecked = emuSettings.ManualSnapshots;
+            this.useColorButtonSwitch.IsChecked = !emuSettings.GrayVControllerButtons;
+
+            if (this.useColorButtonSwitch.IsChecked.Value)
+                CustomizeBgcolorBtn.Visibility = System.Windows.Visibility.Visible;
+            else
+                CustomizeBgcolorBtn.Visibility = System.Windows.Visibility.Collapsed;
+
 
             this.toggleUseMogaController.IsChecked = emuSettings.UseMogaController;
 
@@ -239,24 +271,7 @@ namespace PhoneDirect3DXamlAppInterop
         //    }
         //}
 
-        private void vcontrollerStyleSwitch_Unchecked_1(object sender, RoutedEventArgs e)
-        {
-            this.vcontrollerStyleSwitch.Content = AppResources.VirtualControllerButtonColored;
-            if (this.initdone)
-            {
-                EmulatorSettings.Current.GrayVControllerButtons = false;
-            }
-        }
-
-        private void vcontrollerStyleSwitch_Checked_1(object sender, RoutedEventArgs e)
-        {
-            this.vcontrollerStyleSwitch.Content = AppResources.VirtualControllerButtonGray;
-            if (this.initdone)
-            {
-                EmulatorSettings.Current.GrayVControllerButtons = true;
-            }
-        }
-
+        
         private void ListPicker_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
             if (this.initdone)
@@ -557,6 +572,44 @@ namespace PhoneDirect3DXamlAppInterop
         private void MappingBtn_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/MogaMappingPage.xaml", UriKind.Relative));
+        }
+
+        private void useColorButtonSwitch_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.useColorButtonSwitch.IsChecked.Value)
+                CustomizeBgcolorBtn.Visibility = System.Windows.Visibility.Visible;
+            else
+                CustomizeBgcolorBtn.Visibility = System.Windows.Visibility.Collapsed;
+
+            if (this.initdone)
+            {
+                EmulatorSettings.Current.GrayVControllerButtons = !this.useColorButtonSwitch.IsChecked.Value;
+            }
+
+        }
+
+        private void CustomizeBgcolorBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //disable current page
+            this.IsHitTestVisible = false;
+            //this.Content.Visibility = Visibility.Collapsed;
+
+            //create new popup instance
+
+            popupWindow = new Popup();
+
+            popupWindow.Child = new ColorChooserControl();
+
+            popupWindow.VerticalOffset = 130;
+            popupWindow.HorizontalOffset = 10;
+            popupWindow.IsOpen = true;
+
+            popupWindow.Closed += (s1, e1) =>
+            {
+                this.IsHitTestVisible = true;
+                //this.Content.Visibility = Visibility.Visible;
+
+            };
         }
 
 

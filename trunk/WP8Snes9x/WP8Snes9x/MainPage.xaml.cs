@@ -15,7 +15,7 @@ using Windows.Storage;
 using System.Threading.Tasks;
 using PhoneDirect3DXamlAppComponent;
 using PhoneDirect3DXamlAppInterop.Database;
-using Coding4Fun.Phone.Controls;
+using Coding4Fun.Toolkit.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using Microsoft.Phone.Tasks;
@@ -301,6 +301,18 @@ namespace PhoneDirect3DXamlAppInterop
                 {
                     isoSettings[SettingsPage.ShouldShowAdsKey] = false;
                 }
+                if (!isoSettings.Contains(SettingsPage.BgcolorRKey))
+                {
+                    isoSettings[SettingsPage.BgcolorRKey] = 210;
+                }
+                if (!isoSettings.Contains(SettingsPage.BgcolorGKey))
+                {
+                    isoSettings[SettingsPage.BgcolorGKey] = 210;
+                }
+                if (!isoSettings.Contains(SettingsPage.BgcolorBKey))
+                {
+                    isoSettings[SettingsPage.BgcolorBKey] = 210;
+                }
 
 
                 //get default controller position
@@ -526,7 +538,9 @@ namespace PhoneDirect3DXamlAppInterop
                 settings.ManualSnapshots = (bool)isoSettings[SettingsPage.CreateManualSnapshotKey];
                 settings.UseMogaController = (bool)isoSettings[SettingsPage.UseMogaControllerKey];
                 settings.ShouldShowAds = (bool)isoSettings[SettingsPage.ShouldShowAdsKey];
-
+                settings.BgcolorR = (int)isoSettings[SettingsPage.BgcolorRKey];
+                settings.BgcolorG = (int)isoSettings[SettingsPage.BgcolorGKey];
+                settings.BgcolorB = (int)isoSettings[SettingsPage.BgcolorBKey];
 
                 settings.PadCenterXP = (int)isoSettings[SettingsPage.PadCenterXPKey];
                 settings.PadCenterYP = (int)isoSettings[SettingsPage.PadCenterYPKey];
@@ -622,6 +636,9 @@ namespace PhoneDirect3DXamlAppInterop
             isoSettings[SettingsPage.CreateManualSnapshotKey] = settings.ManualSnapshots;
             isoSettings[SettingsPage.UseMogaControllerKey] = settings.UseMogaController;
             isoSettings[SettingsPage.ShouldShowAdsKey] = settings.ShouldShowAds;
+            isoSettings[SettingsPage.BgcolorRKey] = settings.BgcolorR;
+            isoSettings[SettingsPage.BgcolorGKey] = settings.BgcolorG;
+            isoSettings[SettingsPage.BgcolorBKey] = settings.BgcolorB;
             isoSettings.Save();
         }
 
