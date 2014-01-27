@@ -18,7 +18,7 @@ CPositionRenderer::CPositionRenderer()
 	settings = EmulatorSettings::Current;
 	frames = 0;
 
-	useButtonColor = false;
+	useButtonColor = !settings->GrayVControllerButtons;
 
 }
 

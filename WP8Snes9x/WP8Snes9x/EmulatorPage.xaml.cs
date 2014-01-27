@@ -17,7 +17,7 @@ using PhoneDirect3DXamlAppInterop.Resources;
 using Windows.Storage;
 using PhoneDirect3DXamlAppInterop.Database;
 using Microsoft.Devices;
-using Coding4Fun.Phone.Controls;
+using Coding4Fun.Toolkit.Controls;
 using Microsoft.Phone.Tasks;
 
 namespace PhoneDirect3DXamlAppInterop

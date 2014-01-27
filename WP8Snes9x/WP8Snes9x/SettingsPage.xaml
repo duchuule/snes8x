@@ -75,6 +75,8 @@
                         <TextBlock TextWrapping="Wrap" Margin="12,0,12,20"
                                    Text="{Binding Path=LocalizedResources.TurboModeTip, Source={StaticResource LocalizedStrings}}" />
                     </ListBoxItem>
+
+
                     <ListBoxItem HorizontalContentAlignment="Stretch">
                         <toolkit:ListPicker Header="{Binding Path=LocalizedResources.DPadStyleHeader, Source={StaticResource LocalizedStrings}}" 
                                             FullModeHeader="{Binding Path=LocalizedResources.DPadStyleHeader, Source={StaticResource LocalizedStrings}}" 
@@ -85,6 +87,26 @@
                             <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.DPadAnalogueDynamic, Source={StaticResource LocalizedStrings}}" />
                         </toolkit:ListPicker>
                     </ListBoxItem>
+
+
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox Content="Use realistic color buttons"
+                                            IsChecked="true" 
+                                  Name="useColorButtonSwitch" 
+                                  Click="useColorButtonSwitch_Click"
+                                  
+                                            />
+                    </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <Button x:Name="CustomizeBgcolorBtn"
+                                Content="Choose portrait background color..." 
+                                Click="CustomizeBgcolorBtn_Click"
+                                />
+                    </ListBoxItem>
+                    
+                    
                     <ListBoxItem HorizontalContentAlignment="Stretch">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
                             <TextBlock Text="{Binding Path=LocalizedResources.DeadzoneHeader, Source={StaticResource LocalizedStrings}}" Margin="10,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" />
@@ -269,24 +291,8 @@
                          </StackPanel>
                     </ListBoxItem>
                     
-                    <!--<ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.VControllerPosSetting, Source={StaticResource LocalizedStrings}}"
-                                          Checked="vcontrollerPosSwitch_Checked_1" Unchecked="vcontrollerPosSwitch_Unchecked_1"
-                                          Content="{Binding Path=LocalizedResources.VControllerBottomSetting, Source={StaticResource LocalizedStrings}}"
-                                          Name="vcontrollerPosSwitch"/>
-                    </ListBoxItem>-->
-                    <!--<ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.VControllerSizeSetting, Source={StaticResource LocalizedStrings}}"
-                                          Checked="vcontrollerSizeSwitch_Checked_1" Unchecked="vcontrollerSizeSwitch_Unchecked_1"
-                                          Content="{Binding Path=LocalizedResources.VControllerSmallSetting, Source={StaticResource LocalizedStrings}}"
-                                          Name="vcontrollerSizeSwitch"/>
-                    </ListBoxItem>-->
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.VirtualControllerButtonStyle, Source={StaticResource LocalizedStrings}}"
-                                          Checked="vcontrollerStyleSwitch_Checked_1" Unchecked="vcontrollerStyleSwitch_Unchecked_1"
-                                          Content="{Binding Path=LocalizedResources.VirtualControllerButtonColored, Source={StaticResource LocalizedStrings}}"
-                                          Name="vcontrollerStyleSwitch"/>
-                    </ListBoxItem>
+               
+                    
 
                     <ListBoxItem HorizontalContentAlignment="Stretch">
                         <Button x:Name="CPositionPortraitBtn"

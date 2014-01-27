@@ -51,27 +51,29 @@ void Renderer::CreateDeviceResources()
 		);
 
 
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), STICK_TEXTURE_FILE_NAME,
-		this->stickResource.GetAddressOf(),
-		this->stickSRV.GetAddressOf())
-		);
+	
 	DX::ThrowIfFailed(
 		CreateDDSTextureFromFile(
 		this->m_d3dDevice.Get(), STICK_CENTER_TEXTURE_FILE_NAME,
 		this->stickCenterResource.GetAddressOf(),
 		this->stickCenterSRV.GetAddressOf())
 		);
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), CROSS_TEXTURE_FILE_NAME,
-		this->crossResource.GetAddressOf(),
-		this->crossSRV.GetAddressOf())
-		);
+
 
 	if (useButtonColor)
 	{
+		DX::ThrowIfFailed(
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), CROSS_TEXTURE_FILE_NAME,
+			this->crossResource.GetAddressOf(),
+			this->crossSRV.GetAddressOf())
+			);
+		DX::ThrowIfFailed(
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), STICK_TEXTURE_FILE_NAME,
+			this->stickResource.GetAddressOf(),
+			this->stickSRV.GetAddressOf())
+			);
 		DX::ThrowIfFailed(
 			CreateDDSTextureFromFile(
 			this->m_d3dDevice.Get(), A_TEXTURE_FILE_NAME,
@@ -96,16 +98,51 @@ void Renderer::CreateDeviceResources()
 			this->yResource.GetAddressOf(),
 			this->ySRV.GetAddressOf())
 			);
+		DX::ThrowIfFailed(
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), START_TEXTURE_FILE_NAME,
+			this->startResource.GetAddressOf(),
+			this->startSRV.GetAddressOf())
+			);
+		DX::ThrowIfFailed(
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), SELECT_TEXTURE_FILE_NAME,
+			this->selectResource.GetAddressOf(),
+			this->selectSRV.GetAddressOf())
+			);
+		DX::ThrowIfFailed(
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), L_TEXTURE_FILE_NAME,
+			this->lButtonResource.GetAddressOf(),
+			this->lButtonSRV.GetAddressOf())
+			);
+		DX::ThrowIfFailed(
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), R_TEXTURE_FILE_NAME,
+			this->rButtonResource.GetAddressOf(),
+			this->rButtonSRV.GetAddressOf())
+			);
 	}
 	else
 	{
-
 		DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), A_GRAY_TEXTURE_FILE_NAME,
-		this->aResource.GetAddressOf(),
-		this->aSRV.GetAddressOf())
-		);
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), CROSS_GRAY_TEXTURE_FILE_NAME,
+			this->crossResource.GetAddressOf(),
+			this->crossSRV.GetAddressOf())
+			);
+		DX::ThrowIfFailed(
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), STICK_GRAY_TEXTURE_FILE_NAME,
+			this->stickResource.GetAddressOf(),
+			this->stickSRV.GetAddressOf())
+			);
+		DX::ThrowIfFailed(
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), A_GRAY_TEXTURE_FILE_NAME,
+			this->aResource.GetAddressOf(),
+			this->aSRV.GetAddressOf())
+			);
 
 		DX::ThrowIfFailed(
 			CreateDDSTextureFromFile(
@@ -125,31 +162,32 @@ void Renderer::CreateDeviceResources()
 			this->yResource.GetAddressOf(),
 			this->ySRV.GetAddressOf())
 			);
+		DX::ThrowIfFailed(
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), START_GRAY_TEXTURE_FILE_NAME,
+			this->startResource.GetAddressOf(),
+			this->startSRV.GetAddressOf())
+			);
+		DX::ThrowIfFailed(
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), SELECT_GRAY_TEXTURE_FILE_NAME,
+			this->selectResource.GetAddressOf(),
+			this->selectSRV.GetAddressOf())
+			);
+		DX::ThrowIfFailed(
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), L_GRAY_TEXTURE_FILE_NAME,
+			this->lButtonResource.GetAddressOf(),
+			this->lButtonSRV.GetAddressOf())
+			);
+		DX::ThrowIfFailed(
+			CreateDDSTextureFromFile(
+			this->m_d3dDevice.Get(), R_GRAY_TEXTURE_FILE_NAME,
+			this->rButtonResource.GetAddressOf(),
+			this->rButtonSRV.GetAddressOf())
+			);
 	}
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), START_TEXTURE_FILE_NAME,
-		this->startResource.GetAddressOf(),
-		this->startSRV.GetAddressOf())
-		);
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), SELECT_TEXTURE_FILE_NAME,
-		this->selectResource.GetAddressOf(),
-		this->selectSRV.GetAddressOf())
-		);
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), L_TEXTURE_FILE_NAME,
-		this->lButtonResource.GetAddressOf(),
-		this->lButtonSRV.GetAddressOf())
-		);
-	DX::ThrowIfFailed(
-		CreateDDSTextureFromFile(
-		this->m_d3dDevice.Get(), R_TEXTURE_FILE_NAME,
-		this->rButtonResource.GetAddressOf(),
-		this->rButtonSRV.GetAddressOf())
-		);
+	
 
 
 	// Create Textures and SRVs for front and backbuffer
