@@ -652,4 +652,7 @@ Super NES and Super Nintendo Entertainment System are trademarks of Nintendo Co.
   <data name="SettingsPageTitle" xml:space="preserve">
     <value>SETTINGS</value>
   </data>
+  <data name="UseAccentBackgroundText" xml:space="preserve">
+    <value>Use system accent color for live tile</value>
+  </data>
 </root>

@@ -185,6 +185,7 @@ namespace PhoneDirect3DXamlAppInterop
             else
                 MappingBtn.Visibility = Visibility.Collapsed;
 
+            this.chkUseAccentColor.IsChecked = App.metroSettings.UseAccentColor;
 
             this.Loaded += (o, e) =>
             {
@@ -610,6 +611,20 @@ namespace PhoneDirect3DXamlAppInterop
                 //this.Content.Visibility = Visibility.Visible;
 
             };
+        }
+
+        private void chkUseAccentColor_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            if (initdone)
+            {
+
+                App.metroSettings.UseAccentColor = chkUseAccentColor.IsChecked.Value;
+
+                FileHandler.UpdateLiveTile();
+
+
+
+            }
         }
 
 

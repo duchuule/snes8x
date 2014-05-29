@@ -23,6 +23,8 @@ namespace PhoneDirect3DXamlAppInterop
         public const String DEFAULT_SNAPSHOT = "Assets/no_snapshot.png";
         public static DateTime DEFAULT_DATETIME = new DateTime(1988, 04, 12);
 
+        public static String DEFAULT_BACKGROUND_IMAGE = "Assets/Snes.jpg";
+
         public static ROMDBEntry InsertNewDBEntry(string fileName)
         {
             ROMDatabase db = ROMDatabase.Current;
@@ -157,41 +159,32 @@ namespace PhoneDirect3DXamlAppInterop
         {
             ROMDatabase db = ROMDatabase.Current;
             ShellTile tile = ShellTile.ActiveTiles.FirstOrDefault();
-            CycleTileData data = new CycleTileData();
+            FlipTileData data = new FlipTileData();
             data.Title = AppResources.ApplicationTitle;
-            IEnumerable<String> snapshots = db.GetRecentSnapshotList();
-            List<Uri> uris = new List<Uri>(snapshots.Count());
-            if (snapshots.Count() == 0)
-            {
-                for (int i = 0; i < 9; i++)
-                {
-                    uris.Add(new Uri("Assets/Tiles/tileIconLarge.png", UriKind.Relative));
-                }
-            }
-            else
-            {
-                int x = 0;
-                for (int j = 0; j <= (3 - snapshots.Count()); j++)
-                {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        foreach (var snapshot in snapshots)
-                        {
-                            uris.Add(new Uri("isostore:/" + snapshot, UriKind.Absolute));
-                            x++;
-                            if (x >= 9)
-                            {
-                                i = j = 3;
-                                break;
-                            }
-                        }
-                    }
-                }
 
-            }
-            data.CycleImages = uris;
+            //get last snapshot
+            String lastSnapshot = db.GetLastSnapshot();
 
-            tile.Update(data);
+            if (App.metroSettings.UseAccentColor || lastSnapshot == null)  //create see through tile
+            {
+
+                data.SmallBackgroundImage = new Uri("Assets/Tiles/FlipCycleTileSmall.png", UriKind.Relative);
+                data.BackgroundImage = new Uri("Assets/Tiles/FlipCycleTileMedium.png", UriKind.Relative);
+                data.WideBackgroundImage = new Uri("Assets/Tiles/FlipCycleTileLarge.png", UriKind.Relative);
+
+                tile.Update(data);
+            }
+            else  //create opaque tile
+            {
+                data.SmallBackgroundImage = new Uri("Assets/Tiles/FlipCycleTileSmallFilled.png", UriKind.Relative);
+
+
+
+                data.BackgroundImage = new Uri("isostore:/" + lastSnapshot, UriKind.Absolute);
+                data.WideBackgroundImage = new Uri("isostore:/" + lastSnapshot, UriKind.Absolute);
+
+                tile.Update(data);
+            }
         }
 
         public static void DeleteROMTile(string romFileName)
@@ -256,8 +249,8 @@ namespace PhoneDirect3DXamlAppInterop
             if (re.SnapshotURI.Equals(FileHandler.DEFAULT_SNAPSHOT))
             {
                 data.SmallBackgroundImage = new Uri("Assets/Tiles/FlipCycleTileSmall.png", UriKind.Relative);
-                data.BackgroundImage = new Uri("Assets/Tiles/tileIcon.png", UriKind.Relative);
-                data.WideBackgroundImage = new Uri("Assets/Tiles/tileIconLarge.png", UriKind.Relative);
+                data.BackgroundImage = new Uri("Assets/Tiles/FlipCycleTileMedium.png", UriKind.Relative);
+                data.WideBackgroundImage = new Uri("Assets/Tiles/FlipCycleTileLarge.png", UriKind.Relative);
             }
             else
             {

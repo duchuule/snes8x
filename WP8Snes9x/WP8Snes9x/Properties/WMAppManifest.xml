@@ -18,31 +18,25 @@
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="PhoneDirect3DXamlAppInteropToken" TaskName="_default">
-        <TemplateCycle>
+        <TemplateFlip>
           <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</SmallImageURI>
-          <Title>Snes8x</Title>
-          <Photo01ImageURI IsRelative="true" IsResource="false">Assets\Tiles\tileIconLarge.png</Photo01ImageURI>
-          <Photo02ImageURI IsRelative="true" IsResource="false">
-          </Photo02ImageURI>
-          <Photo03ImageURI IsRelative="true" IsResource="false">
-          </Photo03ImageURI>
-          <Photo04ImageURI IsRelative="true" IsResource="false">
-          </Photo04ImageURI>
-          <Photo05ImageURI IsRelative="true" IsResource="false">
-          </Photo05ImageURI>
-          <Photo06ImageURI IsRelative="true" IsResource="false">
-          </Photo06ImageURI>
-          <Photo07ImageURI IsRelative="true" IsResource="false">
-          </Photo07ImageURI>
-          <Photo08ImageURI IsRelative="true" IsResource="false">
-          </Photo08ImageURI>
-          <Photo09ImageURI IsRelative="true" IsResource="false">
-          </Photo09ImageURI>
           <Count>0</Count>
-          <HasLarge>True</HasLarge>
+          <BackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
+          <Title>Snes8x</Title>
+          <BackContent>
+          </BackContent>
+          <BackBackgroundImageURI IsRelative="true" IsResource="false">
+          </BackBackgroundImageURI>
+          <BackTitle>
+          </BackTitle>
+          <LargeBackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileLarge.png</LargeBackgroundImageURI>
+          <LargeBackContent />
+          <LargeBackBackgroundImageURI IsRelative="true" IsResource="false">
+          </LargeBackBackgroundImageURI>
           <DeviceLockImageURI IsRelative="true" IsResource="false">
           </DeviceLockImageURI>
-        </TemplateCycle>
+          <HasLarge>True</HasLarge>
+        </TemplateFlip>
       </PrimaryToken>
     </Tokens>
     <Extensions>
