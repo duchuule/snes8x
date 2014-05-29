@@ -19,6 +19,9 @@ namespace PhoneDirect3DXamlAppInterop
 {
     public partial class App : Application
     {
+        public static AppSettings metroSettings = new AppSettings();
+
+
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// </summary>

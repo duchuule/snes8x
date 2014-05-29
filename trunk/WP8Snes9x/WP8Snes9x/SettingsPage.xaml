@@ -411,6 +411,14 @@
                 </phone:PivotItem.Header>
                 <ListBox>
                     <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox x:Name="chkUseAccentColor" 
+                                          Tap="chkUseAccentColor_Tap" >
+                            <TextBlock Text="{Binding Path=LocalizedResources.UseAccentBackgroundText, Source={StaticResource LocalizedStrings}}" 
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+                    </ListBoxItem>
+                    
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
                         <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.EnableSoundSetting, Source={StaticResource LocalizedStrings}}"
                                         Checked="enableSoundSwitch_Checked_1" Unchecked="enableSoundSwitch_Unchecked_1"
                                         IsChecked="true" Name="enableSoundSwitch"

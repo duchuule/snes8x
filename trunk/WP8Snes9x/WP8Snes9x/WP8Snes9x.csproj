@@ -129,6 +129,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AppSettings.cs" />
     <Compile Include="BackupPage.xaml.cs">
       <DependentUpon>BackupPage.xaml</DependentUpon>
     </Compile>
@@ -328,13 +329,12 @@
     </Content>
     <Content Include="Assets\resumetext.dds" />
     <Content Include="Assets\ThumbStick.dds" />
+    <Content Include="Assets\Tiles\FlipCycleTileSmallFilled.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Tiles\icon176x176.png" />
     <Content Include="Assets\Tiles\icon33x33.png" />
     <Content Include="Assets\Tiles\icon69x69.png" />
-    <Content Include="Assets\Tiles\tileIcon.png" />
-    <Content Include="Assets\Tiles\tileIconLarge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="README_FIRST.txt" />
     <Content Include="tileIcon.png" />
     <Content Include="Assets\Airwolf 92 %28Demo%29.smc" />
@@ -411,12 +411,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Tiles\FlipCycleTileSmall.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\IconicTileMediumLarge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\IconicTileSmall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
