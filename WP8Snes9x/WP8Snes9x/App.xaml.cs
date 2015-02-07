@@ -12,6 +12,26 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Windows.ApplicationModel;
+using Windows.ApplicationModel.Core;
+using PhoneDirect3DXamlAppComponent;
+using Windows.ApplicationModel.Store;
+using Store = Windows.ApplicationModel.Store;
+using System.Collections;
+using System.IO.IsolatedStorage;
+using Windows.Networking.Sockets;
+using Microsoft.Phone.Info;
+using System.Security.Cryptography;
+using System.Text;
+using System.IO;
+using Microsoft.Live;
+using Microsoft.Live.Controls;
+using System.Threading;
+using System.Windows.Markup;
+using System.Diagnostics;
+
+using PhoneDirect3DXamlAppInterop.Resources;
+using PhoneDirect3DXamlAppInterop.Database;
 
 
 
@@ -19,7 +39,96 @@ namespace PhoneDirect3DXamlAppInterop
 {
     public partial class App : Application
     {
+
+        public static int APP_VERSION = 1;
+        public static int VOICE_COMMAND_VERSION = 1;
+
+        public static LiveConnectSession session;
+
         public static AppSettings metroSettings = new AppSettings();
+
+        public static StreamSocket linkSocket;           // The socket object used to communicate with a peer
+
+        public static DateTime LastAutoBackupTime;
+
+        public static string exportFolderID;
+
+
+        public static void MergeCustomColors()
+        {
+            var dictionaries = new ResourceDictionary();
+            string source;
+            Color systemTrayColor;
+            SolidColorBrush brush;
+
+
+
+
+            //remove then add, stupid silverlight does not allow to change value
+            App.Current.Resources.Remove("CustomForegroundColor");
+            App.Current.Resources.Remove("CustomChromeColor");
+
+            if (metroSettings.ThemeSelection == 0)
+            {
+                source = String.Format("/CustomTheme/LightTheme.xaml");
+
+                App.Current.Resources.Add("CustomChromeColor", Color.FromArgb(255, 221, 221, 221)); //same as PhoneChromeColor
+                App.Current.Resources.Add("CustomForegroundColor", Color.FromArgb(0xDE, 0, 0, 0)); //same as PhoneForegroundColor
+
+            }
+            else
+            {
+                source = String.Format("/CustomTheme/DarkTheme.xaml");
+
+                App.Current.Resources.Add("CustomChromeColor", Color.FromArgb(255, 0x1f, 0x1f, 0x1f));
+                App.Current.Resources.Add("CustomForegroundColor", Color.FromArgb(255, 255, 255, 255));
+
+
+            }
+
+            //system color
+            systemTrayColor = Color.FromArgb(255, 0x0c, 0x91, 0xff);
+
+            App.Current.Resources.Remove("SystemTrayColor");
+            App.Current.Resources.Add("SystemTrayColor", systemTrayColor);
+
+            //brushes
+
+            SolidColorBrush brush1 = App.Current.Resources["HeaderBackgroundBrush"] as SolidColorBrush;
+            brush1.Color = systemTrayColor;
+            brush1.Opacity = 0.7;
+
+
+            SolidColorBrush brush3 = App.Current.Resources["HeaderForegroundBrush"] as SolidColorBrush;
+            brush3.Color = Colors.White;
+            brush3.Opacity = 1.0;
+
+
+            SolidColorBrush brush2 = App.Current.Resources["ListboxBackgroundBrush"] as SolidColorBrush;
+            brush2.Color = systemTrayColor;
+#if GBC
+            brush2.Opacity = 0.05;
+#else
+            brush2.Opacity = 0.1;
+#endif
+
+
+            var themeStyles = new ResourceDictionary { Source = new Uri(source, UriKind.Relative) };
+            dictionaries.MergedDictionaries.Add(themeStyles);
+
+
+            ResourceDictionary appResources = App.Current.Resources;
+            foreach (DictionaryEntry entry in dictionaries.MergedDictionaries[0])
+            {
+                SolidColorBrush colorBrush = entry.Value as SolidColorBrush;
+                SolidColorBrush existingBrush = appResources[entry.Key] as SolidColorBrush;
+                if (existingBrush != null && colorBrush != null)
+                {
+                    existingBrush.Color = colorBrush.Color;
+                }
+            }
+
+        }
 
 
         /// <summary>
@@ -38,6 +147,9 @@ namespace PhoneDirect3DXamlAppInterop
 
             // Standard Silverlight initialization
             InitializeComponent();
+
+            //merge custom theme
+            MergeCustomColors();
 
             // Phone-specific initialization
             InitializePhoneApplication();
@@ -163,6 +275,7 @@ namespace PhoneDirect3DXamlAppInterop
                 System.Diagnostics.Debugger.Break();
             }
         }
+
 
         #region Phone application initialization
 

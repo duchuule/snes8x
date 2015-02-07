@@ -11,30 +11,40 @@ using Microsoft.Phone.Shell;
 using Microsoft.Live;
 using Microsoft.Live.Controls;
 using PhoneDirect3DXamlAppInterop.Resources;
-using Windows.Storage;
 using System.Threading.Tasks;
 using PhoneDirect3DXamlAppComponent;
 using PhoneDirect3DXamlAppInterop.Database;
-using Coding4Fun.Toolkit.Controls;
-using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using Microsoft.Phone.Tasks;
-
+using Windows.Phone.Storage.SharedAccess;
+using System.IO;
+using System.Collections.ObjectModel;
+using Telerik.Windows.Controls;
+using Telerik.Windows.Data;
+using System.Windows.Media.Imaging;
+using CloudSixConnector.FilePicker;
+using CloudSixConnector.FileSaver;
+using Coding4Fun.Toolkit.Controls;
+using Microsoft.Phone.Net.NetworkInformation;
+using Ionic.Zip;
+using System.Windows.Data;
+using System.Runtime.Serialization;
+using System.ComponentModel;
+using System.Text.RegularExpressions;
+using Windows.Foundation;
+using DucLe.Extensions;
+using Windows.Phone.Speech.VoiceCommands;
+using Windows.Storage.Streams;
+using Windows.Storage;
+using System.Text;
 //"C:\Program Files (x86)\Microsoft SDKs\Windows Phone\v8.0\Tools\IsolatedStorageExplorerTool\ISETool.exe" ts xd ed3cc816-1ab0-418a-9bb8-11505804f6b4 "D:\Duc\Documents\Visual Studio 2012\Projects\WP8Snes8x\trunk"
 
 
 namespace PhoneDirect3DXamlAppInterop
 {
-    class ROMEntry
-    {
-        public String Name { get; set; }
-    }
 
-    class LoadROMParameter
-    {
-        public StorageFile file;
-        public StorageFolder folder;
-    }
+
+
 
     public partial class MainPage : PhoneApplicationPage
     {
@@ -43,11 +53,16 @@ namespace PhoneDirect3DXamlAppInterop
         private ROMDatabase db;
         private Task createFolderTask, copyDemoTask, initTask;
 
+        public static bool shouldUpdateBackgroud = false;
+
         public MainPage()
         {
             InitializeComponent();
 
-            
+            //add tilt effect to tiltablegrid
+            Microsoft.Phone.Controls.TiltEffect.TiltableItems.Add(typeof(TiltableGrid));
+            Microsoft.Phone.Controls.TiltEffect.TiltableItems.Add(typeof(TiltableCanvas));
+
 
             this.InitAppBar();
 
@@ -113,29 +128,40 @@ namespace PhoneDirect3DXamlAppInterop
             this.RefreshROMList();
         }
 
-        void btnSignin_SessionChanged(object sender, Microsoft.Live.Controls.LiveConnectSessionChangedEventArgs e)
+        async void btnSignin_SessionChanged(object sender, Microsoft.Live.Controls.LiveConnectSessionChangedEventArgs e)
         {
-            if (e.Status == LiveConnectSessionStatus.Connected)
+            try
             {
-                this.session = e.Session;
-                //this.statusLabel.Text = AppResources.StatusSignedIn;
-                this.gotoImportButton.IsEnabled = true;
-                this.gotoBackupButton.IsEnabled = true;
-                this.gotoRestoreButton.IsEnabled = true;
-            }
-            else
-            {
-                this.gotoImportButton.IsEnabled = false;
-                this.gotoBackupButton.IsEnabled = false;
-                this.gotoRestoreButton.IsEnabled = false;
-                //this.statusLabel.Text = AppResources.StatusNotSignedIn;
-                session = null;
+                if (e.Status == LiveConnectSessionStatus.Connected)
+                {
+                    App.session = e.Session;
+                    //this.statusLabel.Text = AppResources.StatusSignedIn;
+                    this.gotoImportButton.IsEnabled = true;
+                    this.gotoBackupButton.IsEnabled = true;
 
-                //if (e.Error != null)
-                //{
-                //    MessageBox.Show(String.Format(AppResources.SkyDriveError, e.Error.Message), AppResources.ErrorCaption, MessageBoxButton.OK);
-                //    //statusLabel.Text = e.Error.ToString();
-                //}
+                    LiveConnectClient client = new LiveConnectClient(App.session);
+                    if (App.metroSettings.AutoBackup && (App.exportFolderID == null || App.exportFolderID == ""))
+                        App.exportFolderID = await ExportSelectionPage.CreateExportFolder(client); //get ID of upload folder
+
+                    //this.gotoRestoreButton.IsEnabled = true;
+                }
+                else
+                {
+                    this.gotoImportButton.IsEnabled = false;
+                    this.gotoBackupButton.IsEnabled = false;
+                    //this.gotoRestoreButton.IsEnabled = false;
+                    //this.statusLabel.Text = AppResources.StatusNotSignedIn;
+                    App.session = null;
+
+                    //if (e.Error != null)
+                    //{
+                    //    MessageBox.Show(String.Format(AppResources.SkyDriveError, e.Error.Message), AppResources.ErrorCaption, MessageBoxButton.OK);
+                    //    //statusLabel.Text = e.Error.ToString();
+                    //}
+                }
+            }
+            catch (Exception ex)
+            {
             }
         }
 
@@ -154,11 +180,25 @@ namespace PhoneDirect3DXamlAppInterop
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
+            //set app bar color in case the user return from setting page
+            if (ApplicationBar != null)
+            {
+                ApplicationBar.BackgroundColor = (Color)App.Current.Resources["CustomChromeColor"];
+                ApplicationBar.ForegroundColor = (Color)App.Current.Resources["CustomForegroundColor"];
+            }
+
             //await this.createFolderTask;
             //await this.copyDemoTask;
             await this.initTask;
 
             this.LoadInitialSettings();
+
+            if (shouldUpdateBackgroud)
+            {
+                UpdateBackgroundImage();
+                shouldUpdateBackgroud = false;
+
+            }
 
             this.RefreshROMList();
 
@@ -167,11 +207,32 @@ namespace PhoneDirect3DXamlAppInterop
             base.OnNavigatedTo(e);
         }
 
+
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             FileHandler.UpdateLiveTile();
 
             base.OnNavigatedFrom(e);
+        }
+
+        private void UpdateBackgroundImage()
+        {
+            if (App.metroSettings.BackgroundUri != null)
+            {
+                panorama.Background = new ImageBrush
+                {
+                    Opacity = App.metroSettings.BackgroundOpacity,
+                    Stretch = Stretch.None,
+                    AlignmentX = System.Windows.Media.AlignmentX.Center,
+                    AlignmentY = System.Windows.Media.AlignmentY.Top,
+                    ImageSource = FileHandler.getBitmapImage(App.metroSettings.BackgroundUri, FileHandler.DEFAULT_BACKGROUND_IMAGE)
+
+                };
+            }
+            else
+            {
+                panorama.Background = null;
+            }
         }
 
         private async Task CopyDemoROM()
@@ -652,7 +713,16 @@ namespace PhoneDirect3DXamlAppInterop
             //{
             //    romNames.Add(new ROMEntry() { Name = file.Name } );
             //}
-            this.romList.ItemsSource = this.db.GetROMList();// romNames;
+
+            DataContext = this.db.GetLastPlayed();
+
+            if (DataContext != null && App.metroSettings.ShowLastPlayedGame == true)
+                lastRomGrid.Visibility = Visibility.Visible;
+            else
+                lastRomGrid.Visibility = Visibility.Collapsed;
+
+            this.romList.ItemsSource = this.db.GetROMList();
+
             this.recentList.ItemsSource = this.db.GetRecentlyPlayed();
         }
 
@@ -679,6 +749,8 @@ namespace PhoneDirect3DXamlAppInterop
 
         private async Task StartROM(ROMDBEntry entry)
         {
+            EmulatorPage.currentROMEntry = entry;
+
             LoadROMParameter param = await FileHandler.GetROMFileToPlayAsync(entry.FileName);
 
             entry.LastPlayed = DateTime.Now;
@@ -692,6 +764,9 @@ namespace PhoneDirect3DXamlAppInterop
         {
             ApplicationBar = new ApplicationBar();
             ApplicationBar.IsMenuEnabled = true;
+
+            ApplicationBar.BackgroundColor = (Color)App.Current.Resources["CustomChromeColor"];
+            ApplicationBar.ForegroundColor = (Color)App.Current.Resources["CustomForegroundColor"];
 
             var helpButton = new ApplicationBarMenuItem(AppResources.HelpButtonText);
             helpButton.Click += helpButton_Click;
@@ -862,6 +937,184 @@ namespace PhoneDirect3DXamlAppInterop
             }
         }
 
+        private void TextBlock_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            WebBrowserTask wbtask = new WebBrowserTask();
+            wbtask.Uri = new Uri("http://www.youtube.com/watch?v=YfqzZhcr__o");
+            wbtask.Show();
+        }
+
+        private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            WebBrowserTask wbtask = new WebBrowserTask();
+            wbtask.Uri = new Uri("http://www.youtube.com/watch?v=3WopTRM4ets");
+            wbtask.Show();
+        }
+
+        private void TextBlock_Tap_2(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            WebBrowserTask wbtask = new WebBrowserTask();
+            wbtask.Uri = new Uri("http://forums.wpcentral.com/showthread.php?t=252987");
+            wbtask.Show();
+        }
+
+        private void contactBlock_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            EmailComposeTask emailcomposer = new EmailComposeTask();
+
+            emailcomposer.To = AppResources.AboutContact;
+            emailcomposer.Subject = AppResources.EmailSubjectText;
+            emailcomposer.Body = String.Format(AppResources.EmailBodyText, Microsoft.Phone.Info.DeviceStatus.DeviceName);
+            emailcomposer.Show();
+        }
+
+        private void TextBlock_Tap_3(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            this.NavigationService.Navigate(new Uri("/HelpPage.xaml", UriKind.Relative));
+        }
+
+        private void TextBlock_Tap_4(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            this.NavigationService.Navigate(new Uri("/HelpPage.xaml?index=1", UriKind.Relative));
+        }
+
+        private void TextBlock_Tap_5(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            this.NavigationService.Navigate(new Uri("/HelpPage.xaml?index=2", UriKind.Relative));
+        }
+
+        private async void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            ROMDBEntry entry = (ROMDBEntry)this.lastRomImage.DataContext;
+            await StartROM(entry);
+        }
+
+
+
+
+        private void pinBlock_Tap(object sender, ContextMenuItemSelectedEventArgs e)
+        {
+
+            try
+            {
+                var menuItem = sender as RadContextMenuItem;
+                var fe = VisualTreeHelper.GetParent(menuItem) as FrameworkElement;
+                ROMDBEntry entry = fe.DataContext as ROMDBEntry;
+
+
+                FileHandler.CreateROMTile(entry);
+            }
+            catch (InvalidOperationException)
+            {
+                MessageBox.Show(AppResources.MaximumTilesPinned);
+            }
+ 
+        }
+
+
+        private void renameBlock_Tap(object sender, ContextMenuItemSelectedEventArgs e)
+        {
+            var menuItem = sender as RadContextMenuItem;
+            var fe = VisualTreeHelper.GetParent(menuItem) as FrameworkElement;
+            ROMDBEntry entry = fe.DataContext as ROMDBEntry;
+
+            PhoneApplicationService.Current.State["parameter"] = entry;
+            PhoneApplicationService.Current.State["parameter2"] = ROMDatabase.Current;
+
+            this.NavigationService.Navigate(new Uri("/RenamePage.xaml", UriKind.Relative));
+        }
+
+
+        private void cheatBlock_Tap(object sender, ContextMenuItemSelectedEventArgs e)
+        {
+
+            var menuItem = sender as RadContextMenuItem;
+            var fe = VisualTreeHelper.GetParent(menuItem) as FrameworkElement;
+            ROMDBEntry entry = fe.DataContext as ROMDBEntry;
+
+            PhoneApplicationService.Current.State["parameter"] = entry;
+            this.NavigationService.Navigate(new Uri("/CheatPage.xaml", UriKind.Relative));
+
+        }
+
+        private void deleteManageBlock_Tap(object sender, ContextMenuItemSelectedEventArgs e)
+        {
+            var menuItem = sender as RadContextMenuItem;
+            var fe = VisualTreeHelper.GetParent(menuItem) as FrameworkElement;
+            ROMDBEntry entry = fe.DataContext as ROMDBEntry;
+
+            PhoneApplicationService.Current.State["parameter"] = entry;
+            this.NavigationService.Navigate(new Uri("/ManageSavestatePage.xaml", UriKind.Relative));
+        }
+
+        private async void deleteSavesBlock_Tap(object sender, ContextMenuItemSelectedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show(AppResources.DeleteConfirmText, AppResources.DeleteConfirmTitle, MessageBoxButton.OKCancel);
+            if (result == MessageBoxResult.Cancel)
+                return;
+
+
+            var menuItem = sender as RadContextMenuItem;
+            var fe = VisualTreeHelper.GetParent(menuItem) as FrameworkElement;
+
+            ROMDBEntry entry = fe.DataContext as ROMDBEntry;
+
+            await FileHandler.DeleteSRAMFile(entry);
+
+            //CustomMessageBox msgbox = new CustomMessageBox();
+            //msgbox.Background = (SolidColorBrush)App.Current.Resources["PhoneChromeBrush"];
+            //msgbox.Foreground = (SolidColorBrush)App.Current.Resources["PhoneForegroundBrush"];
+            //msgbox.Message = AppResources.SRAMDeletedSuccessfully;
+            //msgbox.Caption = AppResources.InfoCaption;
+            //msgbox.LeftButtonContent = "OK";
+            //msgbox.Show();
+            MessageBox.Show(AppResources.SRAMDeletedSuccessfully, AppResources.InfoCaption, MessageBoxButton.OK);
+        }
+
+        private async void deleteBlock_Tap(object sender, ContextMenuItemSelectedEventArgs e)
+        {
+            try
+            {
+                MessageBoxResult result = MessageBox.Show(AppResources.DeleteConfirmText, AppResources.DeleteConfirmTitle, MessageBoxButton.OKCancel);
+                if (result == MessageBoxResult.Cancel)
+                    return;
+
+                var menuItem = sender as RadContextMenuItem;
+                var fe = VisualTreeHelper.GetParent(menuItem) as FrameworkElement;
+
+                ROMDBEntry entry = fe.DataContext as ROMDBEntry;
+                await FileHandler.DeleteROMAsync(entry);
+
+                //update voice command list
+                //await MainPage.UpdateGameListForVoiceCommand();
+
+                this.RefreshRecentROMList();
+
+            }
+            catch (System.IO.FileNotFoundException)
+            { }
+        }
+
+        private void contactBlock_Tap_2(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            WebBrowserTask wbtask = new WebBrowserTask();
+            wbtask.Uri = new Uri("https://twitter.com/wp8emu");
+            wbtask.Show();
+
+        }
+
+        private void romList_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+
+            this.StartROMFromList(this.romList);
+        }
+
+        private void recentList_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            this.StartROMFromList(this.recentList);
+        }
+
+
         private void PinToStartMenuItem_Click_1(object sender, RoutedEventArgs e)
         {
             PinToStart(sender, this.romList);
@@ -904,49 +1157,86 @@ namespace PhoneDirect3DXamlAppInterop
             this.NavigationService.Navigate(new Uri("/SDCardImportPage.xaml", UriKind.Relative));
         }
 
-        private void TextBlock_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
+
+        private void RefreshRecentROMList()
         {
-            WebBrowserTask wbtask = new WebBrowserTask();
-            wbtask.Uri = new Uri("http://www.youtube.com/watch?v=YfqzZhcr__o");
-            wbtask.Show();
+
+
+            //StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+            //StorageFolder romFolder = await localFolder.CreateFolderAsync(ROM_DIRECTORY, CreationCollisionOption.OpenIfExists);
+            //IReadOnlyList<StorageFile> roms = await romFolder.GetFilesAsync();
+            //IList<ROMEntry> romNames = new List<ROMEntry>(roms.Count);
+            //foreach (var file in roms)
+            //{
+            //    romNames.Add(new ROMEntry() { Name = file.Name } );
+            //}
+            this.lastRomImage.DataContext = ROMDatabase.Current.GetLastPlayed();
+
+            if (this.lastRomImage.DataContext != null)
+                this.resumeButton.IsEnabled = true;
+            else
+                this.resumeButton.IsEnabled = false;
+
+            if (this.lastRomImage.DataContext != null && App.metroSettings.ShowLastPlayedGame == true)
+                lastRomGrid.Visibility = Visibility.Visible;
+            else
+                lastRomGrid.Visibility = Visibility.Collapsed;
+
+            //this.romList.ItemsSource = ROMDatabase.Current.GetROMList();
+
+            this.recentList.ItemsSource = ROMDatabase.Current.GetRecentlyPlayed();
+
         }
 
-        private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void CloudSixImportButton_Click(object sender, RoutedEventArgs e)
         {
-            WebBrowserTask wbtask = new WebBrowserTask();
-            wbtask.Uri = new Uri("http://www.youtube.com/watch?v=3WopTRM4ets");
-            wbtask.Show();
+            var launcher = new CloudSixConnector.FilePicker.CloudSixPicker("cloudsix2snes8x");
+
+            launcher.Token = "FromCloudSix";
+            launcher.Caption = "NEED TO CHANGE, .zip, .rar, .7z";
+
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "zip" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "zib" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "rar" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "7z" });
+            launcher.Show();
+
         }
 
-        private void TextBlock_Tap_2(object sender, System.Windows.Input.GestureEventArgs e)
+        private void CloudSixExportButton_Click(object sender, RoutedEventArgs e)
         {
-            WebBrowserTask wbtask = new WebBrowserTask();
-            wbtask.Uri = new Uri("http://forums.wpcentral.com/windows-phone-apps/252987-trio-nintendo-emulators-new-tutorial-using-cheat-codes.html");
-            wbtask.Show();
+            BackupPage.backupMedium = "cloudsix";
+            this.NavigationService.Navigate(new Uri("/BackupPage.xaml", UriKind.Relative));
+
+            //var saver = new CloudSixSaver("df.dd", )
         }
 
-        private void contactBlock_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            EmailComposeTask emailcomposer = new EmailComposeTask();
 
-            emailcomposer.To = AppResources.AboutContact;
-            emailcomposer.Subject = "Snes8x bug report or feature suggestion";
-            emailcomposer.Show();
-        }
+    
 
-        private void TextBlock_Tap_3(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            this.NavigationService.Navigate(new Uri("/HelpPage.xaml", UriKind.Relative));
-        }
 
-        private void TextBlock_Tap_4(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            this.NavigationService.Navigate(new Uri("/HelpPage.xaml?index=1", UriKind.Relative));
-        }
+    }  //end main class
 
-        private void TextBlock_Tap_5(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            this.NavigationService.Navigate(new Uri("/HelpPage.xaml?index=2", UriKind.Relative));
-        }
+    class ROMEntry
+    {
+        public String Name { get; set; }
     }
+
+    [DataContract]
+    public class LoadROMParameter
+    {
+        public StorageFile file { get; set; }
+        public StorageFolder folder { get; set; }
+        [DataMember]
+        public string RomFileName { get; set; } //store this information so that we can store in State in case the app is tombstoned
+    }
+
+    // add these 3 lines  
+    public class TiltableGrid : Grid
+    {
+    }
+
+    public class TiltableCanvas : Canvas
+    {
+    }  
 }

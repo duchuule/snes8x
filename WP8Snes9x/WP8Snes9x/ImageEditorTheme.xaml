@@ -1,0 +1,1659 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mscorlib="clr-namespace:System;assembly=mscorlib"
+    xmlns:local="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.ImageEditor"
+    xmlns:telerikDataViz="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.DataVisualization"
+    xmlns:telerikCore="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Core"
+    xmlns:telerikImageButton="clr-namespace:Telerik.Windows.Controls.ImageButton;assembly=Telerik.Windows.Controls.Primitives"
+    xmlns:telerikSlideView="clr-namespace:Telerik.Windows.Controls.SlideView;assembly=Telerik.Windows.Controls.Primitives"
+    xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
+    xmlns:telerikInput="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Input">
+
+    <local:ThemeObserver x:Key="ThemeObserver"/>
+    <local:LocalizedStrings x:Key="LocalizedStrings"/>
+    
+    <local:ThemeResourceConverter x:Key="ToolBackgroundConverter">
+        <local:ThemeResourceConverter.LightResource>
+            <SolidColorBrush Color="#D6D6D6"/>
+        </local:ThemeResourceConverter.LightResource>
+        
+        <local:ThemeResourceConverter.DarkResource>
+            <SolidColorBrush Color="#1D1D1D"/>
+        </local:ThemeResourceConverter.DarkResource>
+    </local:ThemeResourceConverter>
+
+    <local:ThemeResourceConverter x:Key="AcceptCancelBackgroundConverter">
+        <local:ThemeResourceConverter.LightResource>
+            <SolidColorBrush Color="#E5E5E5"/>
+        </local:ThemeResourceConverter.LightResource>
+
+        <local:ThemeResourceConverter.DarkResource>
+            <SolidColorBrush Color="#292929"/>
+        </local:ThemeResourceConverter.DarkResource>
+    </local:ThemeResourceConverter>
+
+    <local:ThemeResourceConverter x:Key="SeparatorBackgroundConverter">
+        <local:ThemeResourceConverter.LightResource>
+            <SolidColorBrush Color="#D1D1D1"/>
+        </local:ThemeResourceConverter.LightResource>
+
+        <local:ThemeResourceConverter.DarkResource>
+            <SolidColorBrush Color="#191919"/>
+        </local:ThemeResourceConverter.DarkResource>
+    </local:ThemeResourceConverter>
+
+    <local:ThemeResourceConverter x:Key="CropRatioSelectedBackgroundConverter">
+        <local:ThemeResourceConverter.LightResource>
+            <LinearGradientBrush StartPoint="0.5, 0.0"
+                                 EndPoint="0.5, 1.0">
+                <GradientStop Color="#C4C4C4"/>
+                <GradientStop Color="#D6D6D6" Offset="1"/>
+            </LinearGradientBrush>
+        </local:ThemeResourceConverter.LightResource>
+
+        <local:ThemeResourceConverter.DarkResource>
+            <LinearGradientBrush StartPoint="0.5, 0.0"
+                                 EndPoint="0.5, 1.0">
+                <GradientStop Color="#010101"/>
+                <GradientStop Color="#1D1D1D" Offset="1"/>
+            </LinearGradientBrush>
+        </local:ThemeResourceConverter.DarkResource>
+    </local:ThemeResourceConverter>
+    
+    <local:ThemeResourceConverter x:Key="TextLightnessImageConverter"
+                                  LightResource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/text-saturation.png"
+                                  DarkResource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/text-saturation-dark.png"/>
+    
+    <local:ThemeResourceConverter x:Key="TextHueImageConverter"
+                                  LightResource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/text-hue.png"
+                                  DarkResource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/text-hue-dark.png"/>
+
+    <local:CollectionIndexToBackgroundConverter x:Key="IndexToBackgroundConverter">
+        <local:CollectionIndexToBackgroundConverter.EvenDarkBrush>
+            <LinearGradientBrush StartPoint="0.5, 0.0"
+                                 EndPoint="0.5, 1.0">
+                <GradientStop Color="#252525"/>
+                <GradientStop Color="#1D1D1D" Offset="1"/>
+            </LinearGradientBrush>
+        </local:CollectionIndexToBackgroundConverter.EvenDarkBrush>
+
+        <local:CollectionIndexToBackgroundConverter.OddDarkBrush>
+            <SolidColorBrush Color="#1D1D1D"/>
+        </local:CollectionIndexToBackgroundConverter.OddDarkBrush>
+
+        <local:CollectionIndexToBackgroundConverter.EvenLightBrush>
+            <LinearGradientBrush StartPoint="0.5, 0.0"
+                                 EndPoint="0.5, 1.0">
+                <GradientStop Color="#DDDDDD"/>
+                <GradientStop Color="#D6D6D6" Offset="1"/>
+            </LinearGradientBrush>
+        </local:CollectionIndexToBackgroundConverter.EvenLightBrush>
+
+        <local:CollectionIndexToBackgroundConverter.OddLightBrush>
+            <SolidColorBrush Color="#D6D6D6"/>
+        </local:CollectionIndexToBackgroundConverter.OddLightBrush>
+
+    </local:CollectionIndexToBackgroundConverter>
+
+    <telerikCore:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <local:StringToLowerConverter x:Key="ToLowerConverter"/>
+    <local:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
+    <local:IconToBrushConverter x:Key="IconToBrushConverter"/>
+
+    <SolidColorBrush Color="{StaticResource PhoneAccentColor}" x:Key="PressedStateWithOpacityMaskBackgroundFillBrush"/>
+    <SolidColorBrush Color="{StaticResource PhoneForegroundColor}" x:Key="PressedStateWithOpacityMaskBackgroundStrokeBrush"/>
+    <SolidColorBrush Color="White" x:Key="PressedStateWithOpacityMaskForegroundFillBrush"/>
+    <SolidColorBrush Color="{StaticResource PhoneDisabledColor}" x:Key="DisabledStateWithOpacityMaskBrush"/>
+
+    <telerikImageButton:ImageButtonShapeToVisibilityConverter x:Key="ImageButtonShapeToVisibilityConverter" />
+    <telerikImageButton:ThicknessToDoubleConverter x:Key="ThicknessToDoubleConverter"/>
+    
+    <Style TargetType="local:CustomImageButton">
+        <Setter Property="BorderBrush" Value="{StaticResource PhoneForegroundBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:CustomImageButton">
+                    <Grid Background="Transparent">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="RestState"/>
+                                <VisualState x:Name="DisabledState"/>
+                                <VisualState x:Name="PressedState">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_ButtonImage" Storyboard.TargetProperty="Source">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=PressedStateImageSource}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="RestStateWithOpacityMask">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_ButtonImage" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="PressedStateWithOpacityMask">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_ButtonImage" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RectangleButtonForeground" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PressedStateWithOpacityMaskForegroundFillBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" 
+                                                                           Storyboard.TargetProperty="BorderBrush">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneAccentBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RectangleButtonBackground" 
+                                                                       Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource CropRatioSelectedBackgroundConverter}}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="DisabledStateWithOpacityMask"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid x:Name="RectangleButtonBackground" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Border x:Name="Border"
+                                    BorderThickness="0, 3, 0, 0"
+                                    Grid.RowSpan="2"/>
+                            
+                            <Rectangle x:Name="RectangleButtonForeground"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Fill="{TemplateBinding Foreground}"
+                                       Width="84"
+                                       Height="84">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush x:Name="PART_RectangleOpacityMaskImageBrush"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            
+                            <Ellipse Visibility="Collapsed">
+                                <Ellipse.Fill>
+                                    <ImageBrush x:Name="PART_EllipseOpacityMaskImageBrush"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+
+                            <Image x:Name="PART_ButtonImage"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Stretch="None"/>
+
+                            <ContentControl x:Name="ContentControl" Grid.Row="1"
+                                            Foreground="{StaticResource PhoneForegroundBrush}"
+                                        Content="{TemplateBinding Content}" 
+                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            Margin="0, 0, 0, 8"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:RadImageEditor">
+        <Setter Property="DefaultToolUISelector">
+            <Setter.Value>
+                <local:ImageEditorToolUISelector>
+                    <local:ImageEditorToolUISelector.BrightnessToolUI>
+                        <DataTemplate>
+                            <local:RangeUIControl Value="{Binding Value, Mode=TwoWay}"
+                                                  MaxValue="{Binding Max}"/>
+                        </DataTemplate>
+                    </local:ImageEditorToolUISelector.BrightnessToolUI>
+
+                    <local:ImageEditorToolUISelector.SharpenToolUI>
+                        <DataTemplate>
+                            <local:RangeUIControl Value="{Binding Value, Mode=TwoWay}"
+                                                  MaxValue="{Binding Max}"/>
+                        </DataTemplate>
+                    </local:ImageEditorToolUISelector.SharpenToolUI>
+
+                    <local:ImageEditorToolUISelector.HueToolUI>
+                        <DataTemplate>
+                            <local:RangeUIControl Value="{Binding Value, Mode=TwoWay}"
+                                                  MaxValue="{Binding Max}"/>
+                        </DataTemplate>
+                    </local:ImageEditorToolUISelector.HueToolUI>
+
+                    <local:ImageEditorToolUISelector.ContrastToolUI>
+                        <DataTemplate>
+                            <local:RangeUIControl Value="{Binding Value, Mode=TwoWay}"
+                                                  MaxValue="{Binding Max}"/>
+                        </DataTemplate>
+                    </local:ImageEditorToolUISelector.ContrastToolUI>
+
+                    <local:ImageEditorToolUISelector.SaturationToolUI>
+                        <DataTemplate>
+                            <local:RangeUIControl Value="{Binding Value, Mode=TwoWay}"
+                                                  MaxValue="{Binding Max}"/>
+                        </DataTemplate>
+                    </local:ImageEditorToolUISelector.SaturationToolUI>
+
+                    <local:ImageEditorToolUISelector.ColorEffectsToolUI>
+                        <DataTemplate>
+                            <local:ColorEffectsUIControl IsColorFixed="{Binding IsColorFixed, Mode=TwoWay}"
+                                                         IsColorInverted="{Binding IsColorInverted, Mode=TwoWay}"
+                                                         IsGreyscale="{Binding IsGreyscale, Mode=TwoWay}"/>
+                        </DataTemplate>
+                    </local:ImageEditorToolUISelector.ColorEffectsToolUI>
+
+                    <local:ImageEditorToolUISelector.ResizeToolUI>
+                        <DataTemplate>
+                            <local:ResizeUIControl ImageHeight="{Binding Height, Mode=TwoWay}"
+                                                   ImageWidth="{Binding Width, Mode=TwoWay}"
+                                                   IsUniform="{Binding IsUniform, Mode=TwoWay}"/>
+                        </DataTemplate>
+                    </local:ImageEditorToolUISelector.ResizeToolUI>
+
+                    <local:ImageEditorToolUISelector.OrientationToolUI>
+                        <DataTemplate>
+                            <local:OrientationUIControl IsFlippedVertical="{Binding IsFlippedVertical, Mode=TwoWay}"
+                                                        IsFlippedHorizontal="{Binding IsFlippedHorizontal, Mode=TwoWay}"
+                                                        Rotation="{Binding Rotation, Mode=TwoWay}"
+                                                        RotationChange="90"/>
+                        </DataTemplate>
+                    </local:ImageEditorToolUISelector.OrientationToolUI>
+
+                    <local:ImageEditorToolUISelector.CropToolUI>
+                        <DataTemplate>
+                            <local:CropUIControl SupportedRatios="{Binding SupportedRatios, Mode=TwoWay}"
+                                                   SelectedRatio="{Binding SelectedRatio, Mode=TwoWay}"
+                                                   CropRect="{Binding CropRect, Mode=TwoWay}"
+                                                 PreviewImage="{Binding PreviewImage}"/>
+                        </DataTemplate>
+                    </local:ImageEditorToolUISelector.CropToolUI>
+                    
+                    <local:ImageEditorToolUISelector.TextToolUI>
+                        <DataTemplate>
+                            <local:TextUIControl Text="{Binding Path=Text, Mode=TwoWay}"
+                                                 TextOpacity="{Binding Path=Opacity, Mode=TwoWay}"
+                                                 CharacterSpacing="{Binding Path=CharacterSpacing, Mode=TwoWay}"
+                                                 LineHeight="{Binding Path=LineHeight, Mode=TwoWay}"
+                                                 FontWeight="{Binding Path=FontWeight, Mode=TwoWay}"
+                                                 FontSize="{Binding Path=FontSize, Mode=TwoWay}"
+                                                 Foreground="{Binding Path=Foreground, Mode=TwoWay}"
+                                                 FontFamily="{Binding Path=FontFamily, Mode=TwoWay}"
+                                                 FontStretch="{Binding Path=FontStretch, Mode=TwoWay}"
+                                                 FontStyle="{Binding Path=FontStyle, Mode=TwoWay}"
+                                                 TextPosition="{Binding Path=TextPosition, Mode=TwoWay}"
+                                                 LineStackingStrategy="{Binding Path=LineStackingStrategy, Mode=TwoWay}"
+                                                 Padding="{Binding Path=Padding, Mode=TwoWay}"
+                                                 TextAlignment="{Binding Path=TextAlignment, Mode=TwoWay}"
+                                                 TextTrimming="{Binding Path=TextTrimming, Mode=TwoWay}"
+                                                 TextWrapping="{Binding Path=TextWrapping, Mode=TwoWay}"
+                                                 TextHue="{Binding Path=TextHue, Mode=TwoWay}"
+                                                 TextLightness="{Binding Path=TextLightness, Mode=TwoWay}"
+                                                 CurrentEditedProperty="{Binding Path=CurrentEditedProperty, Mode=TwoWay}"
+                                                 CurrentEditedPropertyInitialValue="{Binding Path=InitialPropertyValue, Mode=TwoWay}"
+                                                 PreviewImage="{Binding PreviewImage}"/>
+                        </DataTemplate>
+                    </local:ImageEditorToolUISelector.TextToolUI>
+                </local:ImageEditorToolUISelector>
+            </Setter.Value>
+        </Setter>
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:RadImageEditor">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Canvas Opacity="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top">
+                            <Image x:Name="PART_OriginalImage"
+                                   Visibility="Collapsed"/>
+                        </Canvas>
+
+                        <Image x:Name="PART_Image"
+                               Stretch="Uniform"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"/>
+
+                        <telerikSlideView:PanAndZoomImage x:Name="PART_ModifiedImage"
+                                                          IsAnimated="False"
+                                                          ZoomMode="{Binding Path=CurrentTool.ZoomMode, RelativeSource={RelativeSource TemplatedParent}}"
+                                                          MaximumZoom="3"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Source="{Binding Path=CurrentTool.ModifiedImage, RelativeSource={RelativeSource TemplatedParent}}"
+                               Visibility="{Binding Path=CurrentTool.Visibility, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                        <ContentControl x:Name="PART_ToolUIContainer"
+                                        Grid.RowSpan="2"
+                                        HorizontalContentAlignment="Stretch"
+                                        VerticalContentAlignment="Stretch"/>
+
+                        <Grid Height="104"
+                              Grid.Row="1"
+                                Background="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource ToolBackgroundConverter}}"
+                                x:Name="PART_Toolstrip">
+                            <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                                            HorizontalScrollBarVisibility="Hidden">
+                                <ItemsControl ItemsSource="{TemplateBinding Tools}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid HorizontalAlignment="Stretch"
+                                                        VerticalAlignment="Stretch"
+                                                        Background="{Binding Path=CollectionIndex, Converter={StaticResource IndexToBackgroundConverter}}">
+                                                <local:CustomImageButton RestStateImageSource="{Binding Icon}"
+                                                                            Foreground="{Binding Icon, Converter={StaticResource IconToBrushConverter}}"
+                                                                            Content="{Binding Name, Converter={StaticResource ToLowerConverter}}"
+                                                                            HorizontalContentAlignment="Center"
+                                                                            FontWeight="SemiBold"
+                                                                            VerticalAlignment="Stretch"
+                                                                            HorizontalAlignment="Stretch"
+                                                                            FontSize="13.33"
+                                                                            Width="90"
+                                                                            IsChecked="{Binding Path=IsSelected, Mode=TwoWay}"
+                                                                            ButtonBehavior="ToggleButton"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                        <Rectangle Height="4"
+                                   Grid.Row="2"
+                                        HorizontalAlignment="Stretch"
+                                        Fill="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource SeparatorBackgroundConverter}}"/>
+
+                        <Grid Height="72"
+                              Grid.Row="3"
+                                Background="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource AcceptCancelBackgroundConverter}}">
+                            <StackPanel HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                <telerikPrimitives:RadImageButton x:Name="PART_AcceptButton"
+                                                                        Command="{TemplateBinding SaveImageCommand}"
+                                                                        CommandParameter="{TemplateBinding SaveImageCommandParameter}"
+                                                                        RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/save.png"
+                                                                        Margin="-12"
+                                                                        Width="94"
+                                                                        Height="94"/>
+                                <telerikPrimitives:RadImageButton ButtonBehavior="ToggleButton"
+                                                                        RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/before-after.png"
+                                                                        x:Name="PART_BeforeAfterButton"
+                                                                        Width="94"
+                                                                        Height="94"
+                                                                        Margin="-12"
+                                                                        Visibility="{Binding Path=CurrentTool.SupportsComparison, Converter={StaticResource BoolToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=Collapsed}"/>
+                            </StackPanel>
+
+                            <TextBlock HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontWeight="SemiBold"
+                                            FontSize="{StaticResource PhoneFontSizeSmall}"
+                                            Text="{Binding Path=CurrentTool.Name, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                            <telerikPrimitives:RadImageButton x:Name="PART_CancelButton"
+                                                                Command="{TemplateBinding CancelEditCommand}"
+                                                                CommandParameter="{TemplateBinding CancelEditCommandParameter}"
+                                                                RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/cancel.png"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center"
+                                                                Margin="-12"
+                                                                Width="94"
+                                                                Height="94"/>
+                        </Grid>
+
+                        <local:BeforeAfterControl BeforeImage="{Binding Path=CurrentTool.PreviewImage, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  Zoom="{Binding Path=Zoom, ElementName=PART_ModifiedImage}"
+                                                  Pan="{Binding Path=Pan, ElementName=PART_ModifiedImage}"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Stretch"
+                                                  ImageWidth="{Binding Path=CurrentTool.PreviewImage.PixelWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  Grid.RowSpan="2"
+                                                  IsHitTestVisible="{Binding Path=IsChecked, ElementName=PART_BeforeAfterButton, FallbackValue=false}"
+                                                  Opacity="{Binding Path=IsChecked, ElementName=PART_BeforeAfterButton,Converter={StaticResource BoolToOpacityConverter}, FallbackValue=0}"/>
+
+                        <telerikPrimitives:RadBusyIndicator IsRunning="{Binding Path=CurrentTool.IsWorking, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=false}"
+                                                                Grid.RowSpan="4"
+                                                                AnimationStyle="AnimationStyle9"
+                                                            Content="">
+                            <telerikPrimitives:RadBusyIndicator.Background>
+                                <SolidColorBrush Color="{StaticResource PhoneBackgroundColor}"
+                                                 Opacity="0.5"/>
+                            </telerikPrimitives:RadBusyIndicator.Background>
+                        </telerikPrimitives:RadBusyIndicator>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:RangeUIControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:RangeUIControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Height="104"
+                              Grid.Row="1"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Bottom"
+                              Background="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource ToolBackgroundConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="PART_Minus"
+                                    BorderBrush="Transparent"
+                                    Height="104"
+                                    Width="104">
+                                <Button.ContentTemplate>
+                                    <DataTemplate>
+                                        <Grid Width="20"
+                                              Height="20">
+                                            <Rectangle VerticalAlignment="Center"
+                                                      Height="4"
+                                                      Fill="{StaticResource PhoneForegroundBrush}"
+                                                      HorizontalAlignment="Stretch"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </Button.ContentTemplate>
+                            </Button>
+                            
+                            <Button x:Name="PART_Plus"
+                                    Height="104"
+                                    Width="104"
+                                    Grid.Column="2"
+                                    BorderBrush="Transparent">
+                                <Button.ContentTemplate>
+                                    <DataTemplate>
+                                        <Grid Width="24"
+                                              Height="24">
+                                            <Rectangle VerticalAlignment="Center"
+                                                  Height="4"
+                                                  Fill="{StaticResource PhoneForegroundBrush}"
+                                                  HorizontalAlignment="Stretch"/>
+                                            <Rectangle VerticalAlignment="Stretch"
+                                                  Width="4"
+                                                  Fill="{StaticResource PhoneForegroundBrush}"
+                                                  HorizontalAlignment="Center"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </Button.ContentTemplate>
+                            </Button>
+
+                            <local:PivotSlider MaxValue="{TemplateBinding MaxValue}"
+                                               Grid.Column="1"
+                                               HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Stretch"
+                                               Value="{Binding Value, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:ColorEffectsUIControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:ColorEffectsUIControl">
+                    <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="VerticalAlignment"
+                                            Value="Bottom"/>
+                                <Setter Property="HorizontalAlignment"
+                                            Value="Center"/>
+                                <Setter Property="FontWeight"
+                                            Value="SemiBold"/>
+                                <Setter Property="FontSize"
+                                            Value="13.33"/>
+                            </Style>
+
+                            <Style TargetType="telerikPrimitives:RadImageButton">
+                                <Setter Property="ButtonBehavior"
+                                            Value="ToggleButton"/>
+                                <Setter Property="Margin"
+                                            Value="-12"/>
+                                <Setter Property="Width"
+                                            Value="108"/>
+                                <Setter Property="Height"
+                                            Value="108"/>
+                            </Style>
+                        </Grid.Resources>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Background="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource ToolBackgroundConverter}}"
+                              Grid.Row="1">
+                            <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center"
+                                            Height="104">
+                                <StackPanel.Resources>
+                                    <Style TargetType="local:CustomImageButton">
+                                        <Setter Property="FontWeight"
+                                                Value="SemiBold"/>
+                                        <Setter Property="HorizontalContentAlignment"
+                                                Value="Center"/>
+                                        <Setter Property="VerticalAlignment"
+                                                Value="Center"/>
+                                        <Setter Property="HorizontalAlignment"
+                                                Value="Center"/>
+                                        <Setter Property="FontSize"
+                                                Value="13.33"/>
+                                        <Setter Property="Width"
+                                                Value="90"/>
+                                    </Style>
+                                </StackPanel.Resources>
+                                <local:CustomImageButton RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/effects.png"
+                                                         Content="{Binding Path=LocalizedResources.ColorEffectsToolColorFixText, Source={StaticResource LocalizedStrings}}"
+                                                         IsChecked="{Binding Path=IsColorFixed, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                         ButtonBehavior="ToggleButton"/>
+
+                                <local:CustomImageButton RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/greyscale-chrome.png"
+                                                         Content="{Binding Path=LocalizedResources.ColorEffectsToolGreyscaleText, Source={StaticResource LocalizedStrings}}"
+                                                         IsChecked="{Binding Path=IsGreyscale, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                         ButtonBehavior="ToggleButton">
+                                    <local:CustomImageButton.Foreground>
+                                        <ImageBrush ImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/greyscale-chrome.png"/>
+                                    </local:CustomImageButton.Foreground>
+                                </local:CustomImageButton>
+
+                                <local:CustomImageButton RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/invert-colors.png"
+                                                         Content="{Binding Path=LocalizedResources.ColorEffectsToolInvertColorsText, Source={StaticResource LocalizedStrings}}"
+                                                         IsChecked="{Binding Path=IsColorInverted, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                         ButtonBehavior="ToggleButton"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:ResizeUIControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:ResizeUIControl">
+                    <Grid>
+                        <Grid.Resources>
+                            <local:StringToIntValueConverter x:Key="StringToIntConverter"/>
+                        </Grid.Resources>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="1"
+                              Background="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource ToolBackgroundConverter}}">
+                            <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Height="104">
+                                <TextBox Text="{Binding Path=ImageWidth, Converter={StaticResource StringToIntConverter}, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                             InputScope="Number"
+                                             Width="180"
+                                             VerticalAlignment="Center"/>
+                                <telerikPrimitives:RadImageButton ButtonBehavior="ToggleButton"
+                                                                      VerticalAlignment="Center"
+                                                                      RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/link.png"
+                                                                      IsChecked="{Binding Path=IsUniform, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                <TextBox Text="{Binding Path=ImageHeight, Converter={StaticResource StringToIntConverter}, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                             InputScope="Number"
+                                             VerticalAlignment="Center"
+                                             Width="180"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:OrientationUIControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:OrientationUIControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="1"
+                              Height="104"
+                              Background="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource ToolBackgroundConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Grid.Resources>
+                                <Style TargetType="local:CustomImageButton">
+                                    <Setter Property="FontWeight"
+                                            Value="SemiBold"/>
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Center"/>
+                                    <Setter Property="VerticalAlignment"
+                                            Value="Center"/>
+                                    <Setter Property="HorizontalAlignment"
+                                            Value="Center"/>
+                                    <Setter Property="FontSize"
+                                            Value="13.33"/>
+                                    <Setter Property="Width"
+                                            Value="90"/>
+                                    <Setter Property="Height"
+                                            Value="80"/>
+                                </Style>
+                                
+                                <Style TargetType="telerikPrimitives:RadImageButton">
+                                    <Setter Property="FontWeight"
+                                            Value="SemiBold"/>
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Center"/>
+                                    <Setter Property="VerticalAlignment"
+                                            Value="Center"/>
+                                    <Setter Property="HorizontalAlignment"
+                                            Value="Center"/>
+                                    <Setter Property="FontSize"
+                                            Value="13.33"/>
+                                    <Setter Property="Width"
+                                            Value="90"/>
+                                    <Setter Property="Height"
+                                            Value="80"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="telerikPrimitives:RadImageButton">
+                                                <Grid Background="Transparent">
+                                                    <VisualStateManager.VisualStateGroups>
+                                                        <VisualStateGroup x:Name="CommonStates">
+                                                            <VisualState x:Name="RestState"/>
+                                                            <VisualState x:Name="DisabledState"/>
+                                                            <VisualState x:Name="PressedState">
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_ButtonImage" Storyboard.TargetProperty="Source">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=PressedStateImageSource}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="RestStateWithOpacityMask">
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_ButtonImage" Storyboard.TargetProperty="Visibility">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="PressedStateWithOpacityMask">
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_ButtonImage" Storyboard.TargetProperty="Visibility">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RectangleButtonForeground" Storyboard.TargetProperty="Fill">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PressedStateWithOpacityMaskForegroundFillBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" 
+                                                                           Storyboard.TargetProperty="BorderBrush">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneAccentBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RectangleButtonBackground" 
+                                                                       Storyboard.TargetProperty="Background">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource CropRatioSelectedBackgroundConverter}}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="DisabledStateWithOpacityMask"/>
+                                                        </VisualStateGroup>
+                                                    </VisualStateManager.VisualStateGroups>
+
+                                                    <Grid x:Name="RectangleButtonBackground" >
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition/>
+                                                            <RowDefinition Height="Auto"/>
+                                                        </Grid.RowDefinitions>
+                                                        <Border x:Name="Border"
+                                    BorderThickness="0, 3, 0, 0"
+                                    Grid.RowSpan="2"/>
+
+                                                        <Rectangle x:Name="RectangleButtonForeground"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Fill="{TemplateBinding Foreground}"
+                                       Width="84"
+                                       Height="84">
+                                                            <Rectangle.OpacityMask>
+                                                                <ImageBrush x:Name="PART_RectangleOpacityMaskImageBrush"/>
+                                                            </Rectangle.OpacityMask>
+                                                        </Rectangle>
+
+                                                        <Ellipse Visibility="Collapsed">
+                                                            <Ellipse.Fill>
+                                                                <ImageBrush x:Name="PART_EllipseOpacityMaskImageBrush"/>
+                                                            </Ellipse.Fill>
+                                                        </Ellipse>
+
+                                                        <Image x:Name="PART_ButtonImage"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Stretch="None"/>
+
+                                                        <ContentControl x:Name="ContentControl" Grid.Row="1"
+                                            Foreground="{StaticResource PhoneForegroundBrush}"
+                                        Content="{TemplateBinding Content}" 
+                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            Margin="0, 0, 0, 8"/>
+                                                    </Grid>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                                
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment"
+                                            Value="Center"/>
+                                    <Setter Property="FontWeight"
+                                            Value="SemiBold"/>
+                                    <Setter Property="FontSize"
+                                            Value="13.33"/>
+                                </Style>
+                            </Grid.Resources>
+
+                            <StackPanel HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <telerikPrimitives:RadImageButton RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/rotate-left.png"
+                                                                      x:Name="PART_RotateLeft"/>
+                                    <telerikPrimitives:RadImageButton RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/rotate-right.png"
+                                                                      x:Name="PART_RotateRight"/>
+                                </StackPanel>
+
+                                <TextBlock Text="{Binding Path=LocalizedResources.OrientationToolRotateText, Source={StaticResource LocalizedStrings}}"/>
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Center"
+                                        Grid.Column="1">
+                                <StackPanel Orientation="Horizontal">
+                                    <local:CustomImageButton RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/fliph.png"
+                                                             ButtonBehavior="ToggleButton"
+                                                             IsChecked="{Binding Path=IsFlippedHorizontal, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                             x:Name="PART_FlipHorizontal"/>
+                                    <local:CustomImageButton RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/flipv.png"
+                                                             ButtonBehavior="ToggleButton"
+                                                             IsChecked="{Binding Path=IsFlippedVertical, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                             x:Name="PART_FlipVertical"/>
+                                </StackPanel>
+                                <TextBlock Text="{Binding Path=LocalizedResources.OrientationToolFlipText, Source={StaticResource LocalizedStrings}}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:CropUIControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:CropUIControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="1"
+                                Background="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource ToolBackgroundConverter}}"/>
+                        <telerikPrimitives:RadDataBoundListBox ItemsSource="{Binding Path=SupportedRatios, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                               SelectedItem="{Binding Path=SelectedRatio, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                               x:Name="PART_ListBox"
+                                                               Grid.Row="1"
+                                                               Height="104"
+                                                               ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                            <telerikPrimitives:RadDataBoundListBox.VirtualizationStrategyDefinition>
+                                <telerikPrimitives:StackVirtualizationStrategyDefinition Orientation="Horizontal"/>
+                            </telerikPrimitives:RadDataBoundListBox.VirtualizationStrategyDefinition>
+
+                            <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <local:CropRatioUIControl Text="{Binding Text}"
+                                                              IsSelected="{Binding IsSelected}"
+                                                              Background="{Binding Path=CollectionIndex, Converter={StaticResource IndexToBackgroundConverter}}"/>
+                                </DataTemplate>
+                            </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                        </telerikPrimitives:RadDataBoundListBox>
+
+                        <Grid VerticalAlignment="Center"
+                              HorizontalAlignment="Center">
+                            <Grid>
+                                <Grid.Background>
+                                    <SolidColorBrush Color="{StaticResource PhoneBackgroundColor}"
+                                                     Opacity="0.5"/>
+                                </Grid.Background>
+                            </Grid>
+                            <Image Source="{TemplateBinding PreviewImage}"
+                                       x:Name="PART_Image"
+                                       Clip="{Binding Path=ImageClip, ElementName=PART_CropGizmo}"/>
+                            <Canvas HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch">
+                                <local:CropGizmo x:Name="PART_CropGizmo"
+                                                 CropRatio="{Binding Path=SelectedItem, ElementName=PART_ListBox}"
+                                                 CropRect="{Binding Path=CropRect, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            </Canvas>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:CropGizmo">
+        <Setter Property="MinWidth"
+                Value="4"/>
+        <Setter Property="MinHeight"
+                Value="4"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:CropGizmo">
+                    <Grid>
+                        <Grid.Background>
+                            <SolidColorBrush Color="Black"
+                                             Opacity="0.001"/>
+                        </Grid.Background>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.Resources>
+                            <Style TargetType="Rectangle">
+                                <Setter Property="Stroke"
+                                            Value="White"/>
+                                <Setter Property="StrokeThickness"
+                                            Value="1"/>
+                                <Setter Property="Opacity"
+                                            Value="0.5"/>
+                            </Style>
+
+                            <Style TargetType="Ellipse">
+                                <Setter Property="HorizontalAlignment"
+                                            Value="Center"/>
+                                <Setter Property="VerticalAlignment"
+                                            Value="Center"/>
+                                <Setter Property="Fill"
+                                            Value="Black"/>
+                                <Setter Property="Stroke"
+                                            Value="White"/>
+                                <Setter Property="StrokeThickness"
+                                            Value="5"/>
+                                <Setter Property="Width"
+                                            Value="30"/>
+                                <Setter Property="Height"
+                                            Value="30"/>
+                            </Style>
+
+                            <Style TargetType="Grid"
+                                       x:Key="GridStyle">
+                                <Setter Property="Canvas.Left"
+                                            Value="-30"/>
+                                <Setter Property="Canvas.Top"
+                                            Value="-30"/>
+                                <Setter Property="Width"
+                                            Value="60"/>
+                                <Setter Property="Height"
+                                            Value="60"/>
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="Black"
+                                                             Opacity="0.001"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Grid.Resources>
+
+                        <Rectangle/>
+                        <Rectangle Grid.Column="1"/>
+                        <Rectangle Grid.Column="2"/>
+
+                        <Rectangle Grid.Row="1"/>
+                        <Rectangle Grid.Row="1" Grid.Column="1"/>
+                        <Rectangle Grid.Row="1" Grid.Column="2"/>
+
+                        <Rectangle Grid.Row="2"/>
+                        <Rectangle Grid.Row="2" Grid.Column="1"/>
+                        <Rectangle Grid.Row="2" Grid.Column="2"/>
+
+                        <Border Grid.ColumnSpan="3"
+                                    Grid.RowSpan="3"
+                                    BorderBrush="White"
+                                    BorderThickness="3"/>
+
+                        <Canvas HorizontalAlignment="Left"
+                                    VerticalAlignment="Top">
+                            <Grid x:Name="PART_TopLeft" Style="{StaticResource GridStyle}">
+                                <Ellipse/>
+                            </Grid>
+                        </Canvas>
+
+                        <Canvas Grid.Column="2"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top">
+                            <Grid x:Name="PART_TopRight" Style="{StaticResource GridStyle}">
+                                <Ellipse/>
+                            </Grid>
+                        </Canvas>
+
+                        <Canvas HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Grid.Row="2">
+                            <Grid x:Name="PART_BottomLeft" Style="{StaticResource GridStyle}">
+                                <Ellipse/>
+                            </Grid>
+                        </Canvas>
+
+                        <Canvas HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
+                                    Grid.Row="2"
+                                    Grid.Column="2">
+                            <Grid x:Name="PART_BottomRight" Style="{StaticResource GridStyle}">
+                                <Ellipse/>
+                            </Grid>
+                        </Canvas>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:CropRatioUIControl">
+        <Setter Property="Width"
+                    Value="84"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:CropRatioUIControl">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup>
+                                <VisualState x:Name="Initial"/>
+                                <VisualState x:Name="Selected">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Text" 
+                                                                           Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneAccentBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" 
+                                                                           Storyboard.TargetProperty="BorderBrush">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneAccentBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Grid" 
+                                                                       Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource CropRatioSelectedBackgroundConverter}}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid x:Name="Grid"
+                              Background="{TemplateBinding Background}">
+                            <Border BorderThickness="0, 3, 0, 0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        x:Name="Border">
+                                <TextBlock Text="{TemplateBinding Text}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           x:Name="Text"
+                                           FontWeight="SemiBold"
+                                           FontSize="13.33"/>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:BeforeAfterControl">
+        <Setter Property="Margin"
+                    Value="0, 0, 0, 104"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:BeforeAfterControl">
+                    <Grid>
+                        <Grid x:Name="PART_ImageContainer">
+                            <telerikSlideView:PanAndZoomImage x:Name="PART_Image"
+                                                              Source="{TemplateBinding BeforeImage}"
+                                                              IsHitTestVisible="False"
+                                                              ZoomMode="Free"
+                                                              Pan="{TemplateBinding Pan}"
+                                                              Zoom="{TemplateBinding Zoom}"
+                                                              MaximumZoom="3"
+                                                              Stretch="Uniform"/>
+                        </Grid>
+                        <Canvas HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch">
+                            <Grid x:Name="PART_Border"
+                                    Width="120">
+                                <Grid.Background>
+                                    <SolidColorBrush Color="Black" Opacity="0.001"/>
+                                </Grid.Background>
+                                <TextBlock Foreground="{StaticResource PhoneAccentBrush}"
+                                                FontSize="15"
+                                                FontWeight="SemiBold"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Text="BEFORE"/>
+
+                                <Rectangle Width="4"
+                                           StrokeThickness="1"
+                                           Stroke="{StaticResource PhoneBackgroundBrush}"
+                                            Fill="{StaticResource PhoneAccentBrush}"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Stretch"/>
+
+                                <TextBlock Foreground="{StaticResource PhoneAccentBrush}"
+                                                FontWeight="SemiBold"
+                                                FontSize="15"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Top"
+                                                Text="AFTER"
+                                            Margin="0, 0, 10, 0"/>
+                                
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                    <Polygon Fill="{StaticResource PhoneAccentBrush}"
+                                             Stroke="{StaticResource PhoneBackgroundBrush}"
+                                             StrokeThickness="1"
+                                             Margin="0, 0, 10, 0"
+                                             Points="0,5 10,0 10,10"/>
+                                    <Polygon Fill="{StaticResource PhoneAccentBrush}"
+                                             Stroke="{StaticResource PhoneBackgroundBrush}"
+                                             StrokeThickness="1"
+                                             Margin="10, 0, 0, 0"
+                                             Points="0,0 10,5 0,10"/>
+                                        
+                                </StackPanel>
+                            </Grid>
+                        </Canvas>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <local:NegativeValueConverter x:Key="NegativeValueConverter"/>
+    <Style TargetType="local:PivotSlider">
+        <Setter Property="MaxValue"
+                Value="100"/>
+        <Setter Property="MinHeight"
+                Value="80"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:PivotSlider">
+                    <Border Background="{TemplateBinding Background}">
+                        <telerikDataViz:LinearGaugeRange MinValue="{Binding Path=MaxValue, Converter={StaticResource NegativeValueConverter}, RelativeSource={RelativeSource TemplatedParent}}"
+                                                            MaxValue="{Binding Path=MaxValue, RelativeSource={RelativeSource TemplatedParent}}"
+                                                            TickStep="0"
+                                                            LabelStep="0">
+                            <telerikDataViz:LinearBarGaugeIndicator StartValue="{Binding Path=MaxValue, Converter={StaticResource NegativeValueConverter}, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                    Value="{Binding Path=MaxValue, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                    BarThickness="12"
+                                                                    BarBrush="#898989"/>
+                            <telerikDataViz:LinearBarGaugeIndicator StartValue="0"
+                                                                    BarThickness="12"
+                                                                    BarBrush="{StaticResource PhoneAccentBrush}"
+                                                                    Value="{Binding Path=Value, ElementName=PART_Thumb}"
+                                                                    x:Name="bar"/>
+                            <telerikDataViz:MarkerGaugeIndicator>
+                                <telerikDataViz:MarkerGaugeIndicator.MarkerTemplate>
+                                    <DataTemplate>
+                                            <Rectangle Width="4"
+                                                        Height="12"
+                                                        Fill="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource ToolBackgroundConverter}}"/>
+                                    </DataTemplate>
+                                </telerikDataViz:MarkerGaugeIndicator.MarkerTemplate>
+                            </telerikDataViz:MarkerGaugeIndicator>
+                            
+                            <telerikDataViz:MarkerGaugeIndicator x:Name="PART_Thumb">
+                                <telerikDataViz:MarkerGaugeIndicator.MarkerTemplate>
+                                    <DataTemplate>
+                                        <Grid Width="80"
+                                              Height="80">
+                                            <Grid.Background>
+                                                <SolidColorBrush Color="{StaticResource PhoneBackgroundColor}"
+                                                                 Opacity="0.001"/>
+                                            </Grid.Background>
+                                            <Rectangle Width="12"
+                                                        Height="22"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Fill="{StaticResource PhoneForegroundBrush}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </telerikDataViz:MarkerGaugeIndicator.MarkerTemplate>
+                            </telerikDataViz:MarkerGaugeIndicator>
+                        </telerikDataViz:LinearGaugeRange>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="local:TextUIControl">
+        <Setter Property="OpacityUI">
+            <Setter.Value>
+                <DataTemplate>
+                    <local:ImageEditorSlider Maximum="1"
+                                             Background="#898989"
+                            Minimum="0"
+                            Value="{Binding Path=Opacity, Mode=TwoWay}"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Setter Property="HueUI">
+            <Setter.Value>
+                <DataTemplate>
+                    <local:ImageEditorSlider Value="{Binding Path=TextHue, Mode=TwoWay}"
+                                             Background="{Binding Path=HueRangeBrush, Source={StaticResource ThemeObserver}}"
+                                             Foreground="Transparent"
+                            Minimum="0"
+                            Maximum="359"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Setter Property="LightnessUI">
+            <Setter.Value>
+                <DataTemplate>
+                    <local:ImageEditorSlider Value="{Binding Path=TextLightness, Mode=TwoWay}"
+                                             Foreground="Transparent"
+                                             Background="{Binding LightnessBrush}"
+                            Minimum="0"
+                            Maximum="1"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Setter Property="CharacterSpacingUI">
+            <Setter.Value>
+                <DataTemplate>
+                    <local:RangeUIControl MaxValue="1000"
+                                          Value="{Binding Path=CharacterSpacing, Mode=TwoWay}"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Setter Property="LineHeightUI">
+            <Setter.Value>
+                <DataTemplate>
+                    <local:ImageEditorSlider Maximum="300"
+                                             Background="#898989"
+                            Value="{Binding Path=LineHeight, Mode=TwoWay}"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Setter Property="FontUI">
+            <Setter.Value>
+                <DataTemplate>
+                    <local:FontSelectorControl SelectedFont="{Binding Path=FontFamily, Mode=TwoWay}"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:TextUIControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Canvas x:Name="PART_Canvas"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Width="{Binding Path=PreviewImage.PixelWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                Height="{Binding Path=PreviewImage.PixelHeight, RelativeSource={RelativeSource TemplatedParent}}">
+                            <local:TextToolTextBox Text="{Binding Path=Text, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    TextOpacity="{TemplateBinding TextOpacity}"
+                                                    x:Name="PART_TextBox"
+                                                    FontSize="{Binding Path=FontSize, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    TextAlignment="{TemplateBinding TextAlignment}"
+                                                    TextWrapping="{TemplateBinding TextWrapping}"
+                                                    Padding="6, 3, 6, 3"
+                                                    Foreground="{TemplateBinding Foreground}"
+                                                    CharacterSpacing="{TemplateBinding CharacterSpacing}"
+                                                    LineHeight="{TemplateBinding LineHeight}"
+                                                    FontWeight="{TemplateBinding FontWeight}"
+                                                    FontFamily="{TemplateBinding FontFamily}"
+                                                    FontStyle="{TemplateBinding FontStyle}"
+                                                    FontStretch="{TemplateBinding FontStretch}"
+                                                    LineStackingStrategy="{TemplateBinding LineStackingStrategy}"
+                                                    AcceptsReturn="True"/>
+                        </Canvas>
+
+                        <Grid Grid.Row="1"
+                              Height="104"
+                              Background="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource ToolBackgroundConverter}}">
+                            <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          x:Name="PART_ToolStrip">
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="local:CustomImageButton">
+                                            <Setter Property="Foreground"
+                                                    Value="{StaticResource PhoneForegroundBrush}"/>
+                                            <Setter Property="CharacterSpacing"
+                                                    Value="0"/>
+                                            <Setter Property="HorizontalContentAlignment"
+                                                    Value="Center"/>
+                                            <Setter Property="FontWeight"
+                                                    Value="SemiBold"/>
+                                            <Setter Property="HorizontalAlignment"
+                                                    Value="Stretch"/>
+                                            <Setter Property="VerticalAlignment"
+                                                    Value="Stretch"/>
+                                            <Setter Property="FontSize"
+                                                    Value="13.33"/>
+                                            <Setter Property="Width"
+                                                    Value="90"/>
+                                            <Setter Property="ButtonBehavior"
+                                                    Value="ToggleButton"/>
+                                            <Setter Property="FontFamily"
+                                                    Value="Portable User Interface"/>
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    <local:CustomImageButton RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/text.png"
+                                                             Content="{Binding Path=LocalizedResources.TextToolFontFamilyShortText, Source={StaticResource LocalizedStrings}}"
+                                                             x:Name="PART_FontButton"/>
+
+                                    <local:CustomImageButton RestStateImageSource="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource TextHueImageConverter}}"
+                                                             Content="{Binding Path=LocalizedResources.TextToolTextHueShortText, Source={StaticResource LocalizedStrings}}"
+                                                             x:Name="PART_HueButton">
+                                        <local:CustomImageButton.Foreground>
+                                            <ImageBrush ImageSource="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource TextHueImageConverter}}"/>
+                                        </local:CustomImageButton.Foreground>
+                                    </local:CustomImageButton>
+
+                                    <local:CustomImageButton RestStateImageSource="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource TextLightnessImageConverter}}"
+                                                             Content="{Binding Path=LocalizedResources.TextToolTextLightnessShortText, Source={StaticResource LocalizedStrings}}"
+                                                             x:Name="PART_SaturationButton">
+                                        <local:CustomImageButton.Foreground>
+                                            <ImageBrush ImageSource="{Binding Path=IsDarkTheme, Source={StaticResource ThemeObserver}, Converter={StaticResource TextLightnessImageConverter}}"/>
+                                        </local:CustomImageButton.Foreground>
+                                    </local:CustomImageButton>
+
+                                    <local:CustomImageButton RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/text-opacity.png"
+                                                             Content="{Binding Path=LocalizedResources.TextToolOpacityShortText, Source={StaticResource LocalizedStrings}}"
+                                                             x:Name="PART_OpacityButton"/>
+
+                                    <local:CustomImageButton RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/text-char-space.png"
+                                                             Content="{Binding Path=LocalizedResources.TextToolCharacterSpacingShortText, Source={StaticResource LocalizedStrings}}"
+                                                             x:Name="PART_CharacterButton"/>
+
+                                    <local:CustomImageButton RestStateImageSource="/Telerik.Windows.Controls.ImageEditor;Component/Icons/text-line-spacing.png"
+                                                             Content="{Binding Path=LocalizedResources.TextToolLineHeightShortText, Source={StaticResource LocalizedStrings}}"
+                                                             x:Name="PART_LineButton"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                            
+                            <ContentControl x:Name="PART_TextEditUIContainer"
+                                            Visibility="Collapsed"
+                                            Content="{TemplateBinding DataContext}"
+                                            HorizontalContentAlignment="Stretch"
+                                            VerticalContentAlignment="Stretch"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="local:FontSelectorControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:FontSelectorControl">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <telerikInput:RadListPicker ItemsSource="{TemplateBinding AvailableFonts}"
+                                                    SelectedItem="{Binding Path=SelectedFont, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    CharacterSpacing="0"
+                                                    PopupHeader="CHOOSE FONT"
+                                                    x:Name="PART_ListPicker"
+                                                    InlineModeThreshold="1"
+                                                    VerticalAlignment="Center"
+                                                    FontFamily="{Binding Path=SelectedItem, RelativeSource={RelativeSource Self}}"
+                                                    Height="74"
+                                                    Margin="24, 0, 6, 8"/>
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Margin="0, 0, 6, 0">
+                            <StackPanel.Resources>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="{StaticResource PhoneAccentBrush}"/>
+                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilySemiBold}"/>
+                                    <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeMedium}"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Width" Value="50"/>
+                                    <Setter Property="Height" Value="50"/>
+                                    <Setter Property="Margin" Value="6, 0, 6, 0"/>
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <Image Stretch="None"
+                                               Source="{Binding}"/>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ButtonBase">
+                                                <Grid Background="Transparent">
+                                                    <VisualStateManager.VisualStateGroups>
+                                                        <VisualStateGroup x:Name="CommonStates">
+                                                            <VisualState x:Name="Normal"/>
+                                                            <VisualState x:Name="MouseOver"/>
+                                                            <VisualState x:Name="Pressed">
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonBackground" Storyboard.TargetProperty="Background">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0">
+                                                                            <DiscreteObjectKeyFrame.Value>
+                                                                                <SolidColorBrush Opacity="0.7" Color="{StaticResource PhoneAccentColor}"/>
+                                                                            </DiscreteObjectKeyFrame.Value>
+                                                                        </DiscreteObjectKeyFrame>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Disabled">
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonBackground" Storyboard.TargetProperty="Background">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent" />
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                        </VisualStateGroup>
+                                                    </VisualStateManager.VisualStateGroups>
+                                                    <Border x:Name="ButtonBackground" 
+                                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                                            BorderThickness="{TemplateBinding BorderThickness}" 
+                                                            CornerRadius="0"
+                                                            Background="{TemplateBinding Background}">
+                                                        <ContentControl x:Name="ContentContainer" 
+                                                                        Foreground="{TemplateBinding Foreground}"
+                                                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                                                        Padding="{TemplateBinding Padding}" 
+                                                                        Content="{TemplateBinding Content}" 
+                                                                        ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                                    </Border>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </StackPanel.Resources>
+                            
+                            <Button x:Name="PART_UpButton" 
+                                    Content="/Telerik.Windows.Controls.ImageEditor;Component/Icons/arrow-up.png"/>
+                            <Button x:Name="PART_DownButton" 
+                                    Content="/Telerik.Windows.Controls.ImageEditor;Component/Icons/arrow-down.png"/>
+                        </StackPanel>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="local:TextToolTextBox">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="SelectionBackground" Value="{StaticResource PhoneAccentBrush}"/>
+        <Setter Property="SelectionForeground" Value="{StaticResource PhoneTextBoxSelectionForegroundBrush}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource PhoneBorderThickness}"/>
+        <Setter Property="Padding" Value="2"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:TextToolTextBox">
+                    <Grid Background="Transparent">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver"/>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainBorder" Storyboard.TargetProperty="BorderBrush">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneDisabledBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentElement" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneDisabledBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="ReadOnly">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainBorder" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0">
+                                                <DiscreteObjectKeyFrame.Value>
+                                                    <Visibility>Collapsed</Visibility>
+                                                </DiscreteObjectKeyFrame.Value>
+                                            </DiscreteObjectKeyFrame>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ReadonlyBorder" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0">
+                                                <DiscreteObjectKeyFrame.Value>
+                                                    <Visibility>Visible</Visibility>
+                                                </DiscreteObjectKeyFrame.Value>
+                                            </DiscreteObjectKeyFrame>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ReadonlyBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneTextBoxBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ReadonlyBorder" Storyboard.TargetProperty="BorderBrush">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneTextBoxBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentElement" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneTextBoxReadOnlyBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0">
+                                                <DiscreteObjectKeyFrame.Value>
+                                                    <SolidColorBrush Opacity="0.3"
+                                                                     Color="{StaticResource PhoneBackgroundColor}"/>
+                                                </DiscreteObjectKeyFrame.Value>
+                                            </DiscreteObjectKeyFrame>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainBorder" Storyboard.TargetProperty="BorderBrush">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_ResizeKnob" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Border x:Name="MainBorder" 
+                                Background="{TemplateBinding Background}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"/>
+                        <Border x:Name="ReadonlyBorder" 
+                                Visibility="Collapsed"
+                                Background="Transparent" 
+                                BorderBrush="{StaticResource PhoneDisabledBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"/>
+                        <Border Background="Transparent" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                BorderBrush="Transparent">
+                            <ContentControl x:Name="ContentElement" 
+                                            BorderThickness="0"
+                                            Opacity="{TemplateBinding TextOpacity}"
+                                            Padding="{TemplateBinding Padding}"
+                                            HorizontalContentAlignment="Stretch" 
+                                            VerticalContentAlignment="Stretch"/>
+                        </Border>
+                        
+                        <Canvas HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom">
+                            <Ellipse Width="29"
+                                     Height="29"
+                                     StrokeThickness="4"
+                                     Canvas.Left="-17"
+                                     Canvas.Top="-15"
+                                     Stroke="{StaticResource PhoneBackgroundBrush}"
+                                     x:Name="PART_ResizeKnob"
+                                     Visibility="Collapsed">
+                                <Ellipse.Fill>
+                                    <SolidColorBrush Color="{StaticResource PhoneForegroundColor}"
+                                                     Opacity="1"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </Canvas>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="local:ImageEditorSlider">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Maximum" Value="10"/>
+        <Setter Property="Minimum" Value="0"/>
+        <Setter Property="Value" Value="0"/>
+        <Setter Property="Background" Value="{StaticResource PhoneChromeBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PhoneAccentBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="BorderBrush"
+                                        Value="Transparent"/>
+                                <Setter Property="Width"
+                                        Value="104"/>
+                                <Setter Property="Height"
+                                        Value="104"/>
+                            </Style>
+                        </Grid.Resources>
+
+                        <Slider Grid.Column="1"
+                                Minimum="{Binding Path=Minimum, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                Maximum="{Binding Path=Maximum, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                Value="{Binding Path=Value, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                Margin="0, 0, 0, -26"
+                                Foreground="{TemplateBinding Foreground}"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"/>
+
+                        <Button x:Name="PART_Minus">
+                            <Button.ContentTemplate>
+                                <DataTemplate>
+                                    <Grid Width="20"
+                                              Height="20">
+                                        <Rectangle VerticalAlignment="Center"
+                                                      Height="4"
+                                                      Fill="{StaticResource PhoneForegroundBrush}"
+                                                      HorizontalAlignment="Stretch"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </Button.ContentTemplate>
+                        </Button>
+
+                        <Button x:Name="PART_Plus"
+                                    Grid.Column="2">
+                            <Button.ContentTemplate>
+                                <DataTemplate>
+                                    <Grid Width="24"
+                                              Height="24">
+                                        <Rectangle VerticalAlignment="Center"
+                                                  Height="4"
+                                                  Fill="{StaticResource PhoneForegroundBrush}"
+                                                  HorizontalAlignment="Stretch"/>
+                                        <Rectangle VerticalAlignment="Stretch"
+                                                  Width="4"
+                                                  Fill="{StaticResource PhoneForegroundBrush}"
+                                                  HorizontalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </Button.ContentTemplate>
+                        </Button>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

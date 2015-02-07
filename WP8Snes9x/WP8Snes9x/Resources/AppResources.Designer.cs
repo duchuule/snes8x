@@ -377,6 +377,15 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CloudSix only supports exporting one file at a time unless you choose &quot;Export as zip&quot;..
+        /// </summary>
+        public static string CloudSixOneFileLimitText {
+            get {
+                return ResourceManager.GetString("CloudSixOneFileLimitText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not show this again.
         /// </summary>
         public static string ConfirmationCheckBoxText {
@@ -445,6 +454,24 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         public static string DeadzoneHeader {
             get {
                 return ResourceManager.GetString("DeadzoneHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This cannot be undone, continue?.
+        /// </summary>
+        public static string DeleteConfirmText {
+            get {
+                return ResourceManager.GetString("DeleteConfirmText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm deletion.
+        /// </summary>
+        public static string DeleteConfirmTitle {
+            get {
+                return ResourceManager.GetString("DeleteConfirmTitle", resourceCulture);
             }
         }
         
@@ -548,6 +575,37 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///
+        ///
+        ///
+        ///Device model: {0}.
+        /// </summary>
+        public static string EmailBodyText {
+            get {
+                return ResourceManager.GetString("EmailBodyText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email: store.support@outlook.com.
+        /// </summary>
+        public static string EmailLinkText {
+            get {
+                return ResourceManager.GetString("EmailLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Snes8x bug report or feature suggestion.
+        /// </summary>
+        public static string EmailSubjectText {
+            get {
+                return ResourceManager.GetString("EmailSubjectText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to hide bar.
         /// </summary>
         public static string EmulatorBackIcon {
@@ -571,6 +629,15 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         public static string ErrorCaption {
             get {
                 return ResourceManager.GetString("ErrorCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select at least one file..
+        /// </summary>
+        public static string ExportNoSelection {
+            get {
+                return ResourceManager.GetString("ExportNoSelection", resourceCulture);
             }
         }
         
@@ -904,6 +971,15 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Info.
+        /// </summary>
+        public static string InfoCaption {
+            get {
+                return ResourceManager.GetString("InfoCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to input.
         /// </summary>
         public static string InputSettingsPageTitle {
@@ -1035,6 +1111,15 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         public static string NotSignedInError {
             get {
                 return ResourceManager.GetString("NotSignedInError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ok.
+        /// </summary>
+        public static string OKButtonText {
+            get {
+                return ResourceManager.GetString("OKButtonText", resourceCulture);
             }
         }
         
@@ -1264,6 +1349,24 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to select all.
+        /// </summary>
+        public static string SelectAllText {
+            get {
+                return ResourceManager.GetString("SelectAllText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select none.
+        /// </summary>
+        public static string SelectNoneText {
+            get {
+                return ResourceManager.GetString("SelectNoneText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select State 0.
         /// </summary>
         public static string SelectState0 {
@@ -1440,6 +1543,15 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         public static string SourceLink {
             get {
                 return ResourceManager.GetString("SourceLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save file has been removed successfully..
+        /// </summary>
+        public static string SRAMDeletedSuccessfully {
+            get {
+                return ResourceManager.GetString("SRAMDeletedSuccessfully", resourceCulture);
             }
         }
         

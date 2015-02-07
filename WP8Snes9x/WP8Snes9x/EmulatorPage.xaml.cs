@@ -17,13 +17,17 @@ using PhoneDirect3DXamlAppInterop.Resources;
 using Windows.Storage;
 using PhoneDirect3DXamlAppInterop.Database;
 using Microsoft.Devices;
-using Coding4Fun.Toolkit.Controls;
 using Microsoft.Phone.Tasks;
+using System.Windows.Controls.Primitives;
+using Coding4Fun.Toolkit.Controls;
+using System.IO.IsolatedStorage;
 
 namespace PhoneDirect3DXamlAppInterop
 {
     public partial class EmulatorPage : PhoneApplicationPage
     {
+        public Popup popupWindow = null;
+
         public static bool ROMLoaded = false;
         private Direct3DBackground m_d3dBackground = null;
         private LoadROMParameter cache = null;
@@ -32,6 +36,9 @@ namespace PhoneDirect3DXamlAppInterop
         bool wasHalfPressed = false;
         private ApplicationBarMenuItem[] menuItems;
         private String[] menuItemLabels;
+        public static ROMDBEntry currentROMEntry;
+        public static bool IsTombstoned = false;
+        private bool RestoreSaveStateAfterTombstoned = false;
 
         // Constructor
         public EmulatorPage()

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace PhoneDirect3DXamlAppInterop.Database
 {
     [Table]
-    class SavestateEntry : INotifyPropertyChanged, INotifyPropertyChanging
+    public class SavestateEntry : INotifyPropertyChanged, INotifyPropertyChanging
     {
         public event PropertyChangingEventHandler PropertyChanging;
         public event PropertyChangedEventHandler PropertyChanged;
