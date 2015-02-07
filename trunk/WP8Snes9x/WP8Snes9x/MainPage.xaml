@@ -8,13 +8,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Controls="clr-namespace:Microsoft.Live.Controls;assembly=Microsoft.Live.Controls"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:telerikData="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Data" 
+    xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
     xmlns:local="clr-namespace:PhoneDirect3DXamlAppInterop"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d"
-    shell:SystemTray.IsVisible="True">
+    d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
+    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.BackgroundColor="{StaticResource SystemTrayColor}">
 
     <shell:SystemTray.ProgressIndicator>
         <shell:ProgressIndicator IsIndeterminate="False" 
@@ -24,217 +28,716 @@
     </shell:SystemTray.ProgressIndicator>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot">
-
+    <Grid x:Name="LayoutRoot" 
+          Background="{StaticResource PhoneBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!--ad control-->
-        <!--<local:AdControl Grid.Row="1" />-->
-        
-        <phone:Panorama Grid.Row="0">
-           
-            <phone:PanoramaItem >
+        <phone:Panorama Grid.Row="0" x:Name="panorama"
+                         >
+
+
+            <phone:Panorama.Background>
+                <ImageBrush ImageSource="{Binding Source={StaticResource AppSettings}, Path=BackgroundUri, Converter={StaticResource ImageSourceConverter}}"
+                            Opacity="{Binding Source={StaticResource AppSettings}, Path=BackgroundOpacity}"
+                            Stretch="None"
+                            AlignmentX="Center"
+                            AlignmentY="Top"
+                            />
+            </phone:Panorama.Background>
+            <phone:PanoramaItem  >
                 <phone:PanoramaItem.Header >
                     <TextBlock Text="{Binding Path=LocalizedResources.RomListTitle, Source={StaticResource LocalizedStrings}}"
                                Style="{StaticResource MyTitle1Style}" 
+                               Margin="0,6,0,0"
                                />
                 </phone:PanoramaItem.Header>
-                <ListBox x:Name="romList" 
-                         SelectionChanged="romList_SelectionChanged"
-                         toolkit:TiltEffect.IsTiltEnabled="True"
-                         Margin="0, -24, 0, 0">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Height="60">
-                                <Image Source="{Binding SnapshotURI, Converter={StaticResource IsoImageConverter}}" Stretch="Fill" Width="60" Height="52" />
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Margin="14,0,0,0"  Text="{Binding DisplayName}" FontSize="26" />
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="14,0,0,0"  Text="{Binding Path=LocalizedResources.LastPlayedLabel, Source={StaticResource LocalizedStrings}}" FontSize="14" />
-                                        <TextBlock Margin="14,0,0,0"  Text="{Binding LastPlayed, Converter={StaticResource LastPlayedConverter}}" FontSize="14" />
-                                    </StackPanel>
-                                </StackPanel>
-                                <toolkit:ContextMenuService.ContextMenu>
-                                    <toolkit:ContextMenu Name="ROMContextMenu"
-                                                          >
-                                        <toolkit:MenuItem 
-                                            Name="PinToStartMenuItem"
-                                            Header="{Binding Path=LocalizedResources.PinToStartText, Source={StaticResource LocalizedStrings}}" 
-                                            Click="PinToStartMenuItem_Click_1"/>
-                                        <toolkit:MenuItem 
-                                            Name="RenameMenuItem"
-                                            Header="{Binding Path=LocalizedResources.RenameMenuItemText, Source={StaticResource LocalizedStrings}}" 
-                                            Click="RenameMenuItem_Click_1"/>
-                                        <toolkit:MenuItem 
-                                            Name="DeleteMenuItem"
-                                            Header="{Binding Path=LocalizedResources.DeleteMenuItemText, Source={StaticResource LocalizedStrings}}" 
-                                            Click="DeleteMenuItem_Click_1"/>
-                                        <toolkit:MenuItem 
-                                            Name="DeleteSaveMenuItem"
-                                            Header="{Binding Path=LocalizedResources.DeleteSavesEntry, Source={StaticResource LocalizedStrings}}" 
-                                            Click="DeleteSaveMenuItem_Click_1"/>
-                                        <toolkit:MenuItem 
-                                            Name="SaveStateMenuItem"
-                                            Header="{Binding Path=LocalizedResources.ManageSavestateMenuItem, Source={StaticResource LocalizedStrings}}" 
-                                            Click="SaveStateMenuItem_Click"/>
-                                    </toolkit:ContextMenu>
-                                </toolkit:ContextMenuService.ContextMenu>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+
+
+
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              Margin="0,-12,0,0">
+                    <StackPanel >
+
+                        <local:TiltableGrid Grid.Column="0" 
+                                                Grid.Row="0"
+                                  VerticalAlignment="Stretch" 
+                                  HorizontalAlignment="Stretch"
+                                   Height="272"  
+                                  Margin="12, 0, 0, 24"
+                                    toolkit:TiltEffect.IsTiltEnabled="True"
+                                            x:Name="lastRomGrid"
+                                  >
+
+                            <!--<local:TiltableCanvas Height="272" 
+                                    Margin="12, 0, 0, 24"
+                                    toolkit:TiltEffect.IsTiltEnabled="True"
+                                    VerticalAlignment="Stretch" 
+                                  HorizontalAlignment="Stretch">-->
+                            <Grid Tap="Image_Tap">
+                                <Image Source="{Binding SnapshotURI, Converter={StaticResource IsoImageConverter}}" 
+                                    Stretch="UniformToFill"  
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                       x:Name="lastRomImage"
+                                   d:DataContext="{Binding DesignROMDBEntry[0]}"
+
+                                       
+                                   Grid.Row="0"
+                                    Grid.Column="0" 
+                                    />
+
+
+
+
+                                <Grid>
+                                    <Grid.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Offset="0.6"/>
+                                            <GradientStop Color="#B2000000" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Grid.Background>
+                                    <TextBlock Text="{Binding DisplayName}" 
+                                               d:DataContext="{Binding DesignROMDBEntry[0]}"
+                                           VerticalAlignment="Bottom"
+                                           TextWrapping="Wrap"
+                                           FontSize="30"
+                                         
+                                           LineHeight="38"
+                                           LineStackingStrategy="BaselineToBaseline"
+                                           Margin="20, 0, 20, 12"
+                                           Foreground="White"
+                                           
+                                           />
+                                </Grid>
+
+                                <Image Source="/Assets/Icons/play.png" 
+                                       Width="100"
+                                       Opacity="0.7"/>
+
+                            </Grid>
+                        </local:TiltableGrid>
+
+
+                        <!-- RECENT ROM LIST -->
+
+                        <Grid Background="{StaticResource HeaderBackgroundBrush}"
+                              Margin="12,0,0,12"
+                              Height="36"
+                              VerticalAlignment="Stretch"
+                              
+                              >
+                            <TextBlock Text="{Binding Path=LocalizedResources.RecentHeader, Source={StaticResource LocalizedStrings}}"
+                                 FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                       Margin="12,0,0,0"
+                                       Foreground="{StaticResource HeaderForegroundBrush}"
+                                  />
+                        </Grid>
+
+                        <ListBox Name="recentList" 
+                                 Tap="recentList_Tap" 
+                                 toolkit:TiltEffect.IsTiltEnabled="True"
+                                 Margin="12,0,0,0"
+                                 ItemsSource="{Binding}"
+                                 DataContext="{Binding AllROMDBEntries}"
+                                 d:DataContext="{Binding DesignROMDBEntry}"
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                                 >
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Background="{StaticResource ListboxBackgroundBrush}"
+                                        Margin="0,0,0,12"
+                                          Height="80" >
+
+
+                                        <telerikPrimitives:RadContextMenu.ContextMenu>
+                                            <telerikPrimitives:RadContextMenu IsFadeEnabled="False"
+                                                                              RegionOfInterest="0,750,0,0">
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.PinToStartText, Source={StaticResource LocalizedStrings}}" 
+                                                            Tapped="pinBlock_Tap"
+                                                                />
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.RenameMenuItemText, Source={StaticResource LocalizedStrings}}"
+                                                                Tapped="renameBlock_Tap"
+                                                                  />
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.DeleteMenuItemText, Source={StaticResource LocalizedStrings}}" 
+                                                            Tapped="deleteBlock_Tap"
+                                                                  />
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.DeleteSavesEntry, Source={StaticResource LocalizedStrings}}"
+                                                               Tapped="deleteSavesBlock_Tap"
+                                                                 />
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.ManageSavestateMenuItem, Source={StaticResource LocalizedStrings}}" 
+                                                            Tapped="deleteManageBlock_Tap"
+                                                                 />
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.CheatMenuItemText, Source={StaticResource LocalizedStrings}}"
+                                                                Tapped="cheatBlock_Tap"
+                                                                 />
+                                                <telerikPrimitives:RadContextMenuItem Content=" "
+                                                                Tapped="cheatBlock_Tap"
+                                                                 />
+                                            </telerikPrimitives:RadContextMenu>
+                                        </telerikPrimitives:RadContextMenu.ContextMenu>
+
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="120"/>
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0" 
+                                              VerticalAlignment="Stretch" 
+                                              HorizontalAlignment="Stretch"
+                                              >
+                                            <Image Source="{Binding SnapshotURI, Converter={StaticResource IsoImageConverter}}" 
+                                                    Stretch="UniformToFill"  
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    />
+                                        </Grid>
+                                        <StackPanel Orientation="Vertical"
+                                                    VerticalAlignment="Center"
+                                                    Grid.Column="1" >
+                                            <TextBlock Margin="14,0,0,0"  
+                                                   Text="{Binding DisplayName}" 
+                                                   
+                                                   TextWrapping="Wrap" 
+                                                   FontSize="22" />
+                                            <StackPanel Orientation="Horizontal"
+                                                        Height="24"
+                                                        >
+                                                <TextBlock Margin="14,0,0,0"  
+                                                       Text="{Binding Path=LocalizedResources.LastPlayedLabel, Source={StaticResource LocalizedStrings}}" 
+                                                       FontSize="14" 
+                                                           
+                                                          />
+                                                <TextBlock Margin="14,0,0,0"  
+                                                       Text="{Binding LastPlayed, Converter={StaticResource LastPlayedShortConverter}}" 
+                                                       FontSize="14"
+                                                           />
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <!--<Grid Grid.Column="1" Width="50" 
+                                              Height="40"
+                                              HorizontalAlignment="Right"
+                                              VerticalAlignment="Bottom">
+                                            <TextBlock Text="..." 
+                                                       FontSize="50"
+                                                       HorizontalAlignment="Right"
+                                                       VerticalAlignment="Bottom"/>
+                                            <telerikPrimitives:RadContextMenu.ContextMenu>
+                                                <telerikPrimitives:RadContextMenu OpenGesture="Tap"
+                                              IsZoomEnabled="False">
+                                                    <telerikPrimitives:RadContextMenuItem Content="change color" 
+                                                  />
+                                                </telerikPrimitives:RadContextMenu>
+                                            </telerikPrimitives:RadContextMenu.ContextMenu>
+                                        </Grid>-->
+
+                                        <Button Grid.Column="1"
+                                                HorizontalContentAlignment="Right"
+                                                VerticalContentAlignment="Bottom"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Bottom"
+                                                Margin="0,0,0,0"
+                                                Padding="0,0,0,0"
+                                                BorderThickness="0"
+                                                FontSize="40"
+                                                FontWeight="Light"
+                                                Width="70"
+                                                Height="80"
+                                                Style="{StaticResource MinimalButtonStyle}"
+                                               >
+                                            <Button.Content >
+                                                <TextBlock Text="..."
+                                                           Margin="0,0,6,-6"
+                                                            Foreground="{StaticResource PhoneSubtleBrush}"
+                                                            Visibility="{Binding Source={StaticResource AppSettings}, Path=ShowThreeDots,  Converter={StaticResource VisibilityConverter}}"/>
+                                            </Button.Content>
+                                            <telerikPrimitives:RadContextMenu.ContextMenu>
+                                                <telerikPrimitives:RadContextMenu IsFadeEnabled="False"
+                                                                                  OpenGesture="Tap"
+                                                                                  RegionOfInterest="0,750,0,0">
+
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.PinToStartText, Source={StaticResource LocalizedStrings}}" 
+                                                            Tapped="pinBlock_Tap"
+                                                                />
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.RenameMenuItemText, Source={StaticResource LocalizedStrings}}"
+                                                                Tapped="renameBlock_Tap"
+                                                                  />
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.DeleteMenuItemText, Source={StaticResource LocalizedStrings}}" 
+                                                            Tapped="deleteBlock_Tap"
+                                                                  />
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.DeleteSavesEntry, Source={StaticResource LocalizedStrings}}"
+                                                               Tapped="deleteSavesBlock_Tap"
+                                                                 />
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.ManageSavestateMenuItem, Source={StaticResource LocalizedStrings}}" 
+                                                            Tapped="deleteManageBlock_Tap"
+                                                                 />
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.CheatMenuItemText, Source={StaticResource LocalizedStrings}}"
+                                                                Tapped="cheatBlock_Tap"
+                                                                 />
+                                                    <telerikPrimitives:RadContextMenuItem Content=" "
+                                                                Tapped="cheatBlock_Tap"
+                                                                 />
+                                                </telerikPrimitives:RadContextMenu>
+                                            </telerikPrimitives:RadContextMenu.ContextMenu>
+                                        </Button>
+
+
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <!--ALL LIST-->
+
+                        <Grid Background="{StaticResource HeaderBackgroundBrush}"
+                              Margin="12,12,0,12"
+                              Height="36"
+                              VerticalAlignment="Stretch"
+                              >
+                            <TextBlock Text="{Binding Path=LocalizedResources.AllHeader, Source={StaticResource LocalizedStrings}}"
+                                 FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                       Margin="12,0,0,0"
+                                       Foreground="{StaticResource HeaderForegroundBrush}"
+                                  />
+                        </Grid>
+
+
+                        <ListBox x:Name="romList" 
+                                Tap="romList_Tap" 
+                                 toolkit:TiltEffect.IsTiltEnabled="True"
+                                 Margin="12, 0, 0, 0"  
+                                 ItemsSource="{Binding}"
+                                 DataContext="{Binding AllROMDBEntries}"
+                                 d:DataContext="{Binding DesignROMDBEntry}"
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                                 >
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+
+                                <DataTemplate>
+                                    <Grid Background="{StaticResource ListboxBackgroundBrush}"
+                                                Margin="0,0,0,12"
+                                                
+                                                Height="60" >
+
+                                        <!--<toolkit:ContextMenuService.ContextMenu>
+                                            <toolkit:ContextMenu IsZoomEnabled="False"
+                                                                  >
+                                                <toolkit:MenuItem Header="{Binding Path=LocalizedResources.PinToStartText, Source={StaticResource LocalizedStrings}}" 
+                                                            Click="pinBlock_Tap"
+                                                                  Foreground="{StaticResource PhoneForegroundBrush}"/>
+                                                <toolkit:MenuItem Header="{Binding Path=LocalizedResources.RenameMenuItemText, Source={StaticResource LocalizedStrings}}"
+                                                                Click="renameBlock_Tap"
+                                                                  Foreground="{StaticResource PhoneForegroundBrush}"/>
+                                                <toolkit:MenuItem Header="{Binding Path=LocalizedResources.DeleteMenuItemText, Source={StaticResource LocalizedStrings}}" 
+                                                            Click="deleteBlock_Tap"
+                                                                  Foreground="{StaticResource PhoneForegroundBrush}"/>
+                                                <toolkit:MenuItem Header="{Binding Path=LocalizedResources.DeleteSavesEntry, Source={StaticResource LocalizedStrings}}"
+                                                                Click="deleteSavesBlock_Tap"
+                                                                  Foreground="{StaticResource PhoneForegroundBrush}"/>
+                                                <toolkit:MenuItem Header="{Binding Path=LocalizedResources.ManageSavestateMenuItem, Source={StaticResource LocalizedStrings}}" 
+                                                            Click="deleteManageBlock_Tap"
+                                                                  Foreground="{StaticResource PhoneForegroundBrush}"/>
+                                                <toolkit:MenuItem Header="{Binding Path=LocalizedResources.CheatMenuItemText, Source={StaticResource LocalizedStrings}}"
+                                                                Click="cheatBlock_Tap"
+                                                                  Foreground="{StaticResource PhoneForegroundBrush}"/>
+                                            </toolkit:ContextMenu>
+                                        </toolkit:ContextMenuService.ContextMenu>-->
+
+                                        <telerikPrimitives:RadContextMenu.ContextMenu>
+                                            <telerikPrimitives:RadContextMenu IsFadeEnabled="False"
+                                                                              RegionOfInterest="0,750,0,0">
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.PinToStartText, Source={StaticResource LocalizedStrings}}" 
+                                                            Tapped="pinBlock_Tap"
+                                                                />
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.RenameMenuItemText, Source={StaticResource LocalizedStrings}}"
+                                                                Tapped="renameBlock_Tap"
+                                                                  />
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.DeleteMenuItemText, Source={StaticResource LocalizedStrings}}" 
+                                                            Tapped="deleteBlock_Tap"
+                                                                  />
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.DeleteSavesEntry, Source={StaticResource LocalizedStrings}}"
+                                                               Tapped="deleteSavesBlock_Tap"
+                                                                 />
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.ManageSavestateMenuItem, Source={StaticResource LocalizedStrings}}" 
+                                                            Tapped="deleteManageBlock_Tap"
+                                                                 />
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.CheatMenuItemText, Source={StaticResource LocalizedStrings}}"
+                                                                Tapped="cheatBlock_Tap"
+                                                                 />
+                                                <telerikPrimitives:RadContextMenuItem Content=" "
+                                                                Tapped="cheatBlock_Tap"
+                                                                 />
+                                            </telerikPrimitives:RadContextMenu>
+                                        </telerikPrimitives:RadContextMenu.ContextMenu>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0"
+                                              VerticalAlignment="Stretch" 
+                                              HorizontalAlignment="Stretch"
+                                              >
+                                            <Image Source="{Binding SnapshotURI, Converter={StaticResource IsoImageConverter}}" 
+                                                   Stretch="UniformToFill" 
+                                                    HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                        </Grid>
+                                        <StackPanel Orientation="Vertical"
+                                                    VerticalAlignment="Center"
+                                                    Grid.Column="1"
+                                                    >
+                                            <TextBlock Margin="14,0,0,0"  
+                                                       Text="{Binding DisplayName}" 
+                                                       FontSize="22" 
+                                                       TextWrapping="NoWrap"
+                                                       />
+                                            <!--<StackPanel Orientation="Horizontal">
+                                                <TextBlock Margin="14,0,0,0"  
+                                                           Text="{Binding Path=LocalizedResources.LastPlayedLabel, Source={StaticResource LocalizedStrings}}" 
+                                                           FontSize="14" />
+                                                <TextBlock Margin="14,0,0,0"  
+                                                           Text="{Binding LastPlayed, Converter={StaticResource LastPlayedConverter}}" FontSize="14" />
+                                            </StackPanel>-->
+                                        </StackPanel>
+
+                                        <Button Grid.Column="1"
+                                                HorizontalContentAlignment="Right"
+                                                VerticalContentAlignment="Bottom"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Bottom"
+                                                Margin="0,0,0,0"
+                                                Padding="0,0,0,0"
+                                                BorderThickness="0"
+                                                FontSize="40"
+                                                FontWeight="Light"
+                                                Width="70"
+                                                Height="80"
+                                                Style="{StaticResource MinimalButtonStyle}"
+                                               >
+                                            <Button.Content >
+                                                <TextBlock Text="..."
+                                                           Margin="0,0,6,-6"
+                                                            Foreground="{StaticResource PhoneSubtleBrush}"
+                                                            Visibility="{Binding Source={StaticResource AppSettings}, Path=ShowThreeDots,  Converter={StaticResource VisibilityConverter}}"/>
+                                            </Button.Content>
+
+                                            <telerikPrimitives:RadContextMenu.ContextMenu>
+                                                <telerikPrimitives:RadContextMenu IsFadeEnabled="False"
+                                                                              RegionOfInterest="0,750,0,0"
+                                                                                  OpenGesture="Tap">
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.PinToStartText, Source={StaticResource LocalizedStrings}}" 
+                                                            Tapped="pinBlock_Tap"
+                                                                />
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.RenameMenuItemText, Source={StaticResource LocalizedStrings}}"
+                                                                Tapped="renameBlock_Tap"
+                                                                  />
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.DeleteMenuItemText, Source={StaticResource LocalizedStrings}}" 
+                                                            Tapped="deleteBlock_Tap"
+                                                                  />
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.DeleteSavesEntry, Source={StaticResource LocalizedStrings}}"
+                                                               Tapped="deleteSavesBlock_Tap"
+                                                                 />
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.ManageSavestateMenuItem, Source={StaticResource LocalizedStrings}}" 
+                                                            Tapped="deleteManageBlock_Tap"
+                                                                 />
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.CheatMenuItemText, Source={StaticResource LocalizedStrings}}"
+                                                                Tapped="cheatBlock_Tap"
+                                                                 />
+                                                    <telerikPrimitives:RadContextMenuItem Content=" "
+                                                                Tapped="cheatBlock_Tap"
+                                                                 />
+                                                </telerikPrimitives:RadContextMenu>
+                                            </telerikPrimitives:RadContextMenu.ContextMenu>
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                    </StackPanel>
+                </ScrollViewer>
                 <!--<Grid />-->
             </phone:PanoramaItem>
 
-            <phone:PanoramaItem >
-                <phone:PanoramaItem.Header >
-                    <TextBlock Text="{Binding Path=LocalizedResources.RecentTitle, Source={StaticResource LocalizedStrings}}"
-                               Style="{StaticResource MyTitle1Style}" 
-                               />
-                </phone:PanoramaItem.Header>
-                <ListBox Name="recentList" 
-                         SelectionChanged="recentList_SelectionChanged_1"
-                         toolkit:TiltEffect.IsTiltEnabled="True"
-                         Margin="0,-24,0,0">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="{Binding SnapshotURI, Converter={StaticResource IsoImageConverter}}" Stretch="Fill" Width="130" Height="114" />
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Margin="14,0,0,0"  Text="{Binding DisplayName}" Width="320" TextWrapping="Wrap" FontSize="26" />
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="14,0,0,0"  Text="{Binding Path=LocalizedResources.LastPlayedLabel, Source={StaticResource LocalizedStrings}}" FontSize="14" />
-                                        <TextBlock Margin="14,0,0,0"  Text="{Binding LastPlayed, Converter={StaticResource LastPlayedShortConverter}}" FontSize="14" />
-                                    </StackPanel>
-                                </StackPanel>
-                                <toolkit:ContextMenuService.ContextMenu>
-                                    <toolkit:ContextMenu Name="ROMContextMenu"
-                                                          >
-                                        <toolkit:MenuItem 
-                                            Name="PinToStartMenuItem"
-                                            Header="{Binding Path=LocalizedResources.PinToStartText, Source={StaticResource LocalizedStrings}}" 
-                                            Click="PinToStartMenuItem_Click_1"/>
-                                        <toolkit:MenuItem 
-                                            Name="RenameMenuItem"
-                                            Header="{Binding Path=LocalizedResources.RenameMenuItemText, Source={StaticResource LocalizedStrings}}" 
-                                            Click="RenameMenuItem_Click_1"/>
-                                        <toolkit:MenuItem 
-                                            Name="DeleteMenuItem"
-                                            Header="{Binding Path=LocalizedResources.DeleteMenuItemText, Source={StaticResource LocalizedStrings}}" 
-                                            Click="DeleteMenuItem_Click_1"/>
-                                        <toolkit:MenuItem 
-                                            Name="DeleteSaveMenuItem"
-                                            Header="{Binding Path=LocalizedResources.DeleteSavesEntry, Source={StaticResource LocalizedStrings}}" 
-                                            Click="DeleteSaveMenuItem_Click_1"/>
-                                        <toolkit:MenuItem 
-                                            Name="SaveStateMenuItem"
-                                            Header="{Binding Path=LocalizedResources.ManageSavestateMenuItem, Source={StaticResource LocalizedStrings}}" 
-                                            Click="SaveStateMenuItem_Click"/>
-                                    </toolkit:ContextMenu>
-                                </toolkit:ContextMenuService.ContextMenu>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </phone:PanoramaItem>
 
-            <phone:PanoramaItem >
+            <phone:PanoramaItem  >
                 <phone:PanoramaItem.Header >
                     <TextBlock Text="{Binding Path=LocalizedResources.ImportTitle, Source={StaticResource LocalizedStrings}}"
                                Style="{StaticResource MyTitle1Style}" 
-                               />
+                               Margin="0,6,0,0"/>
                 </phone:PanoramaItem.Header>
-                
-                <ScrollViewer Margin="0,-24,0,0">
-                    <StackPanel Margin="0,0,0,0">
-                        <Button x:Name="ImportSD" 
-                                    Click="ImportSD_Click"
-                                    Content="Import ROMs from SD Card"/>
-                        
-                        <TextBlock TextWrapping="Wrap" FontSize="24"
-                                Text="{Binding Path=LocalizedResources.ImportInstructionsText, Source={StaticResource LocalizedStrings}}" />
-                           
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                                    Margin="0,0,0,0">
-                                    <Controls:SignInButton Content="SignInButton" Name="signinButton"
-                                ClientId="000000004810C3D3"
-                                Branding="Skydrive"
-                                Scopes="wl.signin wl.skydrive_update wl.offline_access"
-                                SessionChanged="btnSignin_SessionChanged" Width="200" Height="72" VerticalAlignment="Top"/>
-                                    <Button Name="gotoImportButton" Width="200"
-                                    IsEnabled="False" Click="gotoImportButton_Click_1"
-                                    Content="{Binding Path=LocalizedResources.ImportFromSkyDriveButtonText, Source={StaticResource LocalizedStrings}}"/>
-                        </StackPanel>
-                            
-                            
-                        <TextBlock TextWrapping="Wrap" FontSize="24"
-                            Text="{Binding Path=LocalizedResources.BackupAndRestoreInstructions, Source={StaticResource LocalizedStrings}}" />
-                            
-                            
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                            Margin="0,0,0,0">
-                            <Button Name="gotoBackupButton" Width="200"
-                                IsEnabled="False" Click="gotoBackupButton_Click_1"
-                                Content="{Binding Path=LocalizedResources.BackupButton, Source={StaticResource LocalizedStrings}}"/>
-                            <Button Name="gotoRestoreButton"  Width="200"
-                                IsEnabled="False" Click="gotoRestoreButton_Click_1"
-                                Content="{Binding Path=LocalizedResources.RestoreButton, Source={StaticResource LocalizedStrings}}"/>
-                        </StackPanel>
-                            
-                           
 
-                     
+                <ScrollViewer Margin="0,-12,0,0">
+                    <StackPanel Margin="0,0,0,0">
+
+                        <!--SD Card-->
+                        <Grid Background="{StaticResource HeaderBackgroundBrush}"
+                              Margin="12,0,0,12"
+                              Height="36"
+                              VerticalAlignment="Stretch"
+                              >
+                            <TextBlock Text="{Binding Path=LocalizedResources.SDCardHeader, Source={StaticResource LocalizedStrings}}"
+                                 FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                       Margin="12,0,0,0"
+                                       Foreground="{StaticResource HeaderForegroundBrush}"
+                                  />
+                        </Grid>
+                        <Button x:Name="ImportSD" 
+                                        Click="ImportSD_Click"
+                                        Content="{Binding Path=LocalizedResources.ImportSDCardText, Source={StaticResource LocalizedStrings}}"
+                                        Margin="0,0,-12,0"/>
+
+                        <TextBlock TextWrapping="Wrap" FontSize="20"
+                                    Text="{Binding Path=LocalizedResources.SDCardReadOnlyText, Source={StaticResource LocalizedStrings}}"
+                                    Margin="12,0,0,12"/>
+
+
+                        <!--OneDrive-->
+                        <Grid Background="{StaticResource HeaderBackgroundBrush}"
+                              Margin="12,12,0,12"
+                              Height="36"
+                              VerticalAlignment="Stretch"
+                              >
+                            <TextBlock Text="{Binding Path=LocalizedResources.OneDriveHeader, Source={StaticResource LocalizedStrings}}"
+                                 FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                       Margin="12,0,0,0"
+                                       Foreground="{StaticResource HeaderForegroundBrush}"
+                                  />
+                        </Grid>
+
+
+
+
+
+                        <Grid  Margin="0,0,-12,0"
+                                    >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Controls:SignInButton Content="SignInButton" 
+                                                        Name="signinButton"
+                                                    ClientId="000000004810CC31"
+                                                    Branding="Skydrive"
+                                                    Scopes="wl.signin wl.skydrive_update wl.offline_access"
+                                                    SessionChanged="btnSignin_SessionChanged" 
+                                                        Margin="0,0,0,0"
+                                                    />
+
+                        </Grid>
+
+
+                        <Grid  Margin="12,0,0,0"
+                                    >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Name="gotoImportButton"
+                                        IsEnabled="False" 
+                                        Grid.Column="0"
+                                        Click="gotoImportButton_Click_1"
+                                        Margin="-12,0,-6,0"
+                                        Content="{Binding Path=LocalizedResources.ImportFromSkyDriveButtonText, Source={StaticResource LocalizedStrings}}"/>
+                            <Button Name="gotoBackupButton" 
+                                                    IsEnabled="False"
+                                        Click="gotoBackupButton_Click_1"
+                                    Grid.Column="1"
+                                        Margin="-6,0,-12,0"
+                                                    Content="{Binding Path=LocalizedResources.BackupButton, Source={StaticResource LocalizedStrings}}"/>
+                        </Grid>
+
+
+
+                        <!--Save states-->
+                        <!--<Grid Background="{StaticResource HeaderBackgroundBrush}"
+                              Margin="12,12,0,12"
+                              Height="36"
+                              VerticalAlignment="Stretch"
+                              >
+                            <TextBlock Text="SAVE STATES"
+                                 FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                       Margin="12,0,0,0"
+                                       Foreground="{StaticResource HeaderForegroundBrush}"
+                                  />
+                        </Grid>-->
+                        <TextBlock TextWrapping="Wrap" FontSize="20"
+                                    Text="{Binding Path=LocalizedResources.ImportInstructionsText, Source={StaticResource LocalizedStrings}}"
+                                    Margin="12,12,0,0"/>
+
+                        <TextBlock TextWrapping="Wrap" FontSize="20"
+                                    Text="{Binding Path=LocalizedResources.ImportSaveInstructionsText, Source={StaticResource LocalizedStrings}}"
+                                    Margin="12,18,0,0"/>
+
+
+
+                        <!--Cloud Six-->
+                        <Grid Background="{StaticResource HeaderBackgroundBrush}"
+                              Margin="12,18,0,12"
+                              Height="36"
+                              VerticalAlignment="Stretch"
+                              >
+                            <TextBlock Text="{Binding Path=LocalizedResources.CloudSixHeader, Source={StaticResource LocalizedStrings}}"
+                                 FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                       Margin="12,0,0,0"
+                                       Foreground="{StaticResource HeaderForegroundBrush}"
+                                  />
+                        </Grid>
+                        <Grid  Margin="12,0,0,0"
+                                    >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Name="CloudSixImportButton"
+                                        Grid.Column="0"
+                                        Click="CloudSixImportButton_Click"
+                                        Margin="-12,0,-6,0"
+                                        Content="{Binding Path=LocalizedResources.ImportFromSkyDriveButtonText, Source={StaticResource LocalizedStrings}}"/>
+                            <Button Name="CloudSixExportButton" 
+                                    Grid.Column="1"
+                                        Margin="-6,0,-12,0"
+                                                    Content="{Binding Path=LocalizedResources.BackupButton, Source={StaticResource LocalizedStrings}}" 
+                                    Click="CloudSixExportButton_Click"/>
+                        </Grid>
+
+                        <TextBlock TextWrapping="Wrap" FontSize="20"
+                                    Text="{Binding Path=LocalizedResources.CloudSixInstructionText, Source={StaticResource LocalizedStrings}}"
+                                    Margin="12,0,0,12"/>
+
                     </StackPanel>
                 </ScrollViewer>
             </phone:PanoramaItem>
 
             <phone:PanoramaItem  >
                 <phone:PanoramaItem.Header >
-                    <TextBlock Text="help&amp;guides"
+                    <TextBlock Text="{Binding Path=LocalizedResources.GuidesTitle, Source={StaticResource LocalizedStrings}}"
                                Style="{StaticResource MyTitle1Style}" 
-                               />
+                               Margin="0,6,0,0"/>
                 </phone:PanoramaItem.Header>
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                               Margin="12,-24,0,0"
+                               Margin="12,-12,0,0">
+                    <StackPanel >
+                        <!--guides-->
+                        <Grid Background="{StaticResource HeaderBackgroundBrush}"
+                              Margin="0,0,0,12"
+                              Height="36"
+                              VerticalAlignment="Stretch"
                               >
-                    <StackPanel Margin="0,0,0,0">
-                        <TextBlock Text="Video: MOGA controller instruction" 
+                            <TextBlock Text="{Binding Path=LocalizedResources.GuidesHeader, Source={StaticResource LocalizedStrings}}"
+                                 FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                       Margin="12,0,0,0"
+                                       Foreground="{StaticResource HeaderForegroundBrush}"
+                                  />
+                        </Grid>
+
+                        <TextBlock Text="{Binding Path=LocalizedResources.VideoMogaText, Source={StaticResource LocalizedStrings}}"
                            TextWrapping="Wrap"
-                           Margin="0,0,12,12"
+                           Margin="0,0,0,12"
+                               FontSize="22"
                                 TextDecorations="Underline" Tap="TextBlock_Tap_1" 
                            />
- 
-                        <TextBlock Text="Guide: 4 ways to import ROMs" 
+                        <TextBlock Text="{Binding Path=LocalizedResources.VideoCheatText, Source={StaticResource LocalizedStrings}}"
                            TextWrapping="Wrap"
-                           Margin="0,0,12,12"
+                           Margin="0,0,0,12"
+                                   FontSize="22"
+                                TextDecorations="Underline" Tap="TextBlock_Tap" 
+                           />
+                        <TextBlock Text="{Binding Path=LocalizedResources.GuideImportROMText, Source={StaticResource LocalizedStrings}}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,12"
+                                   FontSize="22"
                                 TextDecorations="Underline" Tap="TextBlock_Tap_3"
                            />
-                        <TextBlock Text="Guide: how to improve performance" 
+                        <TextBlock Text="{Binding Path=LocalizedResources.GuidePerformanceText, Source={StaticResource LocalizedStrings}}"
                            TextWrapping="Wrap"
-                           Margin="0,0,12,12"
+                           Margin="0,0,0,12"
+                                   FontSize="22"
                                 TextDecorations="Underline" Tap="TextBlock_Tap_4" 
                            />
-                        <TextBlock Text="Guide: troubleshoot blank screen" 
+                        <TextBlock Text="{Binding Path=LocalizedResources.GuideBlankScreenText, Source={StaticResource LocalizedStrings}}"
                            TextWrapping="Wrap"
-                           Margin="0,0,12,12"
+                           Margin="0,0,0,12"
+                                   FontSize="22"
                                 TextDecorations="Underline" Tap="TextBlock_Tap_5" 
                            />
-                        <TextBlock Text="Forum dicussions" 
+
+                        <!--contacts-->
+                        <Grid Background="{StaticResource HeaderBackgroundBrush}"
+                              Margin="0,12,0,12"
+                              Height="36"
+                              VerticalAlignment="Stretch"
+                              >
+                            <TextBlock Text="{Binding Path=LocalizedResources.ContactHeader, Source={StaticResource LocalizedStrings}}"
+                                 FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                       Margin="12,0,0,0"
+                                       Foreground="{StaticResource HeaderForegroundBrush}"
+                                  />
+                        </Grid>
+                        <TextBlock Text="{Binding Path=LocalizedResources.FAQsLinkText, Source={StaticResource LocalizedStrings}}"
                            TextWrapping="Wrap"
-                           Margin="0,0,12,12"
+                           Margin="0,0,0,12"
+                                   FontSize="22"
                                 TextDecorations="Underline" Tap="TextBlock_Tap_2"  
                            />
 
                         <TextBlock TextWrapping="Wrap" Tap="contactBlock_Tap_1" 
                                        TextDecorations="Underline" 
-                                       Text="Contact developer" />
+                                   FontSize="22"
+                                   Margin="0,0,0,12"
+                                       Text="{Binding Path=LocalizedResources.EmailLinkText, Source={StaticResource LocalizedStrings}}" />
+                        <TextBlock TextWrapping="Wrap" Tap="contactBlock_Tap_2" 
+                                       TextDecorations="Underline" 
+                                   FontSize="22"
+                                   Margin="0,0,0,12"
+                                       Text="Twitter: @WP8Emu" />
                     </StackPanel>
                 </ScrollViewer>
             </phone:PanoramaItem>
+
         </phone:Panorama>
+
+        <!--Uncomment to see an alignment grid to help ensure your controls are
+            aligned on common boundaries.  The image has a top margin of -32px to
+            account for the System Tray. Set this to 0 (or remove the margin altogether)
+            if the System Tray is hidden.
+
+            Before shipping remove this XAML and the image itself.-->
+        <!--<Image Source="/Assets/AlignmentGrid.png" 
+               VerticalAlignment="Top" 
+               Height="800" 
+               Width="480" 
+               Margin="0" 
+               Grid.Row="0" 
+               Grid.RowSpan="2" 
+               IsHitTestVisible="False" />-->
+
     </Grid>
+
+
 
 </phone:PhoneApplicationPage>

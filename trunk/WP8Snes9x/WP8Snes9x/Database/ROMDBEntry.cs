@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 namespace PhoneDirect3DXamlAppInterop.Database
 {
     [Table(Name = "ROMs")]
-    class ROMDBEntry : INotifyPropertyChanged, INotifyPropertyChanging
+    public class ROMDBEntry : INotifyPropertyChanged, INotifyPropertyChanging
     {
         public event PropertyChangingEventHandler PropertyChanging;
         public event PropertyChangedEventHandler PropertyChanged;

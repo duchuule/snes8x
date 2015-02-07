@@ -23,7 +23,37 @@ namespace PhoneDirect3DXamlAppInterop
         public const String DEFAULT_SNAPSHOT = "Assets/no_snapshot.png";
         public static DateTime DEFAULT_DATETIME = new DateTime(1988, 04, 12);
 
-        public static String DEFAULT_BACKGROUND_IMAGE = "Assets/Snes.jpg";
+        public static String DEFAULT_BACKGROUND_IMAGE = "Assets/SNES_PAL.jpg";
+        public static String CUSTOM_TILE_FILENAME = "myCustomTile1.png";
+
+        public static BitmapImage getBitmapImage(String path, String default_path)
+        {
+
+            BitmapImage img = new BitmapImage();
+
+            if (path.Equals(FileHandler.DEFAULT_BACKGROUND_IMAGE))
+            {
+                Uri uri = new Uri(path, UriKind.Relative);
+
+                img = new BitmapImage(uri);
+                return img;
+            }
+
+            if (!String.IsNullOrEmpty(path))
+            {
+                using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    using (IsolatedStorageFileStream fs = isoStore.OpenFile(path, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                    {
+                        img.SetSource(fs);
+                    }
+                }
+            }
+
+            return img;
+
+        }
+
 
         public static ROMDBEntry InsertNewDBEntry(string fileName)
         {
@@ -396,7 +426,7 @@ namespace PhoneDirect3DXamlAppInterop
             return entry;
         }
 
-        internal static async void DeleteSRAMFile(ROMDBEntry re)
+        internal static async Task DeleteSRAMFile(ROMDBEntry re)
         {
             string sramName = re.FileName.Substring(0, re.FileName.LastIndexOf('.')) + ".srm";
 

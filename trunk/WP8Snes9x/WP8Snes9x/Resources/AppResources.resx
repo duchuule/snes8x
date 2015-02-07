@@ -184,7 +184,7 @@
     <value>resume</value>
   </data>
   <data name="RomListTitle" xml:space="preserve">
-    <value>rom list</value>
+    <value>roms</value>
   </data>
   <data name="SaveStateButton" xml:space="preserve">
     <value>save state</value>
@@ -226,10 +226,10 @@
     <value>settings</value>
   </data>
   <data name="SkyDriveGeneralError" xml:space="preserve">
-    <value>Error while accessing SkyDrive: {0}</value>
+    <value>Error while accessing OneDrive: {0}</value>
   </data>
   <data name="SkyDriveImportTitle" xml:space="preserve">
-    <value>import ROMs</value>
+    <value>OneDrive</value>
   </data>
   <data name="StatusLabelContent" xml:space="preserve">
     <value>Status: </value>
@@ -262,13 +262,13 @@
     <value>video</value>
   </data>
   <data name="AboutSnes9x" xml:space="preserve">
-    <value>This app is based on the source code provided by M.k, which is in turn based on the Snes9x source code. 
+    <value>Feel free to report any bugs or broken games.
 
 The author is not responsible for any illegal use of this software. Furthermore, there is no warranty for this software and the author is not liable for any damages.
 
 Credits:
-- Eddi Bento for the logo.
-- Moga company for the surprised gift.</value>
+- Eddi Bento for logo design.
+- MOGA company for the surprised gift.</value>
   </data>
   <data name="AboutSnes9xLicense" xml:space="preserve">
     <value>Snes9x license:</value>
@@ -348,19 +348,19 @@ Super NES and Super Nintendo Entertainment System are trademarks of Nintendo Co.
     <value>Export and import savegames:</value>
   </data>
   <data name="BackupButton" xml:space="preserve">
-    <value>export</value>
+    <value>Export</value>
   </data>
   <data name="RestoreButton" xml:space="preserve">
     <value>import</value>
   </data>
   <data name="SkyDriveError" xml:space="preserve">
-    <value>SkyDriveError: {0}</value>
+    <value>OneDrive Error: {0}</value>
   </data>
   <data name="BackupErrorUpload" xml:space="preserve">
     <value>Error while uploading a file: {0}. Try to sign out from SkyDrive and sign back in if this error persists.</value>
   </data>
   <data name="BackupInstructions" xml:space="preserve">
-    <value>To export saves, click on the name of the ROM in the list below. The savestates and SRAM will be uploaded to a SkyDrive directory. The save files are fully compatible with Snes8x for Windows 8/RT.</value>
+    <value>Choose the game to export saves.</value>
   </data>
   <data name="BackupPageTitle" xml:space="preserve">
     <value>export saves</value>
@@ -401,6 +401,9 @@ Super NES and Super Nintendo Entertainment System are trademarks of Nintendo Co.
   <data name="FileAssociationError" xml:space="preserve">
     <value>Error importing and opening ROM file.</value>
   </data>
+  <data name="ImportSavestateInvalidFormat" xml:space="preserve">
+    <value>Savestate file format is invalid. The file name must end with a number from 0 to 9 (e.g. demo0.sgm).</value>
+  </data>
   <data name="TileOpenError" xml:space="preserve">
     <value>Error opening the ROM associated with the tile.</value>
   </data>
@@ -418,6 +421,9 @@ Super NES and Super Nintendo Entertainment System are trademarks of Nintendo Co.
   </data>
   <data name="AboutContactLabel" xml:space="preserve">
     <value>Contact: </value>
+  </data>
+  <data name="AspectRatioStretchSetting" xml:space="preserve">
+    <value>stretch</value>
   </data>
   <data name="FrameSkipAutoSetting" xml:space="preserve">
     <value>automatic</value>
@@ -654,5 +660,45 @@ Super NES and Super Nintendo Entertainment System are trademarks of Nintendo Co.
   </data>
   <data name="UseAccentBackgroundText" xml:space="preserve">
     <value>Use system accent color for live tile</value>
+  </data>
+  <data name="CloudSixOneFileLimitText" xml:space="preserve">
+    <value>CloudSix only supports exporting one file at a time unless you choose "Export as zip".</value>
+  </data>
+  <data name="DeleteConfirmText" xml:space="preserve">
+    <value>This cannot be undone, continue?</value>
+  </data>
+  <data name="DeleteConfirmTitle" xml:space="preserve">
+    <value>Confirm deletion</value>
+  </data>
+  <data name="EmailBodyText" xml:space="preserve">
+    <value>
+
+
+
+Device model: {0}</value>
+  </data>
+  <data name="EmailLinkText" xml:space="preserve">
+    <value>Email: store.support@outlook.com</value>
+  </data>
+  <data name="EmailSubjectText" xml:space="preserve">
+    <value>Snes8x bug report or feature suggestion</value>
+  </data>
+  <data name="ExportNoSelection" xml:space="preserve">
+    <value>You must select at least one file.</value>
+  </data>
+  <data name="InfoCaption" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="OKButtonText" xml:space="preserve">
+    <value>ok</value>
+  </data>
+  <data name="SelectAllText" xml:space="preserve">
+    <value>select all</value>
+  </data>
+  <data name="SelectNoneText" xml:space="preserve">
+    <value>select none</value>
+  </data>
+  <data name="SRAMDeletedSuccessfully" xml:space="preserve">
+    <value>Save file has been removed successfully.</value>
   </data>
 </root>

@@ -246,6 +246,16 @@ namespace PhoneDirect3DXamlAppInterop.Database
                 .ToArray();
         }
 
+        public ROMDBEntry GetLastPlayed()
+        {
+            return this.context.ROMTable
+                .Where(r => (r.LastPlayed != FileHandler.DEFAULT_DATETIME))
+                .OrderByDescending(f => f.LastPlayed)
+                .FirstOrDefault();
+
+
+        }
+
         public IEnumerable<ROMDBEntry> GetROMList()
         {
             return this.context.ROMTable
