@@ -70,7 +70,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contact: .
+        ///   Looks up a localized string similar to Contact:.
         /// </summary>
         public static string AboutContactLabel {
             get {
@@ -79,13 +79,13 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This app is based on the source code provided by M.k, which is in turn based on the Snes9x source code. 
+        ///   Looks up a localized string similar to Feel free to report any bugs or broken games.
         ///
         ///The author is not responsible for any illegal use of this software. Furthermore, there is no warranty for this software and the author is not liable for any damages.
         ///
         ///Credits:
-        ///- Eddi Bento for the logo.
-        ///- Moga company for the surprised gift..
+        ///- Eddi Bento for logo design.
+        ///- MOGA company for the surprised gift..
         /// </summary>
         public static string AboutSnes9x {
             get {
@@ -161,11 +161,74 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your device does not have an accelerometer..
+        /// </summary>
+        public static string AccelerometerMissingText {
+            get {
+                return ResourceManager.GetString("AccelerometerMissingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accelerometer.
+        /// </summary>
+        public static string AccelerometerText {
+            get {
+                return ResourceManager.GetString("AccelerometerText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  (active).
         /// </summary>
         public static string ActiveSavestateText {
             get {
                 return ResourceManager.GetString("ActiveSavestateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto adapt to orientation change.
+        /// </summary>
+        public static string adaptOrientationText {
+            get {
+                return ResourceManager.GetString("adaptOrientationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to add.
+        /// </summary>
+        public static string AddCheatButtonText {
+            get {
+                return ResourceManager.GetString("AddCheatButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Cheat.
+        /// </summary>
+        public static string AddCheatsTitle {
+            get {
+                return ResourceManager.GetString("AddCheatsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string AllButtonText {
+            get {
+                return ResourceManager.GetString("AllButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ALL.
+        /// </summary>
+        public static string AllHeader {
+            get {
+                return ResourceManager.GetString("AllHeader", resourceCulture);
             }
         }
         
@@ -179,11 +242,83 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to appearance.
+        /// </summary>
+        public static string AppearanceSettingsTitle {
+            get {
+                return ResourceManager.GetString("AppearanceSettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to APP FUNCTION.
+        /// </summary>
+        public static string AppFunctionText {
+            get {
+                return ResourceManager.GetString("AppFunctionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Snes8x.
         /// </summary>
         public static string ApplicationTitle {
             get {
                 return ResourceManager.GetString("ApplicationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 4:3.
+        /// </summary>
+        public static string AspectRatio4to3Setting {
+            get {
+                return ResourceManager.GetString("AspectRatio4to3Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5:4.
+        /// </summary>
+        public static string AspectRatio5to4Setting {
+            get {
+                return ResourceManager.GetString("AspectRatio5to4Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1:1.
+        /// </summary>
+        public static string AspectRatioOneSetting {
+            get {
+                return ResourceManager.GetString("AspectRatioOneSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to native.
+        /// </summary>
+        public static string AspectRatioOriginalSetting {
+            get {
+                return ResourceManager.GetString("AspectRatioOriginalSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aspect Ratio.
+        /// </summary>
+        public static string AspectRatioSetting {
+            get {
+                return ResourceManager.GetString("AspectRatioSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to stretch.
+        /// </summary>
+        public static string AspectRatioStretchSetting {
+            get {
+                return ResourceManager.GetString("AspectRatioStretchSetting", resourceCulture);
             }
         }
         
@@ -197,6 +332,61 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to - Simple mode: save slots are backed up &quot;as is&quot; with no compression; ideal for syncing data with tablet/PC but does not protect from accidental overwriting of data.
+        ///- Rotating mode: save slots are compressed, multiple save files are kept to prevent accidental overwritting of data; ideal for safe guard of data..
+        /// </summary>
+        public static string AutoBackupModeHelp {
+            get {
+                return ResourceManager.GetString("AutoBackupModeHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: Auto backup is triggered when users return to the main page after playing a game..
+        /// </summary>
+        public static string AutoBackupNote {
+            get {
+                return ResourceManager.GetString("AutoBackupNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto backup starting....
+        /// </summary>
+        public static string AutoBackupStartText {
+            get {
+                return ResourceManager.GetString("AutoBackupStartText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatically back up save data.
+        /// </summary>
+        public static string AutoBackupText {
+            get {
+                return ResourceManager.GetString("AutoBackupText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to auto backup.
+        /// </summary>
+        public static string AutoBackupTitle {
+            get {
+                return ResourceManager.GetString("AutoBackupTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto backup mode.
+        /// </summary>
+        public static string AutoBackupTypeText {
+            get {
+                return ResourceManager.GetString("AutoBackupTypeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Automatically increment save state.
         /// </summary>
         public static string AutoIncSavestateSetting {
@@ -206,11 +396,38 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Background image.
+        ///   Looks up a localized string similar to Automatically save and load game.
         /// </summary>
-        public static string BackgroundImageSetting {
+        public static string AutoLoadLastStateText {
             get {
-                return ResourceManager.GetString("BackgroundImageSetting", resourceCulture);
+                return ResourceManager.GetString("AutoLoadLastStateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WARNING: only check this box if you use quick save function. Your game saves may be wiped if you relies on in-game save function. Do you want to continue?.
+        /// </summary>
+        public static string AutoSaveWarning {
+            get {
+                return ResourceManager.GetString("AutoSaveWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available save files.
+        /// </summary>
+        public static string AvailableSaveFilesText {
+            get {
+                return ResourceManager.GetString("AvailableSaveFilesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Background image opacity.
+        /// </summary>
+        public static string BackgroundOpacitySetting {
+            get {
+                return ResourceManager.GetString("BackgroundOpacitySetting", resourceCulture);
             }
         }
         
@@ -224,7 +441,16 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to export.
+        ///   Looks up a localized string similar to Back up auto save slot.
+        /// </summary>
+        public static string BackupAutoSlotText {
+            get {
+                return ResourceManager.GetString("BackupAutoSlotText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
         /// </summary>
         public static string BackupButton {
             get {
@@ -233,7 +459,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error while uploading a file: {0}. Try to sign out from SkyDrive and sign back in if this error persists..
+        ///   Looks up a localized string similar to Error while uploading a file: {0}. Try to sign out from OneDrive and sign back in if this error persists..
         /// </summary>
         public static string BackupErrorUpload {
             get {
@@ -242,11 +468,47 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To export saves, click on the name of the ROM in the list below. The savestates and SRAM will be uploaded to a SkyDrive directory. The save files are fully compatible with Snes8x for Windows 8/RT..
+        ///   Looks up a localized string similar to Auto backup fail, please sign in to OneDrive..
+        /// </summary>
+        public static string BackupFailOnedriveText {
+            get {
+                return ResourceManager.GetString("BackupFailOnedriveText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back up ingame save.
+        /// </summary>
+        public static string BackupIngameSaveText {
+            get {
+                return ResourceManager.GetString("BackupIngameSaveText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose the game to export saves..
         /// </summary>
         public static string BackupInstructions {
             get {
                 return ResourceManager.GetString("BackupInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back up most recent manual save slot.
+        /// </summary>
+        public static string BackupLastManualSlotText {
+            get {
+                return ResourceManager.GetString("BackupLastManualSlotText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only backup when Wifi is available (checking for this may be slow).
+        /// </summary>
+        public static string BackupOnlyWifiText {
+            get {
+                return ResourceManager.GetString("BackupOnlyWifiText", resourceCulture);
             }
         }
         
@@ -305,6 +567,123 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Buy now.
+        /// </summary>
+        public static string BuyNowButtonText {
+            get {
+                return ResourceManager.GetString("BuyNowButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue trial.
+        /// </summary>
+        public static string BuyNowCancelButtonText {
+            get {
+                return ResourceManager.GetString("BuyNowCancelButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In the trial version you can store up to 2 ROMs on your phone. Click on Ok to buy the app and remove this limit..
+        /// </summary>
+        public static string BuyNowImportText {
+            get {
+                return ResourceManager.GetString("BuyNowImportText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This feature is only available in the full version of the app. Click on the Ok button below, if you want to buy the app and unlock the feature..
+        /// </summary>
+        public static string BuyNowText {
+            get {
+                return ResourceManager.GetString("BuyNowText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait for the active download to complete..
+        /// </summary>
+        public static string BuyWaitForDownloadText {
+            get {
+                return ResourceManager.GetString("BuyWaitForDownloadText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gameboy cable.
+        /// </summary>
+        public static string CableLinkText {
+            get {
+                return ResourceManager.GetString("CableLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cable - Bluetooth.
+        /// </summary>
+        public static string CablePeerText {
+            get {
+                return ResourceManager.GetString("CablePeerText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wifi TCP/IP.
+        /// </summary>
+        public static string CableSocketText {
+            get {
+                return ResourceManager.GetString("CableSocketText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instruction: hold the phone at the desired rest postion and press the &quot;Calibrate&quot; button..
+        /// </summary>
+        public static string CalibrateInstruction {
+            get {
+                return ResourceManager.GetString("CalibrateInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calibrate.
+        /// </summary>
+        public static string CalibrateText {
+            get {
+                return ResourceManager.GetString("CalibrateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calibration successful..
+        /// </summary>
+        public static string CalibrationSuccessText {
+            get {
+                return ResourceManager.GetString("CalibrationSuccessText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A-Button.
+        /// </summary>
+        public static string CameraAssignA {
+            get {
+                return ResourceManager.GetString("CameraAssignA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to B-Button.
+        /// </summary>
+        public static string CameraAssignB {
+            get {
+                return ResourceManager.GetString("CameraAssignB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to L-Button.
         /// </summary>
         public static string CameraAssignL {
@@ -350,7 +729,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancel.
+        ///   Looks up a localized string similar to cancel.
         /// </summary>
         public static string CancelButtonText {
             get {
@@ -359,20 +738,218 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose.
+        ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        public static string ChooseBackgroundButtonText {
+        public static string CancelText {
             get {
-                return ResourceManager.GetString("ChooseBackgroundButtonText", resourceCulture);
+                return ResourceManager.GetString("CancelText", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove.
+        ///   Looks up a localized string similar to Change voice command prefix....
         /// </summary>
-        public static string ClearBackgroundButtonText {
+        public static string ChangeVoicePrefixText {
             get {
-                return ResourceManager.GetString("ClearBackgroundButtonText", resourceCulture);
+                return ResourceManager.GetString("ChangeVoicePrefixText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to add.
+        /// </summary>
+        public static string CheatCodesAddPivotTitle {
+            get {
+                return ResourceManager.GetString("CheatCodesAddPivotTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to list.
+        /// </summary>
+        public static string CheatCodesListPivotTitle {
+            get {
+                return ResourceManager.GetString("CheatCodesListPivotTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CheatDefaultDescription {
+            get {
+                return ResourceManager.GetString("CheatDefaultDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid code format. The codes must be 6, 8, 9, 12 or 16 hexadecimal values per line..
+        /// </summary>
+        public static string CheatInvalidFormat {
+            get {
+                return ResourceManager.GetString("CheatInvalidFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid code format. The codes must be in the format XXX-XXX-XXX, XXX-XXX or an 8 digit hexadecimal number per line..
+        /// </summary>
+        public static string CheatInvalidFormat2 {
+            get {
+                return ResourceManager.GetString("CheatInvalidFormat2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cheats for:.
+        /// </summary>
+        public static string CheatListGameLabel {
+            get {
+                return ResourceManager.GetString("CheatListGameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to unknown.
+        /// </summary>
+        public static string CheatListUnknownGame {
+            get {
+                return ResourceManager.GetString("CheatListUnknownGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to cheat codes.
+        /// </summary>
+        public static string CheatMenuItemText {
+            get {
+                return ResourceManager.GetString("CheatMenuItemText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must enter a code first..
+        /// </summary>
+        public static string CheatNoCodeEntered {
+            get {
+                return ResourceManager.GetString("CheatNoCodeEntered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select a cheat code first..
+        /// </summary>
+        public static string CheatNoSelection {
+            get {
+                return ResourceManager.GetString("CheatNoSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CHEATS.
+        /// </summary>
+        public static string CheatPageTitle {
+            get {
+                return ResourceManager.GetString("CheatPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore old values after cheats (GBA).
+        /// </summary>
+        public static string CheatRestoreValuesOption {
+            get {
+                return ResourceManager.GetString("CheatRestoreValuesOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can enter GameShark and CodeBreaker codes for GBA games and GameShark and GameGenie codes for GB/GBC games..
+        /// </summary>
+        public static string CheatsDescription {
+            get {
+                return ResourceManager.GetString("CheatsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NOTE: Due to a recent bug fix, all existing 16-character cheat codes have to be *edited* with proper space to work again..
+        /// </summary>
+        public static string CheatsDescription2 {
+            get {
+                return ResourceManager.GetString("CheatsDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cheat code {0} is for rom {1} while the current rom is {2}. It will not work and may cause problems. This happens mostly because you are using a EU cheat code with a US rom or vice versa..
+        /// </summary>
+        public static string CheatWrongVersionText {
+            get {
+                return ResourceManager.GetString("CheatWrongVersionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incompatible cheat code!.
+        /// </summary>
+        public static string CheatWrongVersionTitle {
+            get {
+                return ResourceManager.GetString("CheatWrongVersionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose image....
+        /// </summary>
+        public static string ChooseImageText {
+            get {
+                return ResourceManager.GetString("ChooseImageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose portrait background color....
+        /// </summary>
+        public static string ChoosePortraitBackgroundColorText {
+            get {
+                return ResourceManager.GetString("ChoosePortraitBackgroundColorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Client.
+        /// </summary>
+        public static string ClientText {
+            get {
+                return ResourceManager.GetString("ClientText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CLOUDSIX.
+        /// </summary>
+        public static string CloudSixHeader {
+            get {
+                return ResourceManager.GetString("CloudSixHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CloudSix.
+        /// </summary>
+        public static string CloudSixImportTitle {
+            get {
+                return ResourceManager.GetString("CloudSixImportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install one of Rudy Huyn&apos;s CloudSix apps to use this function..
+        /// </summary>
+        public static string CloudSixInstructionText {
+            get {
+                return ResourceManager.GetString("CloudSixInstructionText", resourceCulture);
             }
         }
         
@@ -382,6 +959,24 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         public static string CloudSixOneFileLimitText {
             get {
                 return ResourceManager.GetString("CloudSixOneFileLimitText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code.
+        /// </summary>
+        public static string CodeText {
+            get {
+                return ResourceManager.GetString("CodeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your device does have a compass or an accelerometer (most likely a compass)..
+        /// </summary>
+        public static string CompassMissingText {
+            get {
+                return ResourceManager.GetString("CompassMissingText", resourceCulture);
             }
         }
         
@@ -413,11 +1008,56 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to reset the game (equivalent to turn the console ON/OFF).
+        /// </summary>
+        public static string ConfirmResetText {
+            get {
+                return ResourceManager.GetString("ConfirmResetText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to save? This will overwrite the selected save state..
         /// </summary>
         public static string ConfirmSaveText {
             get {
                 return ResourceManager.GetString("ConfirmSaveText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect to selected.
+        /// </summary>
+        public static string ConnectButtonCaption {
+            get {
+                return ResourceManager.GetString("ConnectButtonCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect.
+        /// </summary>
+        public static string ConnectText {
+            get {
+                return ResourceManager.GetString("ConnectText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CONTACT.
+        /// </summary>
+        public static string ContactHeader {
+            get {
+                return ResourceManager.GetString("ContactHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to options.
+        /// </summary>
+        public static string ContextTitle {
+            get {
+                return ResourceManager.GetString("ContextTitle", resourceCulture);
             }
         }
         
@@ -449,11 +1089,56 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customize button mapping....
+        /// </summary>
+        public static string CustomizeButtonMappingText {
+            get {
+                return ResourceManager.GetString("CustomizeButtonMappingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customize Landscape Control Position.
+        /// </summary>
+        public static string CustomizeLandscapeControlText {
+            get {
+                return ResourceManager.GetString("CustomizeLandscapeControlText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customize Portrait Control Position.
+        /// </summary>
+        public static string CustomizePortraitControlText {
+            get {
+                return ResourceManager.GetString("CustomizePortraitControlText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dark.
+        /// </summary>
+        public static string DarkText {
+            get {
+                return ResourceManager.GetString("DarkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deadzone (analogue stick only).
         /// </summary>
         public static string DeadzoneHeader {
             get {
                 return ResourceManager.GetString("DeadzoneHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to remove.
+        /// </summary>
+        public static string DeleteCheatButtonText {
+            get {
+                return ResourceManager.GetString("DeleteCheatButtonText", resourceCulture);
             }
         }
         
@@ -485,11 +1170,29 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to delete save file.
+        ///   Looks up a localized string similar to delete in-game save.
         /// </summary>
         public static string DeleteSavesEntry {
             get {
                 return ResourceManager.GetString("DeleteSavesEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string DescriptionText {
+            get {
+                return ResourceManager.GetString("DescriptionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device ID: {0}.
+        /// </summary>
+        public static string DeviceIDText {
+            get {
+                return ResourceManager.GetString("DeviceIDText", resourceCulture);
             }
         }
         
@@ -512,7 +1215,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error while downloading file &apos;{0}&apos; from SkyDrive: {1}.
+        ///   Looks up a localized string similar to Error while downloading file &apos;{0}&apos;: {1}.
         /// </summary>
         public static string DownloadErrorText {
             get {
@@ -521,7 +1224,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Downloading ROM &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Downloading &apos;{0}&apos;.
         /// </summary>
         public static string DownloadingProgressText {
             get {
@@ -575,6 +1278,15 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to edit.
+        /// </summary>
+        public static string EditText {
+            get {
+                return ResourceManager.GetString("EditText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///
         ///
@@ -597,7 +1309,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Snes8x bug report or feature suggestion.
+        ///   Looks up a localized string similar to VBA8/VGBC bug report or feature suggestion.
         /// </summary>
         public static string EmailSubjectText {
             get {
@@ -606,11 +1318,20 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to hide bar.
+        ///   Looks up a localized string similar to Note: Emulator Menu function will be implemented at a later date..
         /// </summary>
-        public static string EmulatorBackIcon {
+        public static string EmulatorMenuText {
             get {
-                return ResourceManager.GetString("EmulatorBackIcon", resourceCulture);
+                return ResourceManager.GetString("EmulatorMenuText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camera button auto fires A/B/L/R.
+        /// </summary>
+        public static string EnableAutoFireText {
+            get {
+                return ResourceManager.GetString("EnableAutoFireText", resourceCulture);
             }
         }
         
@@ -624,11 +1345,182 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to enable TURBO mode for faster game play? You can  later change the setting by going to Settings -&gt; Video or press the camera button..
+        /// </summary>
+        public static string EnableTurboPromptText {
+            get {
+                return ResourceManager.GetString("EnableTurboPromptText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable turbo mode?.
+        /// </summary>
+        public static string EnableTurboPromptTitle {
+            get {
+                return ResourceManager.GetString("EnableTurboPromptTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter promotion code.
+        /// </summary>
+        public static string EnterCodeText {
+            get {
+                return ResourceManager.GetString("EnterCodeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter code.
+        /// </summary>
+        public static string EnterCodeTitle {
+            get {
+                return ResourceManager.GetString("EnterCodeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to enter host&apos;s IP address here.
+        /// </summary>
+        public static string EnterHostIPText {
+            get {
+                return ResourceManager.GetString("EnterHostIPText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter new cheat code:.
+        /// </summary>
+        public static string EnterNewCheatText {
+            get {
+                return ResourceManager.GetString("EnterNewCheatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter voice command prefix:.
+        /// </summary>
+        public static string EnterVoicePrefixText {
+            get {
+                return ResourceManager.GetString("EnterVoicePrefixText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bluetooth is turned off. To see the current Bluetooth settings tap &apos;ok&apos;..
+        /// </summary>
+        public static string Err_BluetoothOff {
+            get {
+                return ResourceManager.GetString("Err_BluetoothOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bluetooth Off.
+        /// </summary>
+        public static string Err_BluetoothOffCaption {
+            get {
+                return ResourceManager.GetString("Err_BluetoothOffCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a name to join..
+        /// </summary>
+        public static string Err_NoChatName {
+            get {
+                return ResourceManager.GetString("Err_NoChatName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name is empty.
+        /// </summary>
+        public static string Err_NoChatNameCaption {
+            get {
+                return ResourceManager.GetString("Err_NoChatNameCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t connect.
+        /// </summary>
+        public static string Err_NoConnectTitle {
+            get {
+                return ResourceManager.GetString("Err_NoConnectTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a message to send..
+        /// </summary>
+        public static string Err_NoMessageToSend {
+            get {
+                return ResourceManager.GetString("Err_NoMessageToSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select a peer from the list..
+        /// </summary>
+        public static string Err_NoPeer {
+            get {
+                return ResourceManager.GetString("Err_NoPeer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not connected to a Peer..
+        /// </summary>
+        public static string Err_NoPeerConnected {
+            get {
+                return ResourceManager.GetString("Err_NoPeerConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t send.
+        /// </summary>
+        public static string Err_NoSendTitle {
+            get {
+                return ResourceManager.GetString("Err_NoSendTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string ErrorCaption {
             get {
                 return ResourceManager.GetString("ErrorCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error! No Internet connection or Microsoft server error. Please try again later..
+        /// </summary>
+        public static string ErrorNoConnectionText {
+            get {
+                return ResourceManager.GetString("ErrorNoConnectionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error reading SD Card content.
+        /// </summary>
+        public static string ErrorReadingSDCardText {
+            get {
+                return ResourceManager.GetString("ErrorReadingSDCardText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export as zip.
+        /// </summary>
+        public static string ExportAsZipText {
+            get {
+                return ResourceManager.GetString("ExportAsZipText", resourceCulture);
             }
         }
         
@@ -642,6 +1534,33 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to obtain data from supercheats.com..
+        /// </summary>
+        public static string FailDownloadCheatDataText {
+            get {
+                return ResourceManager.GetString("FailDownloadCheatDataText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to calibrate. Please try hitting the button again..
+        /// </summary>
+        public static string FailedToCalibrateText {
+            get {
+                return ResourceManager.GetString("FailedToCalibrateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FAQs, forum discussion &amp; PC app.
+        /// </summary>
+        public static string FAQsLinkText {
+            get {
+                return ResourceManager.GetString("FAQsLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error importing and opening ROM file..
         /// </summary>
         public static string FileAssociationError {
@@ -651,7 +1570,25 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to automatic.
+        ///   Looks up a localized string similar to Refresh peers.
+        /// </summary>
+        public static string FindButtonCaption {
+            get {
+                return ResourceManager.GetString("FindButtonCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to first game.
+        /// </summary>
+        public static string FirstGameText {
+            get {
+                return ResourceManager.GetString("FirstGameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to auto.
         /// </summary>
         public static string FrameSkipAutoSetting {
             get {
@@ -660,11 +1597,20 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skip Frames (increase emulation speed).
+        ///   Looks up a localized string similar to Normal Mode Frame Skip.
         /// </summary>
         public static string FrameSkipSetting {
             get {
                 return ResourceManager.GetString("FrameSkipSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camera full press makes A/B/L/R stick.
+        /// </summary>
+        public static string FullPressButtonStickText {
+            get {
+                return ResourceManager.GetString("FullPressButtonStickText", resourceCulture);
             }
         }
         
@@ -678,11 +1624,92 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gameboy Advance.
+        /// </summary>
+        public static string GameboyAdvanceText {
+            get {
+                return ResourceManager.GetString("GameboyAdvanceText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gameboy.
+        /// </summary>
+        public static string GameboyText {
+            get {
+                return ResourceManager.GetString("GameboyText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to gameplay.
+        /// </summary>
+        public static string GameplaySettingsTitle {
+            get {
+                return ResourceManager.GetString("GameplaySettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to general.
         /// </summary>
         public static string GeneralSettingsTitle {
             get {
                 return ResourceManager.GetString("GeneralSettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guide: troubleshoot blank screen.
+        /// </summary>
+        public static string GuideBlankScreenText {
+            get {
+                return ResourceManager.GetString("GuideBlankScreenText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guide: 4 ways to import ROMS.
+        /// </summary>
+        public static string GuideImportROMText {
+            get {
+                return ResourceManager.GetString("GuideImportROMText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guide: how to improve performance.
+        /// </summary>
+        public static string GuidePerformanceText {
+            get {
+                return ResourceManager.GetString("GuidePerformanceText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GUIDES.
+        /// </summary>
+        public static string GuidesHeader {
+            get {
+                return ResourceManager.GetString("GuidesHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to guides.
+        /// </summary>
+        public static string GuidesTitle {
+            get {
+                return ResourceManager.GetString("GuidesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your device does not have a gyroscope..
+        /// </summary>
+        public static string GyroMissingText {
+            get {
+                return ResourceManager.GetString("GyroMissingText", resourceCulture);
             }
         }
         
@@ -732,7 +1759,25 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Alternative 1: importing from SkyDrive.
+        ///   Looks up a localized string similar to Alternative 4: importing from SD card.
+        /// </summary>
+        public static string HelpImportSDCardHeader {
+            get {
+                return ResourceManager.GetString("HelpImportSDCardHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In the data tab of the main page, click on Import from SD card and follow the instruction.
+        /// </summary>
+        public static string HelpImportSDCardText {
+            get {
+                return ResourceManager.GetString("HelpImportSDCardText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alternative 1: importing from OneDrive.
         /// </summary>
         public static string HelpImportSkyDriveHeader {
             get {
@@ -741,7 +1786,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Store your ROMs in a folder on your SkyDrive. If your ROMs are in *.zip file format, don&apos;t forget to extract them first, because Snes8x only supports *.smc and *.sfc files. Afterwards navigate to the SkyDrive section on the main page of the emulator (swipe left from the ROM list). If you are not signed in yet, click on &quot;Sign in&quot; first and enter your credentials if you are asked for it. When you are signed in, click on the button labeled &quot;import ROMs&quot; on the emulators main page. The following page allows you [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Store your ROMs in a folder on your OneDrive.  Afterwards navigate to the OneDrive section on the main page of the emulator (swipe left from the ROM list). If you are not signed in yet, click on &quot;Sign in&quot; first and enter your credentials if you are asked for it. When you are signed in, click on the button labeled &quot;import ROMs&quot; on the emulators main page. The following page allows you to navigate through OneDrive to locate the folder where you put your ROMs into. In the folder containing the ROMs, tap on any [rest of string was truncated]&quot;;.
         /// </summary>
         public static string HelpImportSkyDriveText {
             get {
@@ -786,8 +1831,8 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - Make sure the downloads are completed before you leave the SkyDrive import page (wait for confirmation message). If you leave too early, the ROMs may remain in a corrupted state and cannot load correctly. If this happens, delete them (tap and hold in the ROM list) and re-download.
-        ///- Try other methods to import ROMs. There are 3 methods of importing ROMs (SkyDrive, E-Mail, Web Browser) described in the &quot;how to&quot; section of this page..
+        ///   Looks up a localized string similar to - Make sure the downloads are completed before you leave the OneDrive import page (wait for confirmation message). If you leave too early, the ROMs may remain in a corrupted state and cannot load correctly. If this happens, delete them (tap and hold in the ROM list) and re-download.
+        ///- If OneDrive import does not work or ROMs imported from OneDrive don&apos;t work in general, try other methods to import ROMs. There are 3 methods of importing ROMs (OneDrive, E-Mail, Web Browser) described in the &quot;how to&quot; section  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string HelpIssuesWhiteScreenText {
             get {
@@ -872,7 +1917,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to help.
+        ///   Looks up a localized string similar to HELP.
         /// </summary>
         public static string HelpTitle {
             get {
@@ -895,6 +1940,42 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         public static string HideConfirmationSetting {
             get {
                 return ResourceManager.GetString("HideConfirmationSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Horizontal tilt deadzone (in degrees).
+        /// </summary>
+        public static string HorizontalTiltDeadZoneText {
+            get {
+                return ResourceManager.GetString("HorizontalTiltDeadZoneText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host&apos;s IP address: {0}. Waiting for client....
+        /// </summary>
+        public static string HostIPAddressText {
+            get {
+                return ResourceManager.GetString("HostIPAddressText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host.
+        /// </summary>
+        public static string HostText {
+            get {
+                return ResourceManager.GetString("HostText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to image editor.
+        /// </summary>
+        public static string ImageEditorTitle {
+            get {
+                return ResourceManager.GetString("ImageEditorTitle", resourceCulture);
             }
         }
         
@@ -926,7 +2007,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to import ROMs.
+        ///   Looks up a localized string similar to Import.
         /// </summary>
         public static string ImportFromSkyDriveButtonText {
             get {
@@ -935,7 +2016,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Importing ROM &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Importing &apos;{0}&apos;.
         /// </summary>
         public static string ImportingProgressText {
             get {
@@ -944,7 +2025,10 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Before you can play, it&apos;s necessary to upload ROMs to your SkyDrive folder. Afterwards click on &quot;Sign in&quot; to sign into SkyDrive. After signing in, click on &quot;import ROMs&quot; in order to import ROMs to your phone. .
+        ///   Looks up a localized string similar to To import ROM from OneDrive:
+        ///1. Upload ROMs to your OneDrive folder. 
+        ///2. Tap &quot;Sign in&quot; to sign in into OneDrive
+        ///3. Tap &quot;Import&quot; and choose the ROM..
         /// </summary>
         public static string ImportInstructionsText {
             get {
@@ -953,7 +2037,37 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to import&amp;export.
+        ///   Looks up a localized string similar to To restore saves:
+        ///1. Make sure the names of the rom and the save file match exactly.
+        ///2. Tap &quot;Import&quot; and choose the save file.
+        ///3. Start the game..
+        /// </summary>
+        public static string ImportSaveInstructionsText {
+            get {
+                return ResourceManager.GetString("ImportSaveInstructionsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Savestate file format is invalid. The file name must end with a number from 0 to 9 (e.g. demo0.sgm)..
+        /// </summary>
+        public static string ImportSavestateInvalidFormat {
+            get {
+                return ResourceManager.GetString("ImportSavestateInvalidFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import from SD Card.
+        /// </summary>
+        public static string ImportSDCardText {
+            get {
+                return ResourceManager.GetString("ImportSDCardText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to data.
         /// </summary>
         public static string ImportTitle {
             get {
@@ -971,11 +2085,29 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inclinometer.
+        /// </summary>
+        public static string InclinometerText {
+            get {
+                return ResourceManager.GetString("InclinometerText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string InfoCaption {
             get {
                 return ResourceManager.GetString("InfoCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text input cannot be empty..
+        /// </summary>
+        public static string InputEmptyError {
+            get {
+                return ResourceManager.GetString("InputEmptyError", resourceCulture);
             }
         }
         
@@ -989,11 +2121,101 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid code..
+        /// </summary>
+        public static string InvalidCodeText {
+            get {
+                return ResourceManager.GetString("InvalidCodeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server IP address.
+        /// </summary>
+        public static string IPAddressText {
+            get {
+                return ResourceManager.GetString("IPAddressText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last played: .
         /// </summary>
         public static string LastPlayedLabel {
             get {
                 return ResourceManager.GetString("LastPlayedLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LICENSE.
+        /// </summary>
+        public static string LicenseTitle {
+            get {
+                return ResourceManager.GetString("LicenseTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light.
+        /// </summary>
+        public static string LightText {
+            get {
+                return ResourceManager.GetString("LightText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected. You can now close this window and continue playing game..
+        /// </summary>
+        public static string LinkConnectedText {
+            get {
+                return ResourceManager.GetString("LinkConnectedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occured. Please restart the app and try again..
+        /// </summary>
+        public static string LinkErrorText {
+            get {
+                return ResourceManager.GetString("LinkErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: Turn off frameskip and turbo mode to prevent communication error..
+        /// </summary>
+        public static string LinkingNote {
+            get {
+                return ResourceManager.GetString("LinkingNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Link timeout (ms).
+        /// </summary>
+        public static string LinkTimeoutText {
+            get {
+                return ResourceManager.GetString("LinkTimeoutText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Link type.
+        /// </summary>
+        public static string LinkTypeText {
+            get {
+                return ResourceManager.GetString("LinkTypeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading production list. Please wait....
+        /// </summary>
+        public static string LoadingProductListText {
+            get {
+                return ResourceManager.GetString("LoadingProductListText", resourceCulture);
             }
         }
         
@@ -1007,7 +2229,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Display Refresh Rate.
+        ///   Looks up a localized string similar to 30 Hz Display Refresh Rate.
         /// </summary>
         public static string LowFreqModeSetting {
             get {
@@ -1079,11 +2301,29 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you store the app on SD Card, check this option to improve performance when exiting game. Also check this option if you want to create your own cover art..
+        /// </summary>
+        public static string ManualSnapshotHelp {
+            get {
+                return ResourceManager.GetString("ManualSnapshotHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create tile pictures manually.
         /// </summary>
         public static string ManualSnapshotSetting {
             get {
                 return ResourceManager.GetString("ManualSnapshotSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use A/B/L/R for turbo.
+        /// </summary>
+        public static string MapABLRTurboText {
+            get {
+                return ResourceManager.GetString("MapABLRTurboText", resourceCulture);
             }
         }
         
@@ -1097,11 +2337,137 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MOGA BUTTON.
+        /// </summary>
+        public static string MogaButtonText {
+            get {
+                return ResourceManager.GetString("MogaButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: MOGA controller may require GDR3..
+        /// </summary>
+        public static string MogaGDR3Note {
+            get {
+                return ResourceManager.GetString("MogaGDR3Note", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to moga mapping.
+        /// </summary>
+        public static string MogaMappingTitle {
+            get {
+                return ResourceManager.GetString("MogaMappingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Motion control.
+        /// </summary>
+        public static string MotionControlHeader {
+            get {
+                return ResourceManager.GetString("MotionControlHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Motion control settings....
+        /// </summary>
+        public static string MotionControlSettingsText {
+            get {
+                return ResourceManager.GetString("MotionControlSettingsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to motion settings.
+        /// </summary>
+        public static string MotionMappingTitle {
+            get {
+                return ResourceManager.GetString("MotionMappingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MOTION.
+        /// </summary>
+        public static string MotionText {
+            get {
+                return ResourceManager.GetString("MotionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to link with {0}?.
+        /// </summary>
+        public static string Msg_ChatPrompt {
+            get {
+                return ResourceManager.GetString("Msg_ChatPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incoming Link Request.
+        /// </summary>
+        public static string Msg_ChatPromptTitle {
+            get {
+                return ResourceManager.GetString("Msg_ChatPromptTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Peers found: {0}. Tap &apos;refresh peers&apos; to update..
+        /// </summary>
+        public static string Msg_FoundPeers {
+            get {
+                return ResourceManager.GetString("Msg_FoundPeers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No peers found. Tap &apos;refresh peers&apos; to update..
+        /// </summary>
+        public static string Msg_NoPeers {
+            get {
+                return ResourceManager.GetString("Msg_NoPeers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to never.
         /// </summary>
         public static string NeverPlayedText {
             get {
                 return ResourceManager.GetString("NeverPlayedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t show this again.
+        /// </summary>
+        public static string NeverShowAgainText {
+            get {
+                return ResourceManager.GetString("NeverShowAgainText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please make sure the name of the save file matches the name of the ROM.
+        /// </summary>
+        public static string NoMatchingNameText {
+            get {
+                return ResourceManager.GetString("NoMatchingNameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string NoneButtonText {
+            get {
+                return ResourceManager.GetString("NoneButtonText", resourceCulture);
             }
         }
         
@@ -1115,11 +2481,38 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of rotating backups.
+        /// </summary>
+        public static string NumberRotatingFilesText {
+            get {
+                return ResourceManager.GetString("NumberRotatingFilesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ok.
         /// </summary>
         public static string OKButtonText {
             get {
                 return ResourceManager.GetString("OKButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string OKText {
+            get {
+                return ResourceManager.GetString("OKText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ONEDRIVE.
+        /// </summary>
+        public static string OneDriveHeader {
+            get {
+                return ResourceManager.GetString("OneDriveHeader", resourceCulture);
             }
         }
         
@@ -1169,6 +2562,24 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Over bluetooth/wifi (not available).
+        /// </summary>
+        public static string OverNetworkText {
+            get {
+                return ResourceManager.GetString("OverNetworkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pin alternate style tile.
+        /// </summary>
+        public static string PinSecondaryTileText {
+            get {
+                return ResourceManager.GetString("PinSecondaryTileText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to pin to start screen.
         /// </summary>
         public static string PinToStartText {
@@ -1178,11 +2589,92 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please wait until ROM finishes loading.
+        /// </summary>
+        public static string PleaseWaitROMLoadingText {
+            get {
+                return ResourceManager.GetString("PleaseWaitROMLoadingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skip Frames (same emulation speed).
         /// </summary>
         public static string PowerFrameSkipText {
             get {
                 return ResourceManager.GetString("PowerFrameSkipText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string PowerFrameSkipText2 {
+            get {
+                return ResourceManager.GetString("PowerFrameSkipText2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to set up link.
+        /// </summary>
+        public static string PreLinkTitle {
+            get {
+                return ResourceManager.GetString("PreLinkTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product is not available at the moment..
+        /// </summary>
+        public static string ProductNotAvailableText {
+            get {
+                return ResourceManager.GetString("ProductNotAvailableText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Purchase.
+        /// </summary>
+        public static string PurchaseButtonText {
+            get {
+                return ResourceManager.GetString("PurchaseButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Purchased, thank you!.
+        /// </summary>
+        public static string PurchasedThankYouText {
+            get {
+                return ResourceManager.GetString("PurchasedThankYouText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Purchase successful, ads will not be shown the next time you start the app..
+        /// </summary>
+        public static string PurchaseSuccessNoAdsText {
+            get {
+                return ResourceManager.GetString("PurchaseSuccessNoAdsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Purchase successful..
+        /// </summary>
+        public static string PurchaseSuccessText {
+            get {
+                return ResourceManager.GetString("PurchaseSuccessText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RECENT.
+        /// </summary>
+        public static string RecentHeader {
+            get {
+                return ResourceManager.GetString("RecentHeader", resourceCulture);
             }
         }
         
@@ -1223,11 +2715,29 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string RenameCancelButton {
+            get {
+                return ResourceManager.GetString("RenameCancelButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must enter a name for the ROM..
         /// </summary>
         public static string RenameEmptyString {
             get {
                 return ResourceManager.GetString("RenameEmptyString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter new display name:.
+        /// </summary>
+        public static string RenameLabel {
+            get {
+                return ResourceManager.GetString("RenameLabel", resourceCulture);
             }
         }
         
@@ -1250,6 +2760,24 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename.
+        /// </summary>
+        public static string RenameOkButton {
+            get {
+                return ResourceManager.GetString("RenameOkButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to rename.
+        /// </summary>
+        public static string RenamePageTitle {
+            get {
+                return ResourceManager.GetString("RenamePageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change the displayed name of the ROM:.
         /// </summary>
         public static string RenamePromptMessage {
@@ -1268,11 +2796,56 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset image.
+        /// </summary>
+        public static string ResetImageText {
+            get {
+                return ResourceManager.GetString("ResetImageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to reset.
         /// </summary>
         public static string ResetROMButton {
             get {
                 return ResourceManager.GetString("ResetROMButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LeftToRight.
+        /// </summary>
+        public static string ResourceFlowDirection {
+            get {
+                return ResourceManager.GetString("ResourceFlowDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to en-US.
+        /// </summary>
+        public static string ResourceLanguage {
+            get {
+                return ResourceManager.GetString("ResourceLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please restart the app (hit back button several times) for the new setting to take effect..
+        /// </summary>
+        public static string RestartPromptText {
+            get {
+                return ResourceManager.GetString("RestartPromptText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please restart.
+        /// </summary>
+        public static string RestartPromptTitle {
+            get {
+                return ResourceManager.GetString("RestartPromptTitle", resourceCulture);
             }
         }
         
@@ -1286,7 +2859,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select last state when loading ROM.
+        ///   Looks up a localized string similar to Use 9th slot for auto save/load.
         /// </summary>
         public static string RestoreLastStateSetting {
             get {
@@ -1304,11 +2877,38 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ATTENTION - WP8.1 USERS: If your purchased features got deactivated, just tap on Purchase and enter your Wallet code if necessary, you will be able to restore your purchase without having to pay again..
+        /// </summary>
+        public static string RestorePurchaseNotice {
+            get {
+                return ResourceManager.GetString("RestorePurchaseNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resume.
         /// </summary>
         public static string ResumeButtonText {
             get {
                 return ResourceManager.GetString("ResumeButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please spend a few seconds rating the app. Good reviews keep new features coming..
+        /// </summary>
+        public static string ReviewPromptText {
+            get {
+                return ResourceManager.GetString("ReviewPromptText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Like this app?.
+        /// </summary>
+        public static string ReviewPromptTitle {
+            get {
+                return ResourceManager.GetString("ReviewPromptTitle", resourceCulture);
             }
         }
         
@@ -1322,6 +2922,15 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Role.
+        /// </summary>
+        public static string RoleText {
+            get {
+                return ResourceManager.GetString("RoleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to That ROM has been downloaded before: {0}.
         /// </summary>
         public static string ROMAlreadyExistingError {
@@ -1331,11 +2940,47 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to rom list.
+        ///   Looks up a localized string similar to roms.
         /// </summary>
         public static string RomListTitle {
             get {
                 return ResourceManager.GetString("RomListTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: If your ROMs do not start, see the &quot;issues&quot; section of the help page..
+        /// </summary>
+        public static string RomListTroubleshootNote {
+            get {
+                return ResourceManager.GetString("RomListTroubleshootNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotating mode.
+        /// </summary>
+        public static string RotatingModeText {
+            get {
+                return ResourceManager.GetString("RotatingModeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same device.
+        /// </summary>
+        public static string SameDeviceText {
+            get {
+                return ResourceManager.GetString("SameDeviceText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This save slot is reserved for internal use. You can only load from but cannot save to this slot..
+        /// </summary>
+        public static string SaveSlotReservedText {
+            get {
+                return ResourceManager.GetString("SaveSlotReservedText", resourceCulture);
             }
         }
         
@@ -1349,11 +2994,83 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SD CARD.
+        /// </summary>
+        public static string SDCardHeader {
+            get {
+                return ResourceManager.GetString("SDCardHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SD Card.
+        /// </summary>
+        public static string SDCardImportTitle {
+            get {
+                return ResourceManager.GetString("SDCardImportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The SD card is missing. Insert an SD card try again..
+        /// </summary>
+        public static string SDCardMissingText {
+            get {
+                return ResourceManager.GetString("SDCardMissingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: SD card is read-only to developers. Handling of .zip extension is reserved by the OS, please use .zib for your zip files..
+        /// </summary>
+        public static string SDCardReadOnlyText {
+            get {
+                return ResourceManager.GetString("SDCardReadOnlyText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for cheats.
+        /// </summary>
+        public static string SearchForCheatsText {
+            get {
+                return ResourceManager.GetString("SearchForCheatsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to search.
+        /// </summary>
+        public static string SearchTitle {
+            get {
+                return ResourceManager.GetString("SearchTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to second game (can be the same as first game).
+        /// </summary>
+        public static string SecondGameText {
+            get {
+                return ResourceManager.GetString("SecondGameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to select all.
         /// </summary>
         public static string SelectAllText {
             get {
                 return ResourceManager.GetString("SelectAllText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select files.
+        /// </summary>
+        public static string SelectFileTitle {
+            get {
+                return ResourceManager.GetString("SelectFileTitle", resourceCulture);
             }
         }
         
@@ -1484,7 +3201,52 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SkyDriveError: {0}.
+        ///   Looks up a localized string similar to Set up auto backup....
+        /// </summary>
+        public static string SetupAutoBackupText {
+            get {
+                return ResourceManager.GetString("SetupAutoBackupText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show snapshot of last played game.
+        /// </summary>
+        public static string ShowLastPlayedGameText {
+            get {
+                return ResourceManager.GetString("ShowLastPlayedGameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show context menu hint.
+        /// </summary>
+        public static string ShowThreeDotsSetting {
+            get {
+                return ResourceManager.GetString("ShowThreeDotsSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simple mode.
+        /// </summary>
+        public static string SimpleModeText {
+            get {
+                return ResourceManager.GetString("SimpleModeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simple.
+        /// </summary>
+        public static string SimpleText {
+            get {
+                return ResourceManager.GetString("SimpleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OneDrive Error: {0}.
         /// </summary>
         public static string SkyDriveError {
             get {
@@ -1493,7 +3255,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Note: The emulator only supports *.smc and *.sfc files..
+        ///   Looks up a localized string similar to Supported files:.
         /// </summary>
         public static string SkyDriveFileFormatHint {
             get {
@@ -1502,7 +3264,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error while accessing SkyDrive: {0}.
+        ///   Looks up a localized string similar to Error while accessing OneDrive: {0}.
         /// </summary>
         public static string SkyDriveGeneralError {
             get {
@@ -1511,7 +3273,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to import ROMs.
+        ///   Looks up a localized string similar to OneDrive.
         /// </summary>
         public static string SkyDriveImportTitle {
             get {
@@ -1520,7 +3282,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot connect to SkyDrive. Check your internet connection..
+        ///   Looks up a localized string similar to Cannot connect to OneDrive. Check your internet connection..
         /// </summary>
         public static string SkyDriveInternetLost {
             get {
@@ -1529,11 +3291,20 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Source.
+        ///   Looks up a localized string similar to Source code.
         /// </summary>
         public static string SourceButtonText {
             get {
                 return ResourceManager.GetString("SourceButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to source.
+        /// </summary>
+        public static string SourceHeader {
+            get {
+                return ResourceManager.GetString("SourceHeader", resourceCulture);
             }
         }
         
@@ -1552,6 +3323,42 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         public static string SRAMDeletedSuccessfully {
             get {
                 return ResourceManager.GetString("SRAMDeletedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to start link.
+        /// </summary>
+        public static string StartLinkText {
+            get {
+                return ResourceManager.GetString("StartLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to start link.
+        /// </summary>
+        public static string StartLinkTitle {
+            get {
+                return ResourceManager.GetString("StartLinkTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start server on the other device to get server&apos;s IP address..
+        /// </summary>
+        public static string StartServerOtherText {
+            get {
+                return ResourceManager.GetString("StartServerOtherText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start server.
+        /// </summary>
+        public static string StartServerText {
+            get {
+                return ResourceManager.GetString("StartServerText", resourceCulture);
             }
         }
         
@@ -1583,7 +3390,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronize Audio.
+        ///   Looks up a localized string similar to Synchronize Audio (better quality).
         /// </summary>
         public static string SyncSoundSetting {
             get {
@@ -1601,11 +3408,101 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tap here to download Snes8x.
+        /// </summary>
+        public static string TapDownloadSnes8xText {
+            get {
+                return ResourceManager.GetString("TapDownloadSnes8xText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap here for MOGA controller instruction.
+        /// </summary>
+        public static string TapMogaInstructionText {
+            get {
+                return ResourceManager.GetString("TapMogaInstructionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap Start server to get the server IP address..
+        /// </summary>
+        public static string TapStartServerIPText {
+            get {
+                return ResourceManager.GetString("TapStartServerIPText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap here to return to cheat list..
+        /// </summary>
+        public static string TapToReturnText {
+            get {
+                return ResourceManager.GetString("TapToReturnText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Theme.
+        /// </summary>
+        public static string ThemeText {
+            get {
+                return ResourceManager.GetString("ThemeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This tile is already pinned..
+        /// </summary>
+        public static string TileAlreadyPinnedText {
+            get {
+                return ResourceManager.GetString("TileAlreadyPinnedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error opening the ROM associated with the tile..
         /// </summary>
         public static string TileOpenError {
             get {
                 return ResourceManager.GetString("TileOpenError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tilt down.
+        /// </summary>
+        public static string TiltDownText {
+            get {
+                return ResourceManager.GetString("TiltDownText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tilt left.
+        /// </summary>
+        public static string TiltLeftText {
+            get {
+                return ResourceManager.GetString("TiltLeftText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tilt right.
+        /// </summary>
+        public static string TiltRightText {
+            get {
+                return ResourceManager.GetString("TiltRightText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tilt up.
+        /// </summary>
+        public static string TiltUpText {
+            get {
+                return ResourceManager.GetString("TiltUpText", resourceCulture);
             }
         }
         
@@ -1619,11 +3516,20 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Note: Turbo Mode will be assigned to L or R if the camera button is assigned to L or R..
+        ///   Looks up a localized string similar to Turbo mode.
         /// </summary>
-        public static string TurboModeTip {
+        public static string TurboModeText {
             get {
-                return ResourceManager.GetString("TurboModeTip", resourceCulture);
+                return ResourceManager.GetString("TurboModeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please unpin/repin the tile for the change to take effect..
+        /// </summary>
+        public static string UnpinTilePromptText {
+            get {
+                return ResourceManager.GetString("UnpinTilePromptText", resourceCulture);
             }
         }
         
@@ -1637,11 +3543,29 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use system accent color for live tile.
+        ///   Looks up a localized string similar to Use system accent color for main tile.
         /// </summary>
         public static string UseAccentBackgroundText {
             get {
                 return ResourceManager.GetString("UseAccentBackgroundText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use background image.
+        /// </summary>
+        public static string UseBackgroundImageSetting {
+            get {
+                return ResourceManager.GetString("UseBackgroundImageSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use dimmed Gameboy colors (GBC).
+        /// </summary>
+        public static string UseGameboyColorText {
+            get {
+                return ResourceManager.GetString("UseGameboyColorText", resourceCulture);
             }
         }
         
@@ -1651,6 +3575,24 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         public static string UseMogaControllerText {
             get {
                 return ResourceManager.GetString("UseMogaControllerText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use realistic color buttons.
+        /// </summary>
+        public static string UseRealisticButtonsText {
+            get {
+                return ResourceManager.GetString("UseRealisticButtonsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code accepted. Please restart the app for the code to take effect..
+        /// </summary>
+        public static string ValidCodeText {
+            get {
+                return ResourceManager.GetString("ValidCodeText", resourceCulture);
             }
         }
         
@@ -1709,6 +3651,60 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vertical tilt deadzone (in degrees).
+        /// </summary>
+        public static string VerticalTiltDeadZoneText {
+            get {
+                return ResourceManager.GetString("VerticalTiltDeadZoneText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vibration duration has to be between 0 and 5 seconds.
+        /// </summary>
+        public static string VibrationDurationErrorText {
+            get {
+                return ResourceManager.GetString("VibrationDurationErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vibration duration (seconds).
+        /// </summary>
+        public static string VibrationDurationText {
+            get {
+                return ResourceManager.GetString("VibrationDurationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vibrate when keys are pressed.
+        /// </summary>
+        public static string VibrationSettingText {
+            get {
+                return ResourceManager.GetString("VibrationSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video: cheat code tutorial.
+        /// </summary>
+        public static string VideoCheatText {
+            get {
+                return ResourceManager.GetString("VideoCheatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video: MOGA controller instructions.
+        /// </summary>
+        public static string VideoMogaText {
+            get {
+                return ResourceManager.GetString("VideoMogaText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to video.
         /// </summary>
         public static string VideoSettingsPageTitle {
@@ -1741,6 +3737,24 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         public static string VirtualControllerButtonStyle {
             get {
                 return ResourceManager.GetString("VirtualControllerButtonStyle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning!.
+        /// </summary>
+        public static string WarningTitle {
+            get {
+                return ResourceManager.GetString("WarningTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wireless adapter (not available).
+        /// </summary>
+        public static string WirelessLinkText {
+            get {
+                return ResourceManager.GetString("WirelessLinkText", resourceCulture);
             }
         }
     }

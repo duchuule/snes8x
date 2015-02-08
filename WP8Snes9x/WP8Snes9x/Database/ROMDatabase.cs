@@ -197,7 +197,29 @@ namespace PhoneDirect3DXamlAppInterop.Database
         }
 
 
-       
+
+        public ROMDBEntry GetROMFromSRAMName(string savestateName)
+        {
+            if (!context.DatabaseExists())
+            {
+                throw new InvalidOperationException("Database does not exist.");
+            }
+            String name = savestateName.Substring(0, savestateName.Length - 4).ToLower();
+
+            ROMDBEntry entry = this.context.ROMTable
+                .Where(r => r.FileName.Substring(0, r.FileName.Length - 4).ToLower().Equals(name))
+                .FirstOrDefault();
+
+            if (entry != null)
+                return entry;
+            else
+            {
+                //check display name
+                return this.context.ROMTable
+                .Where(r => (r.DisplayName.ToLower().Equals(name)))
+                .FirstOrDefault();
+            }
+        }
 
         public int GetLastSavestateSlotByFileNameExceptAuto(string filename)
         {
