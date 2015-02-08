@@ -12,6 +12,9 @@
       <Capability Name="ID_CAP_MEDIALIB_PHOTO" />
       <Capability Name="ID_CAP_REMOVABLE_STORAGE" />
       <Capability Name="ID_CAP_IDENTITY_DEVICE" />
+      <Capability Name="ID_CAP_MICROPHONE" />
+      <Capability Name="ID_CAP_SENSORS" />
+      <Capability Name="ID_CAP_SPEECH_RECOGNITION" />
     </Capabilities>
     <Tasks>
       <DefaultTask Name="_default" NavigationPage="MainPage.xaml" ActivationPolicy="Resume" />
@@ -49,6 +52,17 @@
         <SupportedFileTypes>
           <FileType ContentType="application/snes">.smc</FileType>
           <FileType ContentType="application/snes">.sfc</FileType>
+          <FileType ContentType="application/snes">.srm</FileType>
+          <FileType ContentType="application/snes">.000</FileType>
+          <FileType ContentType="application/snes">.001</FileType>
+          <FileType ContentType="application/snes">.002</FileType>
+          <FileType ContentType="application/snes">.003</FileType>
+          <FileType ContentType="application/snes">.004</FileType>
+          <FileType ContentType="application/snes">.005</FileType>
+          <FileType ContentType="application/snes">.006</FileType>
+          <FileType ContentType="application/snes">.007</FileType>
+          <FileType ContentType="application/snes">.008</FileType>
+          <FileType ContentType="application/snes">.009</FileType>
         </SupportedFileTypes>
       </FileTypeAssociation>
     </Extensions>

@@ -49,8 +49,7 @@ namespace PhoneDirect3DXamlAppInterop
     public partial class MainPage : PhoneApplicationPage
     {
         private ApplicationBarIconButton resumeButton;
-        private LiveConnectSession session;
-        private ROMDatabase db;
+       private ROMDatabase db;
         private Task createFolderTask, copyDemoTask, initTask;
 
         public static bool shouldUpdateBackgroud = false;
@@ -106,6 +105,27 @@ namespace PhoneDirect3DXamlAppInterop
             {
                 MessageBox.Show(AppResources.FileAssociationError, AppResources.ErrorCaption, MessageBoxButton.OK);
             }
+
+            //register voice command
+            if (App.metroSettings.VoiceCommandVersion < App.VOICE_COMMAND_VERSION || VoiceCommandService.InstalledCommandSets.Count == 0)
+            {
+                try
+                {
+                    await RegisterVoiceCommand("");
+
+
+
+                    await UpdateGameListForVoiceCommand();
+
+                    App.metroSettings.VoiceCommandVersion = App.VOICE_COMMAND_VERSION;
+
+
+                }
+                catch (Exception error)
+                {
+                    MessageBox.Show(error.Message + "\r\nVoice Commands failed to initialize.");
+                }
+            }
         }
 
         private async Task Initialize()
@@ -127,6 +147,99 @@ namespace PhoneDirect3DXamlAppInterop
             };
             this.RefreshROMList();
         }
+
+
+        public static async Task RegisterVoiceCommand(string prefix)
+        {
+
+
+            //if user specified a command prefix, copy the original definition file to isolated storage and modified it
+            if (prefix != null && prefix.Trim() != "")
+            {
+                StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+
+                StorageFile originalFile = await StorageFile.GetFileFromPathAsync("VoiceCommandDefinitions.xml");
+
+                IRandomAccessStream accessStream = await originalFile.OpenReadAsync();
+
+                string originalText;
+                using (Stream stream = accessStream.AsStreamForRead((int)accessStream.Size))
+                {
+                    byte[] content = new byte[stream.Length];
+                    await stream.ReadAsync(content, 0, (int)stream.Length);
+
+                    originalText = Encoding.UTF8.GetString(content, 0, content.Length);
+                }
+
+                int idx = originalText.IndexOf("    <Example>");
+
+                if (idx < 0)
+                {
+                    MessageBox.Show("Error! Cannot find <Example>");
+                    return;
+                }
+
+
+                string modifiedText = originalText.Substring(0, idx);
+                modifiedText += "    <CommandPrefix> " + prefix + "</CommandPrefix>\r\n";
+                modifiedText += originalText.Substring(idx);
+
+
+                IStorageFile storageFile = await localFolder.CreateFileAsync("VoiceCommandDefinitions.xml", CreationCollisionOption.ReplaceExisting);
+
+                using (Stream stream = await storageFile.OpenStreamForWriteAsync())
+                {
+                    byte[] content = Encoding.UTF8.GetBytes(modifiedText);
+                    await stream.WriteAsync(content, 0, content.Length);
+                }
+
+                Uri uri = new Uri("ms-appdata:///local/VoiceCommandDefinitions.xml", UriKind.Absolute);
+                await Windows.Phone.Speech.VoiceCommands.VoiceCommandService.InstallCommandSetsFromFileAsync(uri);
+            }
+
+            else  //default prefix
+            {
+                Uri uri = new Uri("ms-appx:///VoiceCommandDefinitions.xml", UriKind.Absolute);
+                await Windows.Phone.Speech.VoiceCommands.VoiceCommandService.InstallCommandSetsFromFileAsync(uri);
+            }
+        }
+
+
+        public static async Task UpdateGameListForVoiceCommand()
+        {
+            try
+            {
+                //get list of gammes
+                IEnumerable<ROMDBEntry> romList = ROMDatabase.Current.GetROMList();
+                List<String> nameList = new List<String>();
+                foreach (ROMDBEntry entry in romList)
+                {
+                    nameList.Add(Regex.Replace(entry.DisplayName, @"[^\w\s]+", "").ToLower());
+                }
+
+                //safeguard incase the commandsets failed to install
+                if (VoiceCommandService.InstalledCommandSets.ContainsKey("en-US") == false)
+                {
+                    Uri uri = new Uri("ms-appx:///VoiceCommandDefinitions.xml", UriKind.Absolute);
+                    await Windows.Phone.Speech.VoiceCommands.VoiceCommandService.InstallCommandSetsFromFileAsync(uri);
+                }
+
+                //populate list of games for voice command
+                if (VoiceCommandService.InstalledCommandSets.ContainsKey("en-US"))
+                {
+                    VoiceCommandSet widgetVcs = VoiceCommandService.InstalledCommandSets["en-US"];
+                    await widgetVcs.UpdatePhraseListAsync("RomName", nameList.ToArray());
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
 
         async void btnSignin_SessionChanged(object sender, Microsoft.Live.Controls.LiveConnectSessionChangedEventArgs e)
         {
@@ -167,15 +280,18 @@ namespace PhoneDirect3DXamlAppInterop
 
         private void gotoImportButton_Click_1(object sender, RoutedEventArgs e)
         {
-            if (session != null)
+
+
+            if (App.session != null)
             {
-                PhoneApplicationService.Current.State["parameter"] = this.session;
+                PhoneApplicationService.Current.State["parameter"] = App.session;
                 this.NavigationService.Navigate(new Uri("/SkyDriveImportPage.xaml", UriKind.Relative));
             }
             else
             {
                 MessageBox.Show(AppResources.NotSignedInError, AppResources.ErrorCaption, MessageBoxButton.OK);
             }
+         
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -787,12 +903,7 @@ namespace PhoneDirect3DXamlAppInterop
             resumeButton.Click += resumeButton_Click;
             ApplicationBar.Buttons.Add(resumeButton);
 
-            var settingsButton = new ApplicationBarIconButton(new Uri("/Assets/Icons/feature.settings.png", UriKind.Relative))
-            {
-                Text = AppResources.SettingsButtonText
-            };
-            settingsButton.Click += settingsButton_Click;
-            ApplicationBar.Buttons.Add(settingsButton);
+            
 
 
             var donateButton = new ApplicationBarIconButton(new Uri("/Assets/Icons/appbar.gift.png", UriKind.Relative))
@@ -808,6 +919,13 @@ namespace PhoneDirect3DXamlAppInterop
             };
             reviewButton.Click += reviewButton_Click;
             ApplicationBar.Buttons.Add(reviewButton);
+
+            var settingsButton = new ApplicationBarIconButton(new Uri("/Assets/Icons/feature.settings.png", UriKind.Relative))
+            {
+                Text = AppResources.SettingsButtonText
+            };
+            settingsButton.Click += settingsButton_Click;
+            ApplicationBar.Buttons.Add(settingsButton);
         }
 
         private void donateButton_Click(object sender, EventArgs e)
@@ -913,9 +1031,10 @@ namespace PhoneDirect3DXamlAppInterop
 
         private void gotoBackupButton_Click_1(object sender, RoutedEventArgs e)
         {
-            if (session != null)
+            if (App.session != null)
             {
-                PhoneApplicationService.Current.State["parameter"] = this.session;
+                PhoneApplicationService.Current.State["parameter"] = App.session;
+                BackupPage.backupMedium = "onedrive";
                 this.NavigationService.Navigate(new Uri("/BackupPage.xaml", UriKind.Relative));
             }
             else
@@ -924,19 +1043,7 @@ namespace PhoneDirect3DXamlAppInterop
             }
         }
 
-        private void gotoRestoreButton_Click_1(object sender, RoutedEventArgs e)
-        {
-            if (session != null)
-            {
-                PhoneApplicationService.Current.State["parameter"] = this.session;
-                this.NavigationService.Navigate(new Uri("/RestorePage.xaml", UriKind.Relative));
-            }
-            else
-            {
-                MessageBox.Show(AppResources.NotSignedInError, AppResources.ErrorCaption, MessageBoxButton.OK);
-            }
-        }
-
+ 
         private void TextBlock_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
         {
             WebBrowserTask wbtask = new WebBrowserTask();
@@ -1086,7 +1193,7 @@ namespace PhoneDirect3DXamlAppInterop
                 await FileHandler.DeleteROMAsync(entry);
 
                 //update voice command list
-                //await MainPage.UpdateGameListForVoiceCommand();
+                await MainPage.UpdateGameListForVoiceCommand();
 
                 this.RefreshRecentROMList();
 

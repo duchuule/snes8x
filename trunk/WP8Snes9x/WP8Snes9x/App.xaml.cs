@@ -106,11 +106,9 @@ namespace PhoneDirect3DXamlAppInterop
 
             SolidColorBrush brush2 = App.Current.Resources["ListboxBackgroundBrush"] as SolidColorBrush;
             brush2.Color = systemTrayColor;
-#if GBC
-            brush2.Opacity = 0.05;
-#else
+
             brush2.Opacity = 0.1;
-#endif
+
 
 
             var themeStyles = new ResourceDictionary { Source = new Uri(source, UriKind.Relative) };

@@ -67,6 +67,8 @@ namespace PhoneDirect3DXamlAppInterop
             ApplicationBar = new ApplicationBar();
             ApplicationBar.IsVisible = false;
             ApplicationBar.IsMenuEnabled = true;
+            ApplicationBar.BackgroundColor = (Color)App.Current.Resources["CustomChromeColor"];
+            ApplicationBar.ForegroundColor = (Color)App.Current.Resources["CustomForegroundColor"];
 
             var item0 = new ApplicationBarMenuItem(AppResources.SelectState0);
             item0.Click += (o, e) => { this.m_d3dBackground.SelectSaveState(0); };
@@ -154,11 +156,7 @@ namespace PhoneDirect3DXamlAppInterop
             //resumeButton.Click += resumeButton_Click;
             //ApplicationBar.Buttons.Add(resumeButton);
 
-            var backButton = new ApplicationBarIconButton(new Uri("/Assets/Icons/back.png", UriKind.Relative))
-            {
-                Text = AppResources.EmulatorBackIcon
-            };
-            backButton.Click += backbutton_click;
+
 
             var resetButton = new ApplicationBarIconButton(new Uri("/Assets/Icons/refresh.png", UriKind.Relative))
             {
@@ -218,7 +216,11 @@ namespace PhoneDirect3DXamlAppInterop
 
         void resetButton_Click(object sender, EventArgs e)
         {
-            this.m_d3dBackground.Reset();
+            var result = MessageBox.Show(AppResources.ConfirmResetText, AppResources.InfoCaption, MessageBoxButton.OKCancel);
+            if (result == MessageBoxResult.OK)
+            {
+                this.m_d3dBackground.Reset();
+            }
         }
 
         void resumeButton_Click(object sender, EventArgs e)
@@ -240,29 +242,11 @@ namespace PhoneDirect3DXamlAppInterop
 
         void ShowLoadDialog()
         {
-            confirmPopupOpened = true;
-            MessagePrompt prompt = new MessagePrompt();
-            ConfirmationPage page = new ConfirmationPage(AppResources.ConfirmLoadText);
-            page.Closed += (o, e) =>
+            var result = MessageBox.Show(AppResources.ConfirmLoadText, AppResources.InfoCaption, MessageBoxButton.OKCancel);
+            if (result == MessageBoxResult.OK)
             {
-                confirmPopupOpened = false;
-                prompt.Hide();
-            };
-            prompt.Completed += (o, e) =>
-            {
-                confirmPopupOpened = false;
-            };
-            page.Confirmed += (o, e) =>
-            {
-                confirmPopupOpened = false;
-                prompt.Hide();
-                EmulatorSettings.Current.HideLoadConfirmationDialogs = page.DoNotShowAgain;
                 this.m_d3dBackground.LoadState();
-            };
-            prompt.Body = page;
-            prompt.ActionPopUpButtons.Clear();
-            prompt.Overlay = new SolidColorBrush(Color.FromArgb(155, 41, 41, 41));
-            prompt.Show();
+            }
         }
 
         void savestateButton_Click(object sender, EventArgs e)
@@ -279,29 +263,11 @@ namespace PhoneDirect3DXamlAppInterop
 
         void ShowSaveDialog()
         {
-            confirmPopupOpened = true;
-            MessagePrompt prompt = new MessagePrompt();
-            ConfirmationPage page = new ConfirmationPage(AppResources.ConfirmSaveText);
-            page.Closed += (o, e) =>
+            var result = MessageBox.Show(AppResources.ConfirmSaveText, AppResources.InfoCaption, MessageBoxButton.OKCancel);
+            if (result == MessageBoxResult.OK)
             {
-                confirmPopupOpened = false;
-                prompt.Hide();
-            };
-            prompt.Completed += (o, e) =>
-            {
-                confirmPopupOpened = false;
-            };
-            page.Confirmed += (o, e) =>
-            {
-                confirmPopupOpened = false;
-                prompt.Hide();
-                EmulatorSettings.Current.HideConfirmationDialogs = page.DoNotShowAgain;
                 this.m_d3dBackground.SaveState();
-            };
-            prompt.Body = page;
-            prompt.ActionPopUpButtons.Clear();
-            prompt.Overlay = new SolidColorBrush(Color.FromArgb(155, 41, 41, 41));
-            prompt.Show();
+            }
         }
 
         void backbutton_click(object sender, EventArgs e)
@@ -479,8 +445,8 @@ namespace PhoneDirect3DXamlAppInterop
         protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
         {
 
-            //disable lock screen
-            PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
+            //enable lock screen
+            PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Enabled;
 
             if (initialized && this.m_d3dBackground.IsROMLoaded())
             {
