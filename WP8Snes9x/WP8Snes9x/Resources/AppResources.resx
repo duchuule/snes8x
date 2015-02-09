@@ -764,7 +764,7 @@ Note: In some cases, ROMs downloaded from OneDrive only show a blank screen when
 Device model: {0}</value>
   </data>
   <data name="EmailSubjectText" xml:space="preserve">
-    <value>VBA8/VGBC bug report or feature suggestion</value>
+    <value>Snes8x bug report or feature suggestion</value>
   </data>
   <data name="GuidesTitle" xml:space="preserve">
     <value>guides</value>

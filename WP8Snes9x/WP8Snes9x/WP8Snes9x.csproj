@@ -169,6 +169,10 @@
     <Compile Include="HelpPage.xaml.cs">
       <DependentUpon>HelpPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Imaging\ControlToPng.cs" />
+    <Compile Include="Imaging\EditableImage.cs" />
+    <Compile Include="Imaging\PngEncoder.cs" />
+    <Compile Include="Imaging\WriteableBitmapEx.cs" />
     <Compile Include="ImportPage.xaml.cs">
       <DependentUpon>ImportPage.xaml</DependentUpon>
     </Compile>
