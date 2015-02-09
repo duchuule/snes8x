@@ -20,6 +20,7 @@ namespace PhoneDirect3DXamlAppInterop.Database
         private String displayName;
         private String fileName;
         private DateTime lastPlayed;
+        private int? autoSaveIndex = 0;
         private readonly EntitySet<SavestateEntry> savestateRefs = new EntitySet<SavestateEntry>();
         private string snapshotUri;
 
@@ -90,12 +91,29 @@ namespace PhoneDirect3DXamlAppInterop.Database
             }
             set
             {
-                if (value != this.snapshotUri)
+                //if (value != this.snapshotUri) DL: comment this to force image change whenever image is updated
                 {
                     this.NotifyPropertyChanging("SnapshotURI");
                     this.snapshotUri = value;
                     this.NotifyPropertyChanged("SnapshotURI");
                 }
+            }
+        }
+
+        [Column]
+        public int? AutoSaveIndex
+        {
+            get
+            {
+                return this.autoSaveIndex;
+            }
+            set
+            {
+
+                this.NotifyPropertyChanging("AutoSaveIndex");
+                this.autoSaveIndex = value;
+                this.NotifyPropertyChanged("AutoSaveIndex");
+
             }
         }
 

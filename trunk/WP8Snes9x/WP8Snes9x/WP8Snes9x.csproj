@@ -148,6 +148,7 @@
     </Compile>
     <Compile Include="Database\ROMDBEntry.cs" />
     <Compile Include="Database\SavestateEntry.cs" />
+    <Compile Include="Database\TrulyObservableCollection.cs" />
     <Compile Include="DonatePage.xaml.cs">
       <DependentUpon>DonatePage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -213,6 +214,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Content Include="Assets\Icons\play.png" />
     <Content Include="VoiceCommandDefinitions.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

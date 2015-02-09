@@ -40,8 +40,10 @@ namespace PhoneDirect3DXamlAppInterop
     public partial class App : Application
     {
 
-        public static int APP_VERSION = 1;
+        public static int APP_VERSION = 2;
         public static int VOICE_COMMAND_VERSION = 1;
+
+
 
         public static LiveConnectSession session;
 
@@ -171,6 +173,12 @@ namespace PhoneDirect3DXamlAppInterop
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
+
+            //create data base
+            ROMDatabase.Current.Initialize();
+
+            //load collection
+            ROMDatabase.Current.LoadCollectionsFromDatabase();
 
             
 
