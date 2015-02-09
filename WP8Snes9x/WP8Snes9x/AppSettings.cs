@@ -39,6 +39,7 @@ namespace PhoneDirect3DXamlAppInterop
         const string VoiceCommandVersionKey = "VoiceCommandVersionKey";
         const string FirstTurboPromptKey = "FirstTurboPromptKey";
 
+
         /// <summary>
         /// Constructor that gets the application settings.
         /// </summary>
@@ -429,6 +430,7 @@ namespace PhoneDirect3DXamlAppInterop
                 Save();
             }
         }
+
 
         public int VoiceCommandVersion
         {

@@ -13,17 +13,17 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     d:DesignHeight="80" d:DesignWidth="480">
 
-    <Grid x:Name="LayoutRoot" >
+    <Grid x:Name="LayoutRoot" FlowDirection="LeftToRight" >
 
 
         <adduplex:AdControl x:Name="AdDuplexAdControl" 
-                            AppId="76963" 
-                            Height="80" 
-                            VerticalAlignment="Bottom" 
-                            VerticalContentAlignment="Bottom"
-                            Width="480" 
-                            IsTest="False"
-                            Visibility="Collapsed"
+			AppId="76963" 
+			Height="80" 
+			VerticalAlignment="Bottom" 
+			VerticalContentAlignment="Bottom"
+			Width="480" 
+			IsTest="False"
+			Visibility="Collapsed"
                     />
 
 
@@ -34,33 +34,33 @@
 
 
         <GoogleAds:AdView AdUnitID="ca-app-pub-1886943527754591/5489275628"
-                          x:Name="AdMobControl"
-                          Format="SmartBanner"
+			x:Name="AdMobControl"
+			Format="SmartBanner"
                        
-                          VerticalAlignment="Bottom"
-                          Visibility="Collapsed"/>
+			VerticalAlignment="Bottom"
+			Visibility="Collapsed"/>
 
         <UI:AdControl ApplicationId="b3b2e30a-8d50-4aac-8017-27c365684be7" 
-                      AdUnitId="10327842" 
-                      HorizontalAlignment="Left" 
-                      Height="80" 
-                      VerticalAlignment="Bottom" 
-                      Width="480" 
-                      Opacity="1.0" Margin="0,0,0,0" 
-                      VerticalContentAlignment="Bottom"
-                      x:Name="MSAdControl" 
-                      IsAutoRefreshEnabled="False"
-                      Visibility="Collapsed"
+			AdUnitId="10327842" 
+			HorizontalAlignment="Left" 
+			Height="80" 
+			VerticalAlignment="Bottom" 
+			Width="480" 
+			Opacity="1.0" Margin="0,0,0,0" 
+			VerticalContentAlignment="Bottom"
+			x:Name="MSAdControl" 
+                      IsAutoRefreshEnabled="True"
+                      Visibility="Visible"
                       />
 
 
 
-        <mobfox:AdControl 
-                x:Name="mobFoxadControl"                
-                PublisherID="ef7c4443a6e496524057a0bffeb409b4"
-                TestMode="False"
-                VerticalAlignment="Bottom" 
-            />
+        <!--<mobfox:AdControl 
+			x:Name="mobFoxadControl"                
+			PublisherID="ef7c4443a6e496524057a0bffeb409b4"
+			TestMode="False"
+			VerticalAlignment="Bottom" 
+            />-->
 
 
 
