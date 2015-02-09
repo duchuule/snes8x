@@ -49,10 +49,19 @@ namespace PhoneDirect3DXamlAppInterop
     public partial class MainPage : PhoneApplicationPage
     {
         private ApplicationBarIconButton resumeButton;
-       private ROMDatabase db;
-        private Task createFolderTask, copyDemoTask, initTask;
 
         public static bool shouldUpdateBackgroud = false;
+
+        private bool checkAutoUpload = false; //to notify when we should check for auto upload
+
+        public static bool shouldRefreshRecentROMList = false;
+        public static bool shouldRefreshAllROMList = false;
+        private bool shouldInitialize = true;
+
+        private bool firstLaunch = true;
+
+
+
 
         public MainPage()
         {
@@ -63,47 +72,94 @@ namespace PhoneDirect3DXamlAppInterop
             Microsoft.Phone.Controls.TiltEffect.TiltableItems.Add(typeof(TiltableCanvas));
 
 
+
+
+
+            //set data context
+            this.DataContext = ROMDatabase.Current;
+
+
+            //create data context to display rom list
+            SortRomList();
+
+
+            //increase app launch counter
+            App.metroSettings.NAppLaunch += 1;
+
+
             this.InitAppBar();
 
-            this.initTask = this.Initialize();
+            //create recent rom list
+            this.RefreshRecentROMList();
+
+
 
             this.Loaded += MainPage_Loaded;
 
             
         }
 
+        private void SortRomList()
+        {
+            //sort list of all roms by names
+            CollectionViewSource SortedAllROMEntries = new CollectionViewSource();
+
+            SortedAllROMEntries.SortDescriptions.Add(new System.ComponentModel.SortDescription("DisplayName",
+                    System.ComponentModel.ListSortDirection.Ascending));
+
+
+            SortedAllROMEntries.Source = ROMDatabase.Current.AllROMDBEntries;
+            this.romList.DataContext = SortedAllROMEntries;
+            this.romList.SelectedItem = null;
+
+
+
+        }
+
         async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            await this.initTask;
+            var indicator = SystemTray.GetProgressIndicator(this);
+            //indicator.IsIndeterminate = true;
 
-            try
+            try //launch rom as specified by uri
             {
-                String romFileName = NavigationContext.QueryString[FileHandler.ROM_URI_STRING];
-                NavigationContext.QueryString.Remove(FileHandler.ROM_URI_STRING);
 
-                ROMDBEntry entry = this.db.GetROM(romFileName);
-                await this.StartROM(entry);
+                if (NavigationContext.QueryString.ContainsKey(FileHandler.ROM_URI_STRING)) //check if we are launching from rom tile
+                {
+                    String romFileName = NavigationContext.QueryString[FileHandler.ROM_URI_STRING];
+                    NavigationContext.QueryString.Remove(FileHandler.ROM_URI_STRING);
+
+                    ROMDBEntry entry = ROMDatabase.Current.GetROM(romFileName);
+                    if (entry != null)
+                        await this.StartROM(entry);
+                }
+                else if (NavigationContext.QueryString.ContainsKey("voiceCommandName")) //check if we are launching from voice command
+                {
+                    String voiceCommandName = NavigationContext.QueryString["voiceCommandName"];
+                    NavigationContext.QueryString.Remove("voiceCommandName");
+
+                    if (voiceCommandName == "PlayGame")
+                    {
+                        //get the game name
+                        string spokenRomName = NavigationContext.QueryString["RomName"];
+                        NavigationContext.QueryString.Remove("RomName");
+
+
+
+
+                        //try to find a match
+                        ROMDBEntry entry = ROMDatabase.Current.GetROM(spokenRomName);
+                        if (entry != null)
+                            await this.StartROM(entry);
+
+                    }
+
+                }
             }
-            catch (KeyNotFoundException)
-            { }
+
             catch (Exception)
             {
                 MessageBox.Show(AppResources.TileOpenError, AppResources.ErrorCaption, MessageBoxButton.OK);
-            }
-
-            try
-            {
-                String importRomID = NavigationContext.QueryString["fileToken"];
-                NavigationContext.QueryString.Remove("fileToken");
-
-                ROMDBEntry entry = await FileHandler.ImportRomBySharedID(importRomID, this);
-
-            }
-            catch (KeyNotFoundException)
-            { }
-            catch (Exception)
-            {
-                MessageBox.Show(AppResources.FileAssociationError, AppResources.ErrorCaption, MessageBoxButton.OK);
             }
 
             //register voice command
@@ -130,22 +186,16 @@ namespace PhoneDirect3DXamlAppInterop
 
         private async Task Initialize()
         {
-            createFolderTask = FileHandler.CreateInitialFolderStructure();
-            copyDemoTask = this.CopyDemoROM();
-
-            await createFolderTask;
-            await copyDemoTask;
-
-            this.db = ROMDatabase.Current;
-            if (db.Initialize())
+            try
             {
-                await FileHandler.FillDatabaseAsync();
+                await FileHandler.CreateInitialFolderStructure();
+                await this.CopyDemoROM();
+
+
             }
-            this.db.Commit += () =>
+            catch (TaskCanceledException)
             {
-                this.RefreshROMList();
-            };
-            this.RefreshROMList();
+            }  
         }
 
 
@@ -305,9 +355,30 @@ namespace PhoneDirect3DXamlAppInterop
 
             //await this.createFolderTask;
             //await this.copyDemoTask;
-            await this.initTask;
+            if (shouldInitialize)  //create folder structure and copy demon rom
+            {
+                await this.Initialize();
+                shouldInitialize = false;
+            }
 
-            this.LoadInitialSettings();
+            MainPage.LoadInitialSettings();
+
+            ////ask to enable turbo mode
+            //if (!App.metroSettings.FirstTurboPrompt)
+            //{
+            //    RadMessageBox.Show(AppResources.EnableTurboPromptTitle, MessageBoxButtons.YesNo, AppResources.EnableTurboPromptText,
+            //        closedHandler: (args) =>
+            //        {
+            //            DialogResult result = args.Result;
+            //            if (result == DialogResult.OK)
+            //            {
+            //                EmulatorSettings.Current.UseTurbo = true;
+            //            }
+
+
+            //        });
+            //    App.metroSettings.FirstTurboPrompt = true;
+            //}
 
             if (shouldUpdateBackgroud)
             {
@@ -316,10 +387,64 @@ namespace PhoneDirect3DXamlAppInterop
 
             }
 
-            this.RefreshROMList();
+            if (shouldRefreshRecentROMList)
+            {
+                this.RefreshRecentROMList();
+                shouldRefreshRecentROMList = false;
 
-            this.resumeButton.IsEnabled = EmulatorPage.ROMLoaded;
-            
+            }
+
+            if (shouldRefreshAllROMList)
+            {
+                this.SortRomList();
+                shouldRefreshAllROMList = false;
+            }
+
+
+            //enable/disable resume button
+            if (this.lastRomImage.DataContext != null)
+                this.resumeButton.IsEnabled = true;
+            else
+                this.resumeButton.IsEnabled = false;
+
+            //set indicator to signal everything is done
+            //indicator.IsIndeterminate = false;
+
+            if (e.NavigationMode == NavigationMode.Refresh)
+            {
+                QueryString query = new QueryString(e.Uri.ToString());
+
+
+                if (query.ContainsKey(FileHandler.ROM_URI_STRING)) //check if we are launching from rom tile
+                {
+                    String romFileName = query[FileHandler.ROM_URI_STRING];
+
+                    ROMDBEntry entry = ROMDatabase.Current.GetROM(romFileName);
+                    if (entry != null)
+                        await this.StartROM(entry);
+                }
+                else if (query.ContainsKey("voiceCommandName")) //check if we are launching from voice command
+                {
+                    String voiceCommandName = query["voiceCommandName"];
+
+                    if (voiceCommandName == "PlayGame")
+                    {
+                        //get the game name
+                        string spokenRomName = query["RomName"];
+
+                        //try to find a match
+                        ROMDBEntry entry = ROMDatabase.Current.GetROM(spokenRomName);
+                        if (entry != null)
+                            await this.StartROM(entry);
+
+                    }
+
+                }
+
+            }
+
+
+
             base.OnNavigatedTo(e);
         }
 
@@ -363,10 +488,14 @@ namespace PhoneDirect3DXamlAppInterop
 
                 isoSettings["DEMOCOPIED"] = true;
                 isoSettings.Save();
+
+                await FileHandler.FillDatabaseAsync();
+
+                this.RefreshRecentROMList();
             }
         }
 
-        private void LoadInitialSettings()
+        public static void LoadInitialSettings()
         {
             EmulatorSettings settings = EmulatorSettings.Current;
             if (!settings.Initialized)
@@ -770,19 +899,13 @@ namespace PhoneDirect3DXamlAppInterop
                 settings.MogaLeftJoystick = (int)isoSettings[SettingsPage.MogaLeftJoystickKey];
                 settings.MogaRightJoystick = (int)isoSettings[SettingsPage.MogaRightJoystickKey];
 
-                settings.SettingsChanged = this.SettingsChangedDelegate;
+                settings.SettingsChanged = MainPage.SettingsChangedDelegate;
 
-                //create ad control
-                if (PhoneDirect3DXamlAppComponent.EmulatorSettings.Current.ShouldShowAds)
-                {
-                    AdControl adControl = new AdControl();
-                    LayoutRoot.Children.Add(adControl);
-                    adControl.SetValue(Grid.RowProperty, 1);
-                }
+
             }
         }
 
-        private void SettingsChangedDelegate()
+        private static void SettingsChangedDelegate()
         {
             EmulatorSettings settings = EmulatorSettings.Current;
             IsolatedStorageSettings isoSettings = IsolatedStorageSettings.ApplicationSettings;
@@ -819,28 +942,7 @@ namespace PhoneDirect3DXamlAppInterop
             isoSettings.Save();
         }
 
-        private void RefreshROMList()
-        {
-            //StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            //StorageFolder romFolder = await localFolder.CreateFolderAsync(ROM_DIRECTORY, CreationCollisionOption.OpenIfExists);
-            //IReadOnlyList<StorageFile> roms = await romFolder.GetFilesAsync();
-            //IList<ROMEntry> romNames = new List<ROMEntry>(roms.Count);
-            //foreach (var file in roms)
-            //{
-            //    romNames.Add(new ROMEntry() { Name = file.Name } );
-            //}
-
-            DataContext = this.db.GetLastPlayed();
-
-            if (DataContext != null && App.metroSettings.ShowLastPlayedGame == true)
-                lastRomGrid.Visibility = Visibility.Visible;
-            else
-                lastRomGrid.Visibility = Visibility.Collapsed;
-
-            this.romList.ItemsSource = this.db.GetROMList();
-
-            this.recentList.ItemsSource = this.db.GetRecentlyPlayed();
-        }
+ 
 
         private void romList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -865,12 +967,17 @@ namespace PhoneDirect3DXamlAppInterop
 
         private async Task StartROM(ROMDBEntry entry)
         {
+            if (entry.SuspendAutoLoadLastState)
+                EmulatorPage.ROMLoaded = false;  //force reloading of ROM after reimport save file
+
             EmulatorPage.currentROMEntry = entry;
+
 
             LoadROMParameter param = await FileHandler.GetROMFileToPlayAsync(entry.FileName);
 
-            entry.LastPlayed = DateTime.Now;
-            this.db.CommitChanges();
+
+            this.checkAutoUpload = true;
+
 
             PhoneApplicationService.Current.State["parameter"] = param;
             this.NavigationService.Navigate(new Uri("/EmulatorPage.xaml", UriKind.Relative));
@@ -966,68 +1073,13 @@ namespace PhoneDirect3DXamlAppInterop
             this.NavigationService.Navigate(new Uri("/ImportPage.xaml", UriKind.Relative));
         }
 
-        private async void DeleteMenuItem_Click_1(object sender, RoutedEventArgs e)
-        {
-            ListBox list = this.romList;
-            await DeleteListEntry(sender, list);
-        }
 
-        private async Task DeleteListEntry(object sender, ListBox list)
-        {
-            ListBoxItem contextMenuListItem = list.ItemContainerGenerator.ContainerFromItem((sender as MenuItem).DataContext) as ListBoxItem;
-            ROMDBEntry re = contextMenuListItem.DataContext as ROMDBEntry;
-            try
-            {
-                await FileHandler.DeleteROMAsync(re);
-                this.RefreshROMList();
-            }
-            catch (System.IO.FileNotFoundException ex)
-            { }
-        }
 
-        private void RenameMenuItem_Click_1(object sender, RoutedEventArgs e)
-        {
-            ListBox list = this.romList;
-            RenameListEntry(sender, list);
-        }
+   
 
-        private void RenameListEntry(object sender, ListBox list)
-        {
-            ListBoxItem contextMenuListItem = list.ItemContainerGenerator.ContainerFromItem((sender as MenuItem).DataContext) as ListBoxItem;
-            ROMDBEntry re = contextMenuListItem.DataContext as ROMDBEntry;
-            InputPrompt prompt = new InputPrompt();
-            prompt.Completed += (o, e2) =>
-            {
-                if (e2.PopUpResult == PopUpResult.Ok)
-                {
-                    if (String.IsNullOrWhiteSpace(e2.Result))
-                    {
-                        MessageBox.Show(AppResources.RenameEmptyString, AppResources.ErrorCaption, MessageBoxButton.OK);
-                    }
-                    else
-                    {
-                        if (e2.Result.ToLower().Equals(re.DisplayName.ToLower()))
-                        {
-                            return;
-                        }
-                        if (this.db.IsDisplayNameUnique(e2.Result))
-                        {
-                            re.DisplayName = e2.Result;
-                            this.db.CommitChanges();
-                            FileHandler.UpdateROMTile(re.FileName);
-                        }
-                        else
-                        {
-                            MessageBox.Show(AppResources.RenameNameAlreadyExisting, AppResources.ErrorCaption, MessageBoxButton.OK);
-                        }
-                    }
-                }
-            };
-            prompt.Title = AppResources.RenamePromptTitle;
-            prompt.Message = AppResources.RenamePromptMessage;
-            prompt.Value = re.DisplayName;
-            prompt.Show();
-        }
+
+
+  
 
         private void gotoBackupButton_Click_1(object sender, RoutedEventArgs e)
         {
@@ -1269,27 +1321,18 @@ namespace PhoneDirect3DXamlAppInterop
         {
 
 
-            //StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            //StorageFolder romFolder = await localFolder.CreateFolderAsync(ROM_DIRECTORY, CreationCollisionOption.OpenIfExists);
-            //IReadOnlyList<StorageFile> roms = await romFolder.GetFilesAsync();
-            //IList<ROMEntry> romNames = new List<ROMEntry>(roms.Count);
-            //foreach (var file in roms)
-            //{
-            //    romNames.Add(new ROMEntry() { Name = file.Name } );
-            //}
-            this.lastRomImage.DataContext = ROMDatabase.Current.GetLastPlayed();
+            this.lastRomGrid.DataContext = ROMDatabase.Current.GetLastPlayed();
 
-            if (this.lastRomImage.DataContext != null)
+            if (this.lastRomGrid.DataContext != null)
                 this.resumeButton.IsEnabled = true;
             else
                 this.resumeButton.IsEnabled = false;
 
-            if (this.lastRomImage.DataContext != null && App.metroSettings.ShowLastPlayedGame == true)
+            if (this.lastRomGrid.DataContext != null && App.metroSettings.ShowLastPlayedGame == true)
                 lastRomGrid.Visibility = Visibility.Visible;
             else
                 lastRomGrid.Visibility = Visibility.Collapsed;
 
-            //this.romList.ItemsSource = ROMDatabase.Current.GetROMList();
 
             this.recentList.ItemsSource = ROMDatabase.Current.GetRecentlyPlayed();
 

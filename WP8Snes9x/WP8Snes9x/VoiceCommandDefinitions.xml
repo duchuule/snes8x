@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<VoiceCommands xmlns="http://schemas.microsoft.com/voicecommands/1.0">
+  <CommandSet xml:lang="en-US" Name="en-US">
+    <Example> play Zelda </Example>
+    
+    <Command Name="PlayGame">
+      <Example> play Zelda </Example>
+      <ListenFor> [and] play {RomName} </ListenFor>
+      <ListenFor> [and] start {RomName} </ListenFor>
+      <ListenFor> [and] open {RomName} </ListenFor>
+      <Feedback> Opening game... </Feedback>
+      <Navigate />
+    </Command>
+
+    <Command Name="PlayUnknownGame">
+      <Example> play Pokemon Emerald </Example>
+      <ListenFor> [and] play {*} </ListenFor>
+      <ListenFor> [and] start {*} </ListenFor>
+      <ListenFor> [and] open {*} </ListenFor>
+      <Feedback> Unknown game; launching the app... </Feedback>
+      <Navigate Target="MainPage.xaml" />
+    </Command>
+
+    <Command Name="PlayLastGame">
+      <Example> resume </Example>
+      <ListenFor> resume </ListenFor>
+      <ListenFor> open </ListenFor>
+      <Feedback> Resuming... </Feedback>
+      <Navigate />
+    </Command>
+
+    <!--<Command Name="PlayLastGame">
+      <Example> play the last game </Example>
+      <ListenFor> [and] play [the] last game </ListenFor>
+      <ListenFor> [and] start [the] last game </ListenFor>
+      <ListenFor> [and] open [the] last game </ListenFor>
+      <ListenFor> [and] play [the] last rom </ListenFor>
+      <ListenFor> [and] start [the] last rom </ListenFor>
+      <ListenFor> [and] open [the] last rom </ListenFor>
+      <Feedback> Opening the last game... </Feedback>
+      <Navigate />
+    </Command>-->
+
+    <PhraseList Label="RomName">
+      <Item>bunny advance (demo)</Item>
+      <Item>Pokémon - Emerald</Item>
+    </PhraseList>
+
+  </CommandSet>
+</VoiceCommands>
+
+<!-- Example -->
+<!--
+
+    The preceding example demonstrates a hypothetical game called 'Contoso ROD3O!' which defines two
+    Commands that a user can say to either start a new game or replay one of three levels in the game.  
+    To initiate the PlayGame command, a user can say "Contoso Rodeo play  a new game" or "Contoso Rodeo
+    play new game". Either phrase will start a new game. To initiate the second Command, a user can say
+    "Contoso Rodeo replay level one", "Contoso Rodeo replay level two", or "Contoso Rodeo replay level 
+    three".
+    The second Command demonstrates how to use a PhraseList with a Command. PhraseLists can be updated 
+    dynamically by the application (e.g., if a user unlocks a new level or game or feature, you might 
+    want to allow the user to give commands for newfeatures after voice commands are already registered.)
+    The third Command demonstrates how the {*} sequence can parallel another command to recognize speech
+    that is not defined in the CommandSet.
+
+  Note:
+
+      [and] Indicates that "and" is optional. Making connecting words like this optional
+            can help both "Contoso Rodeo, play new game" and "open Contoso Rodeo and play
+            a new game" feel natural to speak.
+                 
+      {number} Defined separately from the Command, mapping to "one" or "two" or "three".
+
+-->

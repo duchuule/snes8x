@@ -293,14 +293,16 @@ namespace PhoneDirect3DXamlAppInterop
 
         public static async Task DeleteROMAsync(ROMDBEntry rom)
         {
-            ROMDatabase db = ROMDatabase.Current;
             String fileName = rom.FileName;
             StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(ROM_DIRECTORY);
             StorageFile file = await folder.GetFileAsync(fileName);
             DeleteROMTile(file.Name);
             await file.DeleteAsync(StorageDeleteOption.PermanentDelete);
-            db.RemoveROM(file.Name);
-            db.CommitChanges();
+
+
+
+            ROMDatabase.Current.RemoveROM(file.Name);
+            ROMDatabase.Current.CommitChanges();
         }
 
         public static async Task<LoadROMParameter> GetROMFileToPlayAsync(string fileName)

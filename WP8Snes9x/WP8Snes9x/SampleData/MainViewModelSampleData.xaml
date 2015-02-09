@@ -1,0 +1,31 @@
+﻿<vm:MainViewModel
+    xmlns:vm="clr-namespace:PhoneDirect3DXamlAppInterop.ViewModels"
+    xmlns:db="clr-namespace:PhoneDirect3DXamlAppInterop.Database"
+    xmlns:app="clr-namespace:PhoneDirect3DXamlAppInterop">
+
+    <vm:MainViewModel.DesignROMDBEntry>
+        <db:ROMDBEntry DisplayName="ROM display name name name name" LastPlayed="10/21/2013 4:40 PM" SnapshotURI="Assets/no_snapshot.png"/>
+        <db:ROMDBEntry DisplayName="ROM display name" LastPlayed="10/21/2013 4:40 PM" SnapshotURI="Assets/no_snapshot.png"/>
+        <db:ROMDBEntry DisplayName="ROM display name" LastPlayed="10/21/2013 4:40 PM" SnapshotURI="Assets/no_snapshot.png"/>
+    
+    </vm:MainViewModel.DesignROMDBEntry>
+
+    <!--<vm:MainViewModel.DesignCheatInfoList>
+        <app:CheatInfo Title="Title 1" HasGS="True" HasAR="False" />
+        <app:CheatInfo Title="Title 2" HasGS="False" HasAR="True" />
+
+
+    </vm:MainViewModel.DesignCheatInfoList>
+
+    <vm:MainViewModel.DesignPartialCheatMatchList>
+        <app:CheatInfo Title="Title 1" HasGS="True" HasAR="False" />
+        <app:CheatInfo Title="Title 2" HasGS="False" HasAR="True" />
+         </vm:MainViewModel.DesignPartialCheatMatchList>
+
+    <vm:MainViewModel.DesignCheatTextList>
+        <app:CheatText Title="List 1" Text="text text text" />
+        <app:CheatText Title="List 2" Text="text text text" />
+    </vm:MainViewModel.DesignCheatTextList>-->
+
+</vm:MainViewModel>
+
