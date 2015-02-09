@@ -11,6 +11,7 @@ using Microsoft.Phone.Shell;
 using Microsoft.Live;
 using Microsoft.Live.Controls;
 using PhoneDirect3DXamlAppInterop.Resources;
+using Windows.Storage;
 using System.Threading.Tasks;
 using PhoneDirect3DXamlAppComponent;
 using PhoneDirect3DXamlAppInterop.Database;
@@ -35,8 +36,10 @@ using Windows.Foundation;
 using DucLe.Extensions;
 using Windows.Phone.Speech.VoiceCommands;
 using Windows.Storage.Streams;
-using Windows.Storage;
 using System.Text;
+
+
+
 //"C:\Program Files (x86)\Microsoft SDKs\Windows Phone\v8.0\Tools\IsolatedStorageExplorerTool\ISETool.exe" ts xd ed3cc816-1ab0-418a-9bb8-11505804f6b4 "D:\Duc\Documents\Visual Studio 2012\Projects\WP8Snes8x\trunk"
 
 
@@ -44,11 +47,10 @@ namespace PhoneDirect3DXamlAppInterop
 {
 
 
-
-
     public partial class MainPage : PhoneApplicationPage
     {
         private ApplicationBarIconButton resumeButton;
+
 
         public static bool shouldUpdateBackgroud = false;
 
@@ -116,8 +118,117 @@ namespace PhoneDirect3DXamlAppInterop
 
         }
 
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            //set app bar color in case the user return from setting page
+            if (ApplicationBar != null)
+            {
+                ApplicationBar.BackgroundColor = (Color)App.Current.Resources["CustomChromeColor"];
+                ApplicationBar.ForegroundColor = (Color)App.Current.Resources["CustomForegroundColor"];
+            }
+
+            //await this.createFolderTask;
+            //await this.copyDemoTask;
+            if (shouldInitialize)  //create folder structure and copy demon rom
+            {
+                await this.Initialize();
+                shouldInitialize = false;
+            }
+
+            MainPage.LoadInitialSettings();
+
+            //ask to enable turbo mode
+            if (!App.metroSettings.FirstTurboPrompt)
+            {
+                RadMessageBox.Show(AppResources.EnableTurboPromptTitle, MessageBoxButtons.YesNo, AppResources.EnableTurboPromptText,
+                    closedHandler: (args) =>
+                    {
+                        DialogResult result = args.Result;
+                        if (result == DialogResult.OK)
+                        {
+                            EmulatorSettings.Current.UseTurbo = true;
+                            //save to disk
+                            //do this here instead of SettingsChangedDelegate() so that we don't always save to disk when camera is half press
+                            IsolatedStorageSettings.ApplicationSettings[SettingsPage.UseTurboKey] = true;
+                        }
+
+
+                    });
+                App.metroSettings.FirstTurboPrompt = true;
+            }
+
+            if (shouldUpdateBackgroud)
+            {
+                UpdateBackgroundImage();
+                shouldUpdateBackgroud = false;
+
+            }
+
+            if (shouldRefreshRecentROMList)
+            {
+                this.RefreshRecentROMList();
+                shouldRefreshRecentROMList = false;
+
+            }
+
+            if (shouldRefreshAllROMList)
+            {
+                this.SortRomList();
+                shouldRefreshAllROMList = false;
+            }
+
+
+            //enable/disable resume button
+            if (this.lastRomImage.DataContext != null)
+                this.resumeButton.IsEnabled = true;
+            else
+                this.resumeButton.IsEnabled = false;
+
+            //set indicator to signal everything is done
+            //indicator.IsIndeterminate = false;
+
+            if (e.NavigationMode == NavigationMode.Refresh)
+            {
+                QueryString query = new QueryString(e.Uri.ToString());
+
+
+                if (query.ContainsKey(FileHandler.ROM_URI_STRING)) //check if we are launching from rom tile
+                {
+                    String romFileName = query[FileHandler.ROM_URI_STRING];
+
+                    ROMDBEntry entry = ROMDatabase.Current.GetROM(romFileName);
+                    if (entry != null)
+                        await this.StartROM(entry);
+                }
+                else if (query.ContainsKey("voiceCommandName")) //check if we are launching from voice command
+                {
+                    String voiceCommandName = query["voiceCommandName"];
+
+                    if (voiceCommandName == "PlayGame")
+                    {
+                        //get the game name
+                        string spokenRomName = query["RomName"];
+
+                        //try to find a match
+                        ROMDBEntry entry = ROMDatabase.Current.GetROM(spokenRomName);
+                        if (entry != null)
+                            await this.StartROM(entry);
+
+                    }
+
+                }
+
+            }
+
+
+
+            base.OnNavigatedTo(e);
+        }
+
         async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+        //NOTE: this method does not run if the app is fast resumed.
+
             var indicator = SystemTray.GetProgressIndicator(this);
             //indicator.IsIndeterminate = true;
 
@@ -162,6 +273,49 @@ namespace PhoneDirect3DXamlAppInterop
                 MessageBox.Show(AppResources.TileOpenError, AppResources.ErrorCaption, MessageBoxButton.OK);
             }
 
+
+            //rom returned from cloudsix
+            try
+            {
+                if (NavigationContext.QueryString.ContainsKey("fileToken"))
+                {
+                    String fileID = NavigationContext.QueryString["fileToken"];
+                    NavigationContext.QueryString.Remove("fileToken");
+
+                    string incomingFileName = HttpUtility.UrlDecode(SharedStorageAccessManager.GetSharedFileName(fileID).Replace("[1]", ""));
+                    string incomingFileType = Path.GetExtension(incomingFileName).ToLower();
+
+                    if (incomingFileType.Contains("cloudsix")) //this is from cloudsix, need to get the true file name and file type
+                    {
+                        CloudSixFileSelected fileinfo = CloudSixPicker.GetAnswer(fileID);
+                        incomingFileName = fileinfo.Filename;
+                        incomingFileType = Path.GetExtension(incomingFileName).ToLower();
+                    }
+
+
+                    //import file
+                    if (incomingFileType == ".gb" || incomingFileType == ".gbc" || incomingFileType == ".gba")
+                    {
+                        await FileHandler.ImportRomBySharedID(fileID, incomingFileName, this);
+                        this.RefreshRecentROMList();
+                    }
+                    else if (incomingFileType == ".sgm" || incomingFileType == ".sav")
+                        await FileHandler.ImportSaveBySharedID(fileID, incomingFileName, this);
+
+                    else //need to open cloudsix import page to show the content of zip file
+                    {
+                        this.NavigationService.Navigate(new Uri("/CloudSixImportPage.xaml?fileToken=" + fileID, UriKind.Relative));
+                        App.metroSettings.NAppLaunch--; //so that we don't miss asking for review
+                    }
+
+
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(AppResources.FileAssociationError, AppResources.ErrorCaption, MessageBoxButton.OK);
+            }
+
             //register voice command
             if (App.metroSettings.VoiceCommandVersion < App.VOICE_COMMAND_VERSION || VoiceCommandService.InstalledCommandSets.Count == 0)
             {
@@ -182,22 +336,50 @@ namespace PhoneDirect3DXamlAppInterop
                     MessageBox.Show(error.Message + "\r\nVoice Commands failed to initialize.");
                 }
             }
-        }
 
-        private async Task Initialize()
-        {
+            //ask to rate
             try
             {
-                await FileHandler.CreateInitialFolderStructure();
-                await this.CopyDemoROM();
+                if (App.metroSettings.NAppLaunch % 50 == 14 && App.metroSettings.CanAskReview)
+                {
+                    //ask to rate
+                    RadMessageBox.Show(AppResources.ReviewPromptTitle, MessageBoxButtons.OKCancel, AppResources.ReviewPromptText,
+                        AppResources.NeverShowAgainText, closedHandler: (args) =>
+                        {
+                            DialogResult result = args.Result;
+                            if (result == DialogResult.OK)
+                            {
+                                App.metroSettings.CanAskReview = false;
+                                MarketplaceReviewTask marketplaceReviewTask = new MarketplaceReviewTask();
+                                marketplaceReviewTask.Show();
+                            }
 
+                            if (args.IsCheckBoxChecked) //user don't want to see remind box again
+                            {
+                                App.metroSettings.CanAskReview = false;
+                            }
+                        });
 
+                    App.metroSettings.NAppLaunch++;
+                }
             }
-            catch (TaskCanceledException)
+            catch (Exception)
             {
-            }  
-        }
+            }
 
+            //== auto back up
+            try
+            {
+                await AutoBackup();
+            }
+            catch (Exception ex)
+            {
+            }
+
+            SystemTray.GetProgressIndicator(this).Text = AppResources.ApplicationTitle;
+
+            return;
+        }
 
         public static async Task RegisterVoiceCommand(string prefix)
         {
@@ -291,6 +473,324 @@ namespace PhoneDirect3DXamlAppInterop
         }
 
 
+        private async Task AutoBackup()
+        {
+            if (this.checkAutoUpload && App.metroSettings.AutoBackup)
+            {
+                this.checkAutoUpload = false; //set it to false until the next time we launch a game
+
+                if (!DeviceNetworkInformation.IsNetworkAvailable)
+                    return;
+
+                if (App.metroSettings.BackupOnlyWifi)  //check for wifi
+                {
+                    if (!IsWifiConnected())
+                        return;
+                }
+
+
+
+
+
+                ROMDBEntry entry = EmulatorPage.currentROMEntry;
+
+                if (DateTime.Compare(entry.LastPlayed, App.LastAutoBackupTime) > 0)
+                {
+
+
+                    //check for one drive logged in
+                    if (App.session == null)
+                    {
+                        MessageBox.Show(AppResources.BackupFailOnedriveText);
+                        return;
+                    }
+
+                    var indicator = SystemTray.GetProgressIndicator(this);
+                    indicator.IsIndeterminate = true;
+                    indicator.Text = AppResources.AutoBackupStartText;
+
+
+
+                    //get id of upload folder
+                    LiveConnectClient client = new LiveConnectClient(App.session);
+                    if (App.exportFolderID == null || App.exportFolderID == "")
+                        App.exportFolderID = await ExportSelectionPage.CreateExportFolder(client); //get ID of upload folder
+
+
+                    if (App.metroSettings.AutoBackupMode == 0) //simple mode
+                    {
+                        //manual save state
+                        if (App.metroSettings.BackupManualSave)
+                        {
+                            SavestateEntry state = entry.Savestates.Where(s => s.Slot != 9 && s.Savetime != FileHandler.DEFAULT_DATETIME)
+                                .OrderByDescending(s => s.Savetime)
+                                .FirstOrDefault();
+
+                            if (state != null && DateTime.Compare(state.Savetime, App.LastAutoBackupTime) > 0)
+                            {
+
+                                indicator = SystemTray.GetProgressIndicator(this);
+                                indicator.Text = String.Format(AppResources.UploadProgressText, state.FileName);
+
+                                try
+                                {
+                                    using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
+                                    {
+                                        String path = FileHandler.ROM_DIRECTORY + "/" + FileHandler.SAVE_DIRECTORY + "/" + state.FileName;
+
+                                        using (IsolatedStorageFileStream fs = iso.OpenFile(path, System.IO.FileMode.Open))
+                                        {
+                                            await client.UploadAsync(App.exportFolderID, state.FileName, fs, OverwriteOption.Overwrite);
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                { }
+
+
+
+                            }
+
+                        }
+
+                        //auto save state
+                        if (App.metroSettings.BackupAutoSave)
+                        {
+                            SavestateEntry state = entry.Savestates.Where(s => s.Slot == 9).FirstOrDefault();
+                            if (EmulatorSettings.Current.AutoSaveLoad && state != null)
+                            {
+                                //at this point, probably the auto save file is being created, so need to wait for it to complete
+                                //if (!App.autoSaveCompleteEvent.WaitOne(3000))
+                                //    return;
+
+                                indicator = SystemTray.GetProgressIndicator(this);
+                                indicator.IsIndeterminate = true;
+                                indicator.Text = String.Format(AppResources.UploadProgressText, state.FileName);
+
+                                try
+                                {
+                                    using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
+                                    {
+                                        String path = FileHandler.ROM_DIRECTORY + "/" + FileHandler.SAVE_DIRECTORY + "/" + state.FileName;
+
+                                        using (IsolatedStorageFileStream fs = iso.OpenFile(path, System.IO.FileMode.Open))
+                                        {
+                                            await client.UploadAsync(App.exportFolderID, state.FileName, fs, OverwriteOption.Overwrite);
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                { }
+
+
+
+                            }
+
+                        }
+
+
+
+                        //ingame state
+                        if (App.metroSettings.BackupIngameSave)
+                        {
+                            int index = entry.FileName.LastIndexOf('.');
+                            int diff = entry.FileName.Length - 1 - index;
+
+                            String sramName = entry.FileName.Substring(0, entry.FileName.Length - diff) + "srm";
+                            String sramPath = FileHandler.ROM_DIRECTORY + "/" + FileHandler.SAVE_DIRECTORY + "/" + sramName;
+
+
+
+
+                            indicator = SystemTray.GetProgressIndicator(this);
+
+                            try
+                            {
+                                using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
+                                {
+                                    if (iso.FileExists(sramPath))
+                                    {
+
+                                        indicator.IsIndeterminate = true;
+                                        indicator.Text = String.Format(AppResources.UploadProgressText, sramName);
+
+
+                                        using (IsolatedStorageFileStream fs = iso.OpenFile(sramPath, System.IO.FileMode.Open))
+                                        {
+                                            await client.UploadAsync(App.exportFolderID, sramName, fs, OverwriteOption.Overwrite);
+                                        }
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            { }
+
+
+                        }
+                    } //end simple mode
+
+                    else if (App.metroSettings.AutoBackupMode == 1) //rotating mode
+                    {
+
+
+                        int nfile = 0;
+
+                        using (ZipFile zip = new ZipFile())
+                        {
+                            using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
+                            {
+                                //manual save
+                                if (App.metroSettings.BackupManualSave)
+                                {
+                                    SavestateEntry state = entry.Savestates.Where(s => s.Slot != 9 && s.Savetime != FileHandler.DEFAULT_DATETIME)
+                                        .OrderByDescending(s => s.Savetime)
+                                        .FirstOrDefault();
+
+                                    if (state != null && DateTime.Compare(state.Savetime, App.LastAutoBackupTime) > 0)
+                                    {
+                                        String path = FileHandler.ROM_DIRECTORY + "/" + FileHandler.SAVE_DIRECTORY + "/" + state.FileName;
+
+                                        IsolatedStorageFileStream fs = iso.OpenFile(path, System.IO.FileMode.Open);
+                                        zip.AddEntry(state.FileName, fs);
+                                        nfile++;
+                                    }
+
+                                }
+
+                                //auto save state
+                                if (App.metroSettings.BackupAutoSave)
+                                {
+                                    SavestateEntry state = entry.Savestates.Where(s => s.Slot == 9).FirstOrDefault();
+                                    if (EmulatorSettings.Current.AutoSaveLoad && state != null)
+                                    {
+                                        String path = FileHandler.ROM_DIRECTORY + "/" + FileHandler.SAVE_DIRECTORY + "/" + state.FileName;
+                                        IsolatedStorageFileStream fs = iso.OpenFile(path, System.IO.FileMode.Open);
+                                        zip.AddEntry(state.FileName, fs);
+                                        nfile++;
+                                    }
+                                }
+
+
+                                //ingame state
+                                if (App.metroSettings.BackupIngameSave)
+                                {
+                                    int index = entry.FileName.LastIndexOf('.');
+                                    int diff = entry.FileName.Length - 1 - index;
+
+                                    String sramName = entry.FileName.Substring(0, entry.FileName.Length - diff) + "srm";
+                                    String sramPath = FileHandler.ROM_DIRECTORY + "/" + FileHandler.SAVE_DIRECTORY + "/" + sramName;
+
+
+                                    if (iso.FileExists(sramPath))
+                                    {
+                                        IsolatedStorageFileStream fs = iso.OpenFile(sramPath, System.IO.FileMode.Open);
+                                        zip.AddEntry(sramName, fs);
+                                        nfile++;
+
+                                    }
+                                }
+
+                                if (nfile > 0) //we perform upload now
+                                {
+                                    if (entry.AutoSaveIndex == null)
+                                        entry.AutoSaveIndex = 1;
+                                    else
+                                        entry.AutoSaveIndex++;
+
+
+                                    if (entry.AutoSaveIndex > App.metroSettings.NRotatingBackup)
+                                        entry.AutoSaveIndex = 1;
+
+                                    ROMDatabase.Current.CommitChanges();
+
+                                    string exportFileName = entry.DisplayName + entry.AutoSaveIndex.ToString() + ".zip";
+
+
+                                    indicator = SystemTray.GetProgressIndicator(this);
+                                    indicator.IsIndeterminate = true;
+
+                                    indicator.Text = String.Format(AppResources.UploadProgressText, exportFileName);
+
+                                    try
+                                    {
+
+                                        MemoryStream stream = new MemoryStream();
+                                        zip.Save(stream);
+
+
+                                        stream.Seek(0, SeekOrigin.Begin);
+                                        await client.UploadAsync(App.exportFolderID, exportFileName, stream, OverwriteOption.Overwrite);
+
+                                    }
+                                    catch (Exception ex) { }
+
+                                }
+
+
+                            } //end using iso
+                        } //end using ZipFile
+                    } //end rotating mode
+
+                    App.LastAutoBackupTime = DateTime.Now;
+
+                    //set back title
+#if GBC
+                        indicator.Text = AppResources.ApplicationTitle2;
+#else
+                    indicator.Text = AppResources.ApplicationTitle;
+#endif
+                    indicator.IsIndeterminate = false;
+
+                }
+            }
+        }
+        private bool IsWifiConnected()
+        {
+            if (DeviceNetworkInformation.IsNetworkAvailable && DeviceNetworkInformation.IsWiFiEnabled)
+            {
+                return NetworkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211;
+            }
+
+            return false;
+        }
+
+        private async Task Initialize()
+        {
+            try
+            {
+                await FileHandler.CreateInitialFolderStructure();
+                await this.CopyDemoROM();
+
+
+            }
+            catch (TaskCanceledException)
+            {
+            }
+        }
+
+
+
+
+        private void UpdateBackgroundImage()
+        {
+            if (App.metroSettings.BackgroundUri != null)
+            {
+                panorama.Background = new ImageBrush
+                {
+                    Opacity = App.metroSettings.BackgroundOpacity,
+                    Stretch = Stretch.None,
+                    AlignmentX = System.Windows.Media.AlignmentX.Center,
+                    AlignmentY = System.Windows.Media.AlignmentY.Top,
+                    ImageSource = FileHandler.getBitmapImage(App.metroSettings.BackgroundUri, FileHandler.DEFAULT_BACKGROUND_IMAGE)
+
+                };
+            }
+            else
+            {
+                panorama.Background = null;
+            }
+        }
+
         async void btnSignin_SessionChanged(object sender, Microsoft.Live.Controls.LiveConnectSessionChangedEventArgs e)
         {
             try
@@ -344,137 +844,17 @@ namespace PhoneDirect3DXamlAppInterop
          
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
-        {
-            //set app bar color in case the user return from setting page
-            if (ApplicationBar != null)
-            {
-                ApplicationBar.BackgroundColor = (Color)App.Current.Resources["CustomChromeColor"];
-                ApplicationBar.ForegroundColor = (Color)App.Current.Resources["CustomForegroundColor"];
-            }
 
-            //await this.createFolderTask;
-            //await this.copyDemoTask;
-            if (shouldInitialize)  //create folder structure and copy demon rom
-            {
-                await this.Initialize();
-                shouldInitialize = false;
-            }
-
-            MainPage.LoadInitialSettings();
-
-            ////ask to enable turbo mode
-            //if (!App.metroSettings.FirstTurboPrompt)
-            //{
-            //    RadMessageBox.Show(AppResources.EnableTurboPromptTitle, MessageBoxButtons.YesNo, AppResources.EnableTurboPromptText,
-            //        closedHandler: (args) =>
-            //        {
-            //            DialogResult result = args.Result;
-            //            if (result == DialogResult.OK)
-            //            {
-            //                EmulatorSettings.Current.UseTurbo = true;
-            //            }
-
-
-            //        });
-            //    App.metroSettings.FirstTurboPrompt = true;
-            //}
-
-            if (shouldUpdateBackgroud)
-            {
-                UpdateBackgroundImage();
-                shouldUpdateBackgroud = false;
-
-            }
-
-            if (shouldRefreshRecentROMList)
-            {
-                this.RefreshRecentROMList();
-                shouldRefreshRecentROMList = false;
-
-            }
-
-            if (shouldRefreshAllROMList)
-            {
-                this.SortRomList();
-                shouldRefreshAllROMList = false;
-            }
-
-
-            //enable/disable resume button
-            if (this.lastRomImage.DataContext != null)
-                this.resumeButton.IsEnabled = true;
-            else
-                this.resumeButton.IsEnabled = false;
-
-            //set indicator to signal everything is done
-            //indicator.IsIndeterminate = false;
-
-            if (e.NavigationMode == NavigationMode.Refresh)
-            {
-                QueryString query = new QueryString(e.Uri.ToString());
-
-
-                if (query.ContainsKey(FileHandler.ROM_URI_STRING)) //check if we are launching from rom tile
-                {
-                    String romFileName = query[FileHandler.ROM_URI_STRING];
-
-                    ROMDBEntry entry = ROMDatabase.Current.GetROM(romFileName);
-                    if (entry != null)
-                        await this.StartROM(entry);
-                }
-                else if (query.ContainsKey("voiceCommandName")) //check if we are launching from voice command
-                {
-                    String voiceCommandName = query["voiceCommandName"];
-
-                    if (voiceCommandName == "PlayGame")
-                    {
-                        //get the game name
-                        string spokenRomName = query["RomName"];
-
-                        //try to find a match
-                        ROMDBEntry entry = ROMDatabase.Current.GetROM(spokenRomName);
-                        if (entry != null)
-                            await this.StartROM(entry);
-
-                    }
-
-                }
-
-            }
-
-
-
-            base.OnNavigatedTo(e);
-        }
 
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            FileHandler.UpdateLiveTile();
+            //FileHandler.UpdateLiveTile();
 
             base.OnNavigatedFrom(e);
         }
 
-        private void UpdateBackgroundImage()
-        {
-            if (App.metroSettings.BackgroundUri != null)
-            {
-                panorama.Background = new ImageBrush
-                {
-                    Opacity = App.metroSettings.BackgroundOpacity,
-                    Stretch = Stretch.None,
-                    AlignmentX = System.Windows.Media.AlignmentX.Center,
-                    AlignmentY = System.Windows.Media.AlignmentY.Top,
-                    ImageSource = FileHandler.getBitmapImage(App.metroSettings.BackgroundUri, FileHandler.DEFAULT_BACKGROUND_IMAGE)
 
-                };
-            }
-            else
-            {
-                panorama.Background = null;
-            }
-        }
 
         private async Task CopyDemoROM()
         {
@@ -537,7 +917,7 @@ namespace PhoneDirect3DXamlAppInterop
                 }
                 if (!isoSettings.Contains(SettingsPage.ControllerScaleKey))
                 {
-                    isoSettings[SettingsPage.ControllerScaleKey] = 100;
+                    isoSettings[SettingsPage.ControllerScaleKey] = 120;
                 }
                 if (!isoSettings.Contains(SettingsPage.ButtonScaleKey))
                 {
@@ -551,13 +931,17 @@ namespace PhoneDirect3DXamlAppInterop
                 {
                     isoSettings[SettingsPage.SkipFramesKey] = 0;
                 }
+                if (!isoSettings.Contains(SettingsPage.ImageScalingKey))
+                {
+                    isoSettings[SettingsPage.ImageScalingKey] = 100;
+                }
                 if (!isoSettings.Contains(SettingsPage.TurboFrameSkipKey))
                 {
                     isoSettings[SettingsPage.TurboFrameSkipKey] = 4;
                 }
                 if (!isoSettings.Contains(SettingsPage.SyncAudioKey))
                 {
-                    isoSettings[SettingsPage.SyncAudioKey] = true;
+                    isoSettings[SettingsPage.SyncAudioKey] = false;
                 }
                 if (!isoSettings.Contains(SettingsPage.PowerSaverKey))
                 {
@@ -570,10 +954,6 @@ namespace PhoneDirect3DXamlAppInterop
                 if (!isoSettings.Contains(SettingsPage.DeadzoneKey))
                 {
                     isoSettings[SettingsPage.DeadzoneKey] = 10.0f;
-                }
-                if (!isoSettings.Contains(SettingsPage.ImageScalingKey))
-                {
-                    isoSettings[SettingsPage.ImageScalingKey] = 100;
                 }
                 if (!isoSettings.Contains(SettingsPage.CameraAssignKey))
                 {
@@ -942,17 +1322,39 @@ namespace PhoneDirect3DXamlAppInterop
             isoSettings.Save();
         }
 
- 
 
-        private void romList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void RefreshRecentROMList()
         {
+
+
+            this.lastRomGrid.DataContext = ROMDatabase.Current.GetLastPlayed();
+
+            if (this.lastRomGrid.DataContext != null)
+                this.resumeButton.IsEnabled = true;
+            else
+                this.resumeButton.IsEnabled = false;
+
+            if (this.lastRomGrid.DataContext != null && App.metroSettings.ShowLastPlayedGame == true)
+                lastRomGrid.Visibility = Visibility.Visible;
+            else
+                lastRomGrid.Visibility = Visibility.Collapsed;
+
+
+            this.recentList.ItemsSource = ROMDatabase.Current.GetRecentlyPlayed();
+
+        }
+
+        private void romList_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+
             this.StartROMFromList(this.romList);
         }
 
-        private void recentList_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        private void recentList_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             this.StartROMFromList(this.recentList);
         }
+
 
         private async void StartROMFromList(ListBox list)
         {
@@ -1035,6 +1437,10 @@ namespace PhoneDirect3DXamlAppInterop
             ApplicationBar.Buttons.Add(settingsButton);
         }
 
+
+
+
+
         private void donateButton_Click(object sender, EventArgs e)
         {
             this.NavigationService.Navigate(new Uri("/DonatePage.xaml", UriKind.Relative));
@@ -1057,10 +1463,14 @@ namespace PhoneDirect3DXamlAppInterop
             this.NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative));
         }
 
-        void resumeButton_Click(object sender, EventArgs e)
+        async void resumeButton_Click(object sender, EventArgs e)
         {
-            this.NavigationService.Navigate(new Uri("/EmulatorPage.xaml", UriKind.Relative));
+            var entry = ROMDatabase.Current.GetLastPlayed();
+
+            await StartROM(entry);
             this.romList.SelectedItem = null;
+
+
         }
 
         void settingsButton_Click(object sender, EventArgs e)
@@ -1068,18 +1478,10 @@ namespace PhoneDirect3DXamlAppInterop
             this.NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
         }
 
-        void importButton_Click(object sender, EventArgs e)
-        {
-            this.NavigationService.Navigate(new Uri("/ImportPage.xaml", UriKind.Relative));
-        }
-
-
-
-   
-
-
-
-  
+        //void importButton_Click(object sender, EventArgs e)
+        //{
+        //    this.NavigationService.Navigate(new Uri("/ImportPage.xaml", UriKind.Relative));
+        //}
 
         private void gotoBackupButton_Click_1(object sender, RoutedEventArgs e)
         {
@@ -1093,6 +1495,11 @@ namespace PhoneDirect3DXamlAppInterop
             {
                 MessageBox.Show(AppResources.NotSignedInError, AppResources.ErrorCaption, MessageBoxButton.OK);
             }
+        }
+
+                private void ImportSD_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new Uri("/SDCardImportPage.xaml", UriKind.Relative));
         }
 
  
@@ -1254,88 +1661,15 @@ namespace PhoneDirect3DXamlAppInterop
             { }
         }
 
+
+
+
+
         private void contactBlock_Tap_2(object sender, System.Windows.Input.GestureEventArgs e)
         {
             WebBrowserTask wbtask = new WebBrowserTask();
             wbtask.Uri = new Uri("https://twitter.com/wp8emu");
             wbtask.Show();
-
-        }
-
-        private void romList_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-
-            this.StartROMFromList(this.romList);
-        }
-
-        private void recentList_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            this.StartROMFromList(this.recentList);
-        }
-
-
-        private void PinToStartMenuItem_Click_1(object sender, RoutedEventArgs e)
-        {
-            PinToStart(sender, this.romList);
-        }
-
-        private static void PinToStart(object sender, ListBox list)
-        {
-            ListBoxItem contextMenuListItem = list.ItemContainerGenerator.ContainerFromItem((sender as MenuItem).DataContext) as ListBoxItem;
-            ROMDBEntry re = contextMenuListItem.DataContext as ROMDBEntry;
-
-            try
-            {
-                FileHandler.CreateROMTile(re);
-            }
-            catch (InvalidOperationException)
-            {
-                MessageBox.Show(AppResources.MaximumTilesPinned);
-            }
-        }
-
-        private void DeleteSaveMenuItem_Click_1(object sender, RoutedEventArgs e)
-        {
-            ListBoxItem contextMenuListItem = this.romList.ItemContainerGenerator.ContainerFromItem((sender as MenuItem).DataContext) as ListBoxItem;
-            ROMDBEntry re = contextMenuListItem.DataContext as ROMDBEntry;
-
-            FileHandler.DeleteSRAMFile(re);
-        }
-
-        private void SaveStateMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            ListBoxItem contextMenuListItem = this.romList.ItemContainerGenerator.ContainerFromItem((sender as MenuItem).DataContext) as ListBoxItem;
-            ROMDBEntry re = contextMenuListItem.DataContext as ROMDBEntry;
-
-            PhoneApplicationService.Current.State["parameter"] = re;
-            this.NavigationService.Navigate(new Uri("/ManageSavestatePage.xaml", UriKind.Relative));
-        }
-
-        private void ImportSD_Click(object sender, RoutedEventArgs e)
-        {
-            this.NavigationService.Navigate(new Uri("/SDCardImportPage.xaml", UriKind.Relative));
-        }
-
-
-        private void RefreshRecentROMList()
-        {
-
-
-            this.lastRomGrid.DataContext = ROMDatabase.Current.GetLastPlayed();
-
-            if (this.lastRomGrid.DataContext != null)
-                this.resumeButton.IsEnabled = true;
-            else
-                this.resumeButton.IsEnabled = false;
-
-            if (this.lastRomGrid.DataContext != null && App.metroSettings.ShowLastPlayedGame == true)
-                lastRomGrid.Visibility = Visibility.Visible;
-            else
-                lastRomGrid.Visibility = Visibility.Collapsed;
-
-
-            this.recentList.ItemsSource = ROMDatabase.Current.GetRecentlyPlayed();
-
         }
 
         private void CloudSixImportButton_Click(object sender, RoutedEventArgs e)
@@ -1343,8 +1677,21 @@ namespace PhoneDirect3DXamlAppInterop
             var launcher = new CloudSixConnector.FilePicker.CloudSixPicker("cloudsix2snes8x");
 
             launcher.Token = "FromCloudSix";
-            launcher.Caption = "NEED TO CHANGE, .zip, .rar, .7z";
+            launcher.Caption = ".smc, .sfc, .srm, .00x, .zip, .rar, .7z";
 
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "smc" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "sfc" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "srm" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "000" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "001" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "002" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "003" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "004" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "005" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "006" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "007" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "008" });
+            launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "009" });
             launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "zip" });
             launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "zib" });
             launcher.FileExtensions.Add(new CloudSixFileExtension() { Extension = "rar" });

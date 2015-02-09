@@ -54,6 +54,15 @@ namespace PhoneDirect3DXamlAppInterop
         public const String BgcolorRKey = "BgcolorRKey";
         public const String BgcolorGKey = "BgcolorGKey";
         public const String BgcolorBKey = "BgcolorBKey";
+        public const String AutoSaveLoadKey = "AutSaveLoadKey";
+        public const String VirtualControllerStyleKey = "VirtualControllerStyleKey";
+        public const String VibrationEnabledKey = "VibrationEnabledKey";
+        public const String VibrationDurationKey = "VibrationDurationKey";
+        public const String EnableAutoFireKey = "EnableAutoFireKey";
+        public const String MapABLRTurboKey = "MapABLRTurboKey";
+        public const String FullPressStickABLRKey = "FullPressStickABLRKey";
+        public const String UseMotionControlKey = "UseMotionControlKey";
+        public const String UseTurboKey = "UseTurboKey";
 
         public const String PadCenterXPKey = "PadCenterXPKey";
         public const String PadCenterYPKey = "PadCenterYPKey";

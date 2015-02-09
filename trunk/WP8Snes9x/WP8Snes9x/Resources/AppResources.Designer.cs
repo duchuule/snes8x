@@ -1309,7 +1309,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VBA8/VGBC bug report or feature suggestion.
+        ///   Looks up a localized string similar to Snes8x bug report or feature suggestion.
         /// </summary>
         public static string EmailSubjectText {
             get {

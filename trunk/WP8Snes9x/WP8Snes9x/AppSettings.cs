@@ -443,6 +443,18 @@ namespace PhoneDirect3DXamlAppInterop
             }
         }
 
+        public bool FirstTurboPrompt
+        {
+            get
+            {
+                return GetValueOrDefault<bool>(FirstTurboPromptKey, false);
+            }
+            set
+            {
+                AddOrUpdateValue(FirstTurboPromptKey, value);
+                Save();
+            }
+        }
 
 
         #region INotifyPropertyChanged Members

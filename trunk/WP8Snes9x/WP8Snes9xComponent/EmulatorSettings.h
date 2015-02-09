@@ -422,6 +422,128 @@ namespace PhoneDirect3DXamlAppComponent
 			}
 		}
 
+		property bool AutoSaveLoad
+		{
+			bool get(void) { return this->autoSaveLoad; }
+			void set(bool value)
+			{
+				this->autoSaveLoad = value;
+				if (this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
+
+		property int VirtualControllerStyle
+		{
+			int get(void) { return this->virtualControllerStyle; }
+			void set(int value)
+			{
+				this->virtualControllerStyle = value;
+				if (this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
+		property bool VibrationEnabled
+		{
+			bool get(void) { return this->vibrationEnabled; }
+			void set(bool value)
+			{
+				this->vibrationEnabled = value;
+				if (this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
+		property double VibrationDuration
+		{
+			double get(void) { return this->vibrationDuration; }
+			void set(double value)
+			{
+				this->vibrationDuration = value;
+				if (this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
+		property bool EnableAutoFire
+		{
+			bool get(void) { return this->enableAutoFire; }
+			void set(bool value)
+			{
+				this->enableAutoFire = value;
+				if (this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
+		property bool MapABLRTurbo
+		{
+			bool get(void) { return this->mapABLRTurbo; }
+			void set(bool value)
+			{
+				this->mapABLRTurbo = value;
+				if (this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
+		property bool FullPressStickABLR
+		{
+			bool get(void) { return this->fullPressStickABLR; }
+			void set(bool value)
+			{
+				this->fullPressStickABLR = value;
+				if (this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
+		property int UseMotionControl
+		{
+			int get(void) { return this->useMotionControl; }
+			void set(int value)
+			{
+				this->useMotionControl = value;
+				if (this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
+		property bool UseTurbo
+		{
+			bool get(void) { return this->useTurbo; }
+			void set(bool value)
+			{
+				this->useTurbo = value;
+
+				//don't need this, we do it in the C# project already
+				//if (this->SettingsChanged)
+				//{
+				//	this->SettingsChanged();
+				//}
+			}
+		}
+
+		EmulatorSettings(void);
+
 		property int PadCenterXP;
 		property int PadCenterYP;
 		property int ACenterXP;
@@ -472,8 +594,19 @@ namespace PhoneDirect3DXamlAppComponent
 		property int MogaLeftJoystick;
 		property int MogaRightJoystick;
 
+		property int MotionLeft;
+		property int MotionRight;
+		property int MotionUp;
+		property int MotionDown;
+		property double RestAngleX;
+		property double RestAngleY;
+		property double RestAngleZ;
 
-		EmulatorSettings(void);
+		property double MotionDeadzoneH;
+		property double MotionDeadzoneV;
+		property bool MotionAdaptOrientation;
+
+		
 	private:
 		bool soundEnabled;
 		bool useMogaController;
@@ -504,6 +637,16 @@ namespace PhoneDirect3DXamlAppComponent
 		int bgcolorR;
 		int bgcolorG;
 		int bgcolorB;
+
+		bool autoSaveLoad;
+		int virtualControllerStyle;
+		bool vibrationEnabled;
+		double vibrationDuration; //in second
+		bool enableAutoFire;
+		bool mapABLRTurbo;
+		bool fullPressStickABLR;
+		int useMotionControl;
+		bool useTurbo;
 
 		static EmulatorSettings ^instance;
 
