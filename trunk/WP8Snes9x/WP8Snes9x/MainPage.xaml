@@ -23,7 +23,6 @@
     <shell:SystemTray.ProgressIndicator>
         <shell:ProgressIndicator IsIndeterminate="False" 
                                  IsVisible="True" 
-                                 Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
                                   />
     </shell:SystemTray.ProgressIndicator>
 
@@ -76,7 +75,8 @@
                                     toolkit:TiltEffect.IsTiltEnabled="True"
                                     VerticalAlignment="Stretch" 
                                   HorizontalAlignment="Stretch">-->
-                            <Grid Tap="Image_Tap">
+                            <Grid Tap="Image_Tap"
+                                  >
                                 <Image Source="{Binding SnapshotURI, Converter={StaticResource IsoImageConverter}}" 
                                     Stretch="UniformToFill"  
                                     HorizontalAlignment="Center"

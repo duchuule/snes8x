@@ -50,6 +50,7 @@
           <Logo Size="large" IsRelative="true">Assets/Tiles/icon176x176.png</Logo>
         </Logos>
         <SupportedFileTypes>
+          <FileType ContentType="application/cloudsix2vba8">.cloudsix2snes8x</FileType>
           <FileType ContentType="application/snes">.smc</FileType>
           <FileType ContentType="application/snes">.sfc</FileType>
           <FileType ContentType="application/snes">.srm</FileType>

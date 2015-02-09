@@ -33,15 +33,13 @@ using System.Diagnostics;
 using PhoneDirect3DXamlAppInterop.Resources;
 using PhoneDirect3DXamlAppInterop.Database;
 
-
-
 namespace PhoneDirect3DXamlAppInterop
 {
     public partial class App : Application
     {
 
         public static int APP_VERSION = 2;
-        public static int VOICE_COMMAND_VERSION = 1;
+        public static int VOICE_COMMAND_VERSION = 11;
 
 
 
@@ -61,7 +59,7 @@ namespace PhoneDirect3DXamlAppInterop
             var dictionaries = new ResourceDictionary();
             string source;
             Color systemTrayColor;
-            SolidColorBrush brush;
+
 
 
 
@@ -131,11 +129,22 @@ namespace PhoneDirect3DXamlAppInterop
         }
 
 
+
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// </summary>
         /// <returns>The root frame of the Phone Application.</returns>
         public PhoneApplicationFrame RootFrame { get; private set; }
+
+
+
+        // Set to true when the page navigation is being reset 
+        bool wasRelaunched = false;
+
+        // set to true when current rom is different from previous rom
+        bool mustClearPagestack = false;
+
+        IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
 
         /// <summary>
         /// Constructor for the Application object.
@@ -153,6 +162,9 @@ namespace PhoneDirect3DXamlAppInterop
 
             // Phone-specific initialization
             InitializePhoneApplication();
+
+            // Language display initialization
+            InitializeLanguage();
 
             // Show graphics profiling information while debugging.
             if (System.Diagnostics.Debugger.IsAttached)
@@ -179,10 +191,9 @@ namespace PhoneDirect3DXamlAppInterop
 
             //load collection
             ROMDatabase.Current.LoadCollectionsFromDatabase();
+        }
 
             
-
-        }
 
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated
@@ -194,18 +205,25 @@ namespace PhoneDirect3DXamlAppInterop
         // This code will not execute when the application is first launched
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
+            if (!e.IsApplicationInstancePreserved)
+                EmulatorPage.IsTombstoned = true;
         }
 
         // Code to execute when the application is deactivated (sent to background)
         // This code will not execute when the application is closing
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
+            // When the applicaiton is deactivated, save the current deactivation settings to isolated storage
+            SaveCurrentDeactivationSettings();
+
         }
 
         // Code to execute when the application is closing (eg, user hit Back)
         // This code will not execute when the application is deactivated
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
+            // When the application closes, delete any deactivation settings from isolated storage
+            RemoveCurrentDeactivationSettings();
         }
 
 
@@ -282,7 +300,6 @@ namespace PhoneDirect3DXamlAppInterop
             }
         }
 
-
         #region Phone application initialization
 
         // Avoid double-initialization
@@ -299,7 +316,7 @@ namespace PhoneDirect3DXamlAppInterop
             RootFrame = new PhoneApplicationFrame();
             RootFrame.Navigated += CompleteInitializePhoneApplication;
 
-            RootFrame.UriMapper = new SnesUriMapper();
+            RootFrame.UriMapper = new GBAUriMapper();
 
             // Handle navigation failures
             RootFrame.NavigationFailed += RootFrame_NavigationFailed;
@@ -307,8 +324,62 @@ namespace PhoneDirect3DXamlAppInterop
             // Handle reset requests for clearing the backstack
             RootFrame.Navigated += CheckForResetNavigation;
 
+            // Monitor deep link launching 
+            RootFrame.Navigating += RootFrame_Navigating;
+
             // Ensure we don't initialize again
             phoneApplicationInitialized = true;
+        }
+
+
+        // Event handler for the Navigating event of the root frame. Use this handler to modify
+        // the default navigation behavior.
+        void RootFrame_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            
+
+
+            if (e.NavigationMode == NavigationMode.Reset)
+            {
+                // This block will execute if the current navigation is a relaunch.
+                // If so, another navigation will be coming, so this records that a relaunch just happened
+                // so that the next navigation can use this info.
+                wasRelaunched = true;
+            }
+            else if (e.NavigationMode == NavigationMode.New && wasRelaunched)
+            {
+                // This block will run if the previous navigation was a relaunch
+                wasRelaunched = false;
+                mustClearPagestack = true;
+
+                if (e.Uri.ToString().Contains(FileHandler.ROM_URI_STRING + "=")  || e.Uri.ToString().Contains("RomName=") )
+                {
+                    // This block will run if the launch Uri contains "rom=" or "RomName=" which
+                    // was specified when the secondary tile was created in FileHandler.cs
+                    //or from voiceCommmand
+
+                    
+                    //check to see if the rom to be launched is the same as the rom currently being played
+                    if (CheckLastRomPlayed(HttpUtility.UrlDecode(e.Uri.ToString()) ))
+                        mustClearPagestack = false;
+                    else
+                        mustClearPagestack = true;
+                }
+                else if (e.Uri.ToString().Contains("/MainPage.xaml"))
+                {
+                    
+                    // This block will run if the navigation Uri is the main page
+                    mustClearPagestack = false;
+
+                }
+
+                if (mustClearPagestack == false)
+                {
+                    //The app was previously launched via Main Tile and relaunched via Main Tile. Cancel the navigation to resume.
+                    e.Cancel = true;
+                    RootFrame.Navigated -= ClearBackStackAfterReset;
+                }
+            }
         }
 
         // Do not add any additional code to this method
@@ -349,5 +420,128 @@ namespace PhoneDirect3DXamlAppInterop
         }
 
         #endregion
+
+
+        // Initialize the app's font and flow direction as defined in its localized resource strings.
+        //
+        // To ensure that the font of your application is aligned with its supported languages and that the
+        // FlowDirection for each of those languages follows its traditional direction, ResourceLanguage
+        // and ResourceFlowDirection should be initialized in each resx file to match these values with that
+        // file's culture. For example:
+        //
+        // AppResources.es-ES.resx
+        //    ResourceLanguage's value should be "es-ES"
+        //    ResourceFlowDirection's value should be "LeftToRight"
+        //
+        // AppResources.ar-SA.resx
+        //     ResourceLanguage's value should be "ar-SA"
+        //     ResourceFlowDirection's value should be "RightToLeft"
+        //
+        // For more info on localizing Windows Phone apps see http://go.microsoft.com/fwlink/?LinkId=262072.
+        //
+        private void InitializeLanguage()
+        {
+            try
+            {
+                // Set the font to match the display language defined by the
+                // ResourceLanguage resource string for each supported language.
+                //
+                // Fall back to the font of the neutral language if the Display
+                // language of the phone is not supported.
+                //
+                // If a compiler error is hit then ResourceLanguage is missing from
+                // the resource file.
+                RootFrame.Language = XmlLanguage.GetLanguage(AppResources.ResourceLanguage);
+
+                // Set the FlowDirection of all elements under the root frame based
+                // on the ResourceFlowDirection resource string for each
+                // supported language.
+                //
+                // If a compiler error is hit then ResourceFlowDirection is missing from
+                // the resource file.
+                FlowDirection flow = (FlowDirection)Enum.Parse(typeof(FlowDirection), AppResources.ResourceFlowDirection);
+                RootFrame.FlowDirection = flow;
+            }
+            catch
+            {
+                // If an exception is caught here it is most likely due to either
+                // ResourceLangauge not being correctly set to a supported language
+                // code or ResourceFlowDirection is set to a value other than LeftToRight
+                // or RightToLeft.
+
+                if (Debugger.IsAttached)
+                {
+                    Debugger.Break();
+                }
+
+                throw;
+            }
+        }
+
+
+        // Called when the app is deactivating. Saves the time of the deactivation and the 
+        // session type of the app instance to isolated storage.
+        public void SaveCurrentDeactivationSettings()
+        {
+            //get current page before deactivated
+            Uri currentUri = RootFrame.CurrentSource;
+
+            if (currentUri.ToString().Contains("EmulatorPage.xaml"))
+            {
+                if (metroSettings.AddOrUpdateValue("LastFilePlayed", EmulatorPage.currentROMEntry.FileName)
+                    && metroSettings.AddOrUpdateValue("LastRomPlayed", EmulatorPage.currentROMEntry.DisplayName) )
+                {
+                    metroSettings.Save();
+                }
+            }
+            else
+            {
+                if (metroSettings.AddOrUpdateValue("LastFilePlayed", "no_rom_is_being_played")
+                    && metroSettings.AddOrUpdateValue("LastRomPlayed", "no_rom_is_being_played"))
+                {
+                    metroSettings.Save();
+                }
+            }
+
+
+
+        }
+
+
+        // Called when the app is launched or closed. Removes all deactivation settings from
+        // isolated storage
+        public void RemoveCurrentDeactivationSettings()
+        {
+            if (metroSettings.Contains("LastFilePlayed"))
+                metroSettings.RemoveValue("LastFilePlayed");
+
+            if (metroSettings.Contains("LastRomPlayed"))
+                metroSettings.RemoveValue("LastRomPlayed");
+
+            metroSettings.Save();
+        }
+
+        // Helper method to determine if the rom being launched from deep link is the same as the rom currently being played (if any)
+        //true if the same, false if different
+        bool CheckLastRomPlayed(string currentUri)
+        {
+            bool ret = false;
+
+            if (metroSettings.Contains("LastFilePlayed"))
+            {
+                string lastFilePlayed = settings["LastFilePlayed"] as string;
+
+                ret =  currentUri.Contains(lastFilePlayed);
+            }
+
+            if (ret == false && metroSettings.Contains("LastRomPlayed")) //try to match the display name
+            {
+                string lastRomPlayed = settings["LastRomPlayed"] as string;
+
+                ret = currentUri.ToLower().Contains(lastRomPlayed.ToLower());
+            }
+            
+            return ret;
+        }
     }
 }

@@ -21,8 +21,8 @@ namespace PhoneDirect3DXamlAppInterop
 
 
 
-            mobFoxadControl.NewAd += mobFoxadControl_NewAd;
-            mobFoxadControl.NoAd += mobFoxadControl_NoAd;
+            //mobFoxadControl.NewAd += mobFoxadControl_NewAd;
+            //mobFoxadControl.NoAd += mobFoxadControl_NoAd;
 
             AdMobControl.ReceivedAd += AdMobOnAdReceived;
             AdMobControl.FailedToReceiveAd += AdMobOnFailedToReceiveAd;
@@ -33,40 +33,40 @@ namespace PhoneDirect3DXamlAppInterop
         }
 
 
-        private void mobFoxadControl_NewAd(object sender, MobFox.Ads.NewAdEventArgs args)
-        {
+        //private void mobFoxadControl_NewAd(object sender, MobFox.Ads.NewAdEventArgs args)
+        //{
 
 
-            System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
-            {
-                mobFoxadControl.Visibility = Visibility.Visible;
+        //    System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
+        //    {
+        //        mobFoxadControl.Visibility = Visibility.Visible;
 
-                MSAdControl.Visibility = Visibility.Collapsed;
-                AdMobControl.Visibility = Visibility.Collapsed;
-                AdDuplexAdControl.Visibility = Visibility.Collapsed;
+        //        MSAdControl.Visibility = Visibility.Collapsed;
+        //        AdMobControl.Visibility = Visibility.Collapsed;
+        //        AdDuplexAdControl.Visibility = Visibility.Collapsed;
 
-            });
-        }
+        //    });
+        //}
 
-        private void mobFoxadControl_NoAd(object sender, MobFox.Ads.NoAdEventArgs args)
-        {
-            System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
-            {
-                mobFoxadControl.Visibility = Visibility.Collapsed;
+        //private void mobFoxadControl_NoAd(object sender, MobFox.Ads.NoAdEventArgs args)
+        //{
+        //    System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
+        //    {
+        //        mobFoxadControl.Visibility = Visibility.Collapsed;
 
-                MSAdControl.Visibility = Visibility.Visible;
-                AdMobControl.Visibility = Visibility.Collapsed;
-                AdMobControl.Visibility = Visibility.Collapsed;
+        //        MSAdControl.Visibility = Visibility.Visible;
+        //        AdMobControl.Visibility = Visibility.Collapsed;
+        //        AdMobControl.Visibility = Visibility.Collapsed;
 
-                //try to get ad on pubcenter
-                MSAdControl.Refresh();
+        //        //try to get ad on pubcenter
+        //        MSAdControl.Refresh();
 
-            });
-
-
+        //    });
 
 
-        }
+
+
+        //}
 
         void MSAdControl_NewAd(object sender, EventArgs e)
         {

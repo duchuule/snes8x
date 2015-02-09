@@ -63,8 +63,11 @@ namespace PhoneDirect3DXamlAppInterop
 
         public static ROMDBEntry InsertNewDBEntry(string fileName)
         {
-            ROMDatabase db = ROMDatabase.Current;
-            string displayName = fileName.Substring(0, fileName.Length - 4);
+
+            int index = fileName.LastIndexOf('.');
+            int diff = fileName.Length - index;
+
+            string displayName = fileName.Substring(0, fileName.Length - diff);
             ROMDBEntry entry = new ROMDBEntry()
             {
                 DisplayName = displayName,
@@ -72,7 +75,7 @@ namespace PhoneDirect3DXamlAppInterop
                 LastPlayed = DEFAULT_DATETIME,
                 SnapshotURI = DEFAULT_SNAPSHOT
             };
-            db.Add(entry);
+            ROMDatabase.Current.Add(entry);
             return entry;
         }
 
@@ -90,15 +93,22 @@ namespace PhoneDirect3DXamlAppInterop
                 {
                     // Savestate gehoert zu ROM
                     String number = save.Name.Substring(save.Name.Length - 2);
-                    int slot = int.Parse(number);
-                    SavestateEntry ssEntry = new SavestateEntry()
+                    int slot = 0;
+                    if (!int.TryParse(number, out slot))
                     {
-                        ROM = entry,
-                        Savetime = save.DateCreated.DateTime,
-                        Slot = slot,
-                        FileName = save.Name
-                    };
-                    db.Add(ssEntry);
+                        continue;
+                    }
+                    if (slot != 9) //dont include auto save
+                    {
+                        SavestateEntry ssEntry = new SavestateEntry()
+                        {
+                            ROM = entry,
+                            Savetime = save.DateCreated.DateTime,
+                            Slot = slot,
+                            FileName = save.Name
+                        };
+                        db.Add(ssEntry);
+                    }
                 }
             }
         }
@@ -111,7 +121,7 @@ namespace PhoneDirect3DXamlAppInterop
             }));
         }
 
-        private static async void captureSnapshot(ushort[] pixeldata, int pitch, string filename)
+        private static void captureSnapshot(ushort[] pixeldata, int pitch, string filename)
         {
             WriteableBitmap bitmap = new WriteableBitmap(pitch / 2, (int)pixeldata.Length / (pitch / 2));
             int x = 0;
@@ -156,39 +166,14 @@ namespace PhoneDirect3DXamlAppInterop
 
                 UpdateLiveTile();
 
+                CreateOrUpdateSecondaryTile(false);
+
                 UpdateROMTile(filename);
             }
             catch (Exception)
             {
             }
 
-
-
-            //try
-            //{
-            //    using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
-            //    using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
-            //    {
-            //        bitmap.SaveJpeg(ms, bitmap.PixelWidth, bitmap.PixelHeight, 0, 90);
-            //        byte[] bytes = ms.ToArray();
-            //        DataWriter writer = new DataWriter(stream);
-            //        writer.WriteBytes(bytes);
-            //        await writer.StoreAsync();
-            //        writer.DetachStream();
-            //        await stream.FlushAsync();
-            //    }
-
-            //    ROMDatabase db = ROMDatabase.Current;
-            //    ROMDBEntry entry = db.GetROM(filename);
-            //    entry.SnapshotURI = "Shared/ShellContent/" + snapshotName;
-            //    db.CommitChanges();
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show(e.Message);
-            //}
-
-            //await file.CopyAsync(shellContent);
         }
 
         public static void UpdateLiveTile()
@@ -199,9 +184,9 @@ namespace PhoneDirect3DXamlAppInterop
             data.Title = AppResources.ApplicationTitle;
 
             //get last snapshot
-            String lastSnapshot = db.GetLastSnapshot();
+            IEnumerable<String> lastSnapshots = db.GetRecentSnapshotList();
 
-            if (App.metroSettings.UseAccentColor || lastSnapshot == null)  //create see through tile
+            if (App.metroSettings.UseAccentColor ||  lastSnapshots.Count() == 0 )  //create see through tile
             {
 
                 data.SmallBackgroundImage = new Uri("Assets/Tiles/FlipCycleTileSmall.png", UriKind.Relative);
@@ -215,12 +200,90 @@ namespace PhoneDirect3DXamlAppInterop
                 data.SmallBackgroundImage = new Uri("Assets/Tiles/FlipCycleTileSmallFilled.png", UriKind.Relative);
 
 
+                data.BackgroundImage = new Uri("isostore:/" + lastSnapshots.ElementAt(0), UriKind.Absolute);
+                data.WideBackgroundImage = new Uri("isostore:/" + lastSnapshots.ElementAt(0), UriKind.Absolute);
 
-                data.BackgroundImage = new Uri("isostore:/" + lastSnapshot, UriKind.Absolute);
-                data.WideBackgroundImage = new Uri("isostore:/" + lastSnapshot, UriKind.Absolute);
+                if (lastSnapshots.Count() >= 2)
+                {
+                    data.BackBackgroundImage = new Uri("isostore:/" + lastSnapshots.ElementAt(1), UriKind.Absolute);
+                    data.WideBackBackgroundImage = new Uri("isostore:/" + lastSnapshots.ElementAt(1), UriKind.Absolute);
+                }
 
                 tile.Update(data);
             }
+
+        }
+
+
+        public static void CreateOrUpdateSecondaryTile(bool forceCreate)
+        {
+            
+            
+
+            CycleTileData data = new CycleTileData();
+
+
+
+            data.Title = AppResources.ApplicationTitle;
+
+            IEnumerable<String> snapshots = ROMDatabase.Current.GetRecentSnapshotList();
+            List<Uri> uris = new List<Uri>();
+            if (snapshots.Count() == 0)
+            {
+#if !GBC
+                uris.Add(new Uri("Assets/Tiles/FlipCycleTileLarge.png", UriKind.Relative));
+#else
+                    uris.Add(new Uri("Assets/Tiles/FlipCycleTileLargeGBC.png", UriKind.Relative));
+#endif
+            }
+            else
+            {
+                foreach (var snapshot in snapshots)
+                {
+                    uris.Add(new Uri("isostore:/" + snapshot, UriKind.Absolute));
+                }
+
+            }
+            data.CycleImages = uris;
+
+
+
+
+            data.SmallBackgroundImage = new Uri("Assets/Tiles/FlipCycleTileSmall.png", UriKind.Relative);
+
+            //find the tile to update
+            bool secondaryTileAlreadyExists = false;
+
+            
+            foreach (var tile in ShellTile.ActiveTiles)
+            {
+                //make sure if it is not the default
+                if (tile.NavigationUri.OriginalString == "/")
+                    continue;
+
+                //rom tile has '=' sign, secondary does not have it
+                int index = tile.NavigationUri.OriginalString.LastIndexOf('=');
+                if (index >= 0)
+                {
+                    continue; //this is a rom tile
+                }
+
+                //if arrive at this point, it means secondary tile already exists
+                secondaryTileAlreadyExists = true;
+
+                tile.Update(data);
+
+                if (forceCreate)
+                    MessageBox.Show(AppResources.TileAlreadyPinnedText);
+
+                //no need to find more tile
+                break;
+            }
+
+
+
+            if (secondaryTileAlreadyExists == false && forceCreate)
+                ShellTile.Create(new Uri("/MainPage.xaml", UriKind.Relative), data, true);
         }
 
         public static void DeleteROMTile(string romFileName)
@@ -319,7 +382,8 @@ namespace PhoneDirect3DXamlAppInterop
             LoadROMParameter param = new LoadROMParameter()
             {
                 file = romFile,
-                folder = romFolder
+                folder = romFolder,
+                RomFileName = fileName
             };
             return param;
         }
@@ -542,6 +606,7 @@ namespace PhoneDirect3DXamlAppInterop
             catch (Exception) { }
         }
 
+
         public static async Task<bool> DeleteSaveState(SavestateEntry entry)
         {
             ROMDatabase db = ROMDatabase.Current;
@@ -565,6 +630,70 @@ namespace PhoneDirect3DXamlAppInterop
             }
 
             return true;
+        }
+
+        private static Uri CreateAndSavePNGToIsolatedStorage(Uri logo, Color tileColor)
+        {
+            // Obtain the virtual store for the application.
+            using (IsolatedStorageFile myStore = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                using (IsolatedStorageFileStream fileStream = new IsolatedStorageFileStream("Shared/ShellContent/" + CUSTOM_TILE_FILENAME, FileMode.Create, myStore))
+                {
+                    using (Stream pngStream = RenderAsPNGStream(logo, tileColor))
+                    {
+                        pngStream.CopyTo(fileStream);
+                    }
+                }
+            }
+
+            return new Uri("isostore:/" + "Shared/ShellContent/" + CUSTOM_TILE_FILENAME, UriKind.Absolute);
+        }
+
+        private static Stream RenderAsPNGStream(Uri logo, Color tileColor)
+        {
+            try
+            {
+                StreamResourceInfo info;
+
+                info = Application.GetResourceStream(logo);
+
+                // create source bitmap for Image control (image is assumed to be alread 173x173)
+                WriteableBitmap wbmp3 = new WriteableBitmap(1, 1);
+                try
+                {
+                    wbmp3.SetSource(info.Stream);
+                }
+                catch
+                {
+                }
+
+                WriteableBitmap wb = WriteableBitmapEx.CreateTile(wbmp3, tileColor);
+
+
+
+                EditableImage edit = new EditableImage(wb.PixelWidth, wb.PixelHeight);
+
+                for (int y = 0; y < wb.PixelHeight; ++y)
+                {
+                    for (int x = 0; x < wb.PixelWidth; ++x)
+                    {
+                        try
+                        {
+                            byte[] rgba = ControlToPng.ExtractRGBAfromPremultipliedARGB(wb.Pixels[wb.PixelWidth * y + x]);
+                            edit.SetPixel(x, y, rgba[0], rgba[1], rgba[2], rgba[3]);
+                        }
+                        catch (Exception ex)
+                        { }
+                    }
+                }
+
+                return edit.GetStream();
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

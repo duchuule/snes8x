@@ -42,7 +42,7 @@
           <FullDeploy>False</FullDeploy>
           <DebuggerType>Managed</DebuggerType>
           <DebuggerAgentType>Managed</DebuggerAgentType>
-          <Tombstone>False</Tombstone>
+          <Tombstone>True</Tombstone>
         </SilverlightMobileCSProjectFlavor>
       </FlavorProperties>
     </VisualStudio>
