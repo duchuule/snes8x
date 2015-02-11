@@ -1,0 +1,70 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="PhoneDirect3DXamlAppInterop.ImageEditorPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:telerikImageEditor="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.ImageEditor"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.BackgroundColor="{StaticResource SystemTrayColor}">
+
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator IsIndeterminate="False" 
+                                 IsVisible="True" 
+                                 Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
+                                  />
+    </shell:SystemTray.ProgressIndicator>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="White">
+        
+        <telerikImageEditor:RadImageEditor
+            ImageSaved="RadImageEditor_ImageSaved"
+            ImageEditCancelled="RadImageEditor_ImageEditCancelled"
+            Source="{Binding}"
+            x:Name="imageEditor"
+            Foreground="Red"
+            Background="White"
+            >
+            <telerikImageEditor:CropTool
+                >
+                <telerikImageEditor:CropToolRatio CustomText="Custom"
+                                                 CanResize="True"
+                                                  />
+                <telerikImageEditor:CropToolRatio CustomText="Original"
+                                                 CanResize="True"
+                                                 Width="-1"
+                                                 Height="-1"/>
+                <telerikImageEditor:CropToolRatio Width="1" CanResize="True"
+                                                 Height="1"/>
+                <telerikImageEditor:CropToolRatio Width="4" CanResize="True"
+                                                 Height="3"/>
+                <telerikImageEditor:CropToolRatio Width="6" CanResize="True"
+                                                 Height="4"/>
+                <telerikImageEditor:CropToolRatio Width="7" CanResize="True"
+                                                 Height="5"/>
+                <telerikImageEditor:CropToolRatio Width="10" CanResize="True"
+                                                 Height="8"/>
+                <telerikImageEditor:CropToolRatio Width="16" CanResize="True"
+                                                 Height="9"/>
+
+            </telerikImageEditor:CropTool>
+            <telerikImageEditor:OrientationTool />
+            <telerikImageEditor:ColorEffectsTool/>
+            <telerikImageEditor:ContrastTool/>
+            <telerikImageEditor:BrightnessTool/>
+            <telerikImageEditor:HueTool/>
+            <telerikImageEditor:SaturationTool/>
+            <telerikImageEditor:SharpenTool/>
+            <telerikImageEditor:TextTool/>
+        </telerikImageEditor:RadImageEditor>
+    </Grid>
+
+</phone:PhoneApplicationPage>

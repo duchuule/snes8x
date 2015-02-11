@@ -11,10 +11,30 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.BackgroundColor="{StaticResource SystemTrayColor}">
+
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator IsIndeterminate="False" 
+                                 IsVisible="True" 
+                                 Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
+                                  />
+    </shell:SystemTray.ProgressIndicator>
+
+
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneBackgroundBrush}">
+        <Grid>
+            <Grid.Background>
+
+                <ImageBrush ImageSource="{Binding Source={StaticResource AppSettings}, Path=BackgroundUri, Converter={StaticResource ImageSourceConverter}}"
+                        Stretch="None"
+                        AlignmentX="Center"
+                        AlignmentY="Top"
+                        Opacity="{Binding Source={StaticResource AppSettings}, Path=BackgroundOpacity}"/>
+
+            </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -22,9 +42,11 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Name="titleLabel" Text="{Binding LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="Donate" Margin="9,-7,0,0" 
-                       Style="{StaticResource PhoneTextTitle1Style}"/>
+                <TextBlock Name="titleLabel" 
+                       Text="Donate" 
+                       Margin="10,-7,0,0" 
+                       Style="{StaticResource MyTitle1Style}"/>
+
         </StackPanel>
         
         
@@ -34,12 +56,13 @@
                       Margin="0,0,0,0" 
                       Grid.Row="1">
             <StackPanel x:Name="ContentPanel" Grid.Row="1" 
-                        Margin="21,0,0,0">
+                        Margin="24,0,24,0">
                 <TextBlock Text="Please choose a donation amout below. After donating, if you like, you can forward the purchase receipt to store.support@outlook.com to get added to the acknowledgement list." 
                        TextWrapping="Wrap"
-                       Margin="0,0,0,12"
+                       Margin="0,0,0,24"
                        />
-                <TextBlock Text="Loading product list. Please wait..." 
+                    
+                     <TextBlock Text="{Binding Path=LocalizedResources.LoadingProductListText, Source={StaticResource LocalizedStrings}}" 
                        TextWrapping="Wrap"
                        Margin="0,48,0,12"
                            Visibility="Visible"
@@ -47,7 +70,7 @@
                            
                        />
 
-                <TextBlock Text="Error! No Internet connection or Microsoft server error. Please try again later." 
+                    <TextBlock Text="{Binding Path=LocalizedResources.ErrorNoConnectionText, Source={StaticResource LocalizedStrings}}" 
                        TextWrapping="Wrap"
                        Margin="0,0,0,12"
                            Foreground="Red"
@@ -64,27 +87,32 @@
                                         <ColumnDefinition Width="4*"/>
                                     </Grid.ColumnDefinitions>
                                     <Image Margin="0" Source="{Binding imgLink}"/>
-                                    <StackPanel Grid.Column="1" Margin="0,30,0,0">
-                                        <TextBlock Foreground="white" 
-                                                   FontWeight="ExtraBold" 
-                                                   Text="{Binding Name}" 
-                                                   FontSize="25"/>
-                                        <TextBlock Foreground="white" 
-                                                   FontWeight="Normal" 
-                                                   Text="{Binding Status}"
-                                                   TextWrapping="Wrap"/>
-                                        <Button Content="Donate" 
-                                                Visibility="{Binding BuyNowButtonVisible}" 
-                                                Click="ButtonBuyNow_Clicked" 
-                                                Tag="{Binding key}" />
-                                    </StackPanel>
-                                </Grid>
+                                        <Grid Grid.Column="1" 
+                                          Margin="12,0,0,0"
+                                          >
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock FontWeight="ExtraBold" 
+                                            Text="{Binding Name}" 
+                                                FontSize="25"
+                                                TextWrapping="Wrap"/>
+                                                <TextBlock FontWeight="Normal" 
+                                            Text="{Binding Status}"
+                                            TextWrapping="Wrap"/>
+                                                <Button Content="{Binding Path=LocalizedResources.PurchaseButtonText, Source={StaticResource LocalizedStrings}}" 
+                                        Visibility="{Binding BuyNowButtonVisible}" 
+                                        Click="ButtonBuyNow_Clicked" 
+                                            Tag="{Binding key}"
+                                            Margin="-12, 0, -12, 0"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Grid>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
+    </Grid>
     </Grid>
 
 </phone:PhoneApplicationPage>

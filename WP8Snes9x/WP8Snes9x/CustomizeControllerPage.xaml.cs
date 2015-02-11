@@ -9,6 +9,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using PhoneDirect3DXamlAppComponent;
 using System.IO.IsolatedStorage;
+using System.Windows.Media;
 
 namespace PhoneDirect3DXamlAppInterop
 {
@@ -31,6 +32,14 @@ namespace PhoneDirect3DXamlAppInterop
                     e.Cancel = true;
                     this.ApplicationBar.Mode = ApplicationBarMode.Default;
                 }
+
+        }
+
+        protected override void OnTap(System.Windows.Input.GestureEventArgs e)
+        {
+            if (this.ApplicationBar.Mode != ApplicationBarMode.Minimized)
+                    this.ApplicationBar.Mode = ApplicationBarMode.Minimized;
+                base.OnTap(e);
 
         }
 
@@ -74,9 +83,10 @@ namespace PhoneDirect3DXamlAppInterop
             ApplicationBar.IsVisible = true;
             ApplicationBar.Opacity = 0.3;
             ApplicationBar.Mode = ApplicationBarMode.Minimized;
+            ApplicationBar.BackgroundColor = (Color)App.Current.Resources["CustomChromeColor"];
+            ApplicationBar.ForegroundColor = (Color)App.Current.Resources["CustomForegroundColor"];
 
           
-
             var okButton = new ApplicationBarIconButton(new Uri("/Assets/Icons/check.png", UriKind.Relative))
             {
                 Text = "ok"

@@ -62,7 +62,9 @@ public:
 
 	void SelectSaveState(int slot);
 	void SaveState(void);
-	void LoadState(void);
+	int GetCurrentSaveSlot(void);
+	//void LoadState(void);
+	void LoadState(int slot);
 	void Reset(void);
 	void SetContinueNotifier(ContinueEmulationNotifier ^notifier);
 

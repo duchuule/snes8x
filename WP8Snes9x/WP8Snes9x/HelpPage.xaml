@@ -11,20 +11,48 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.BackgroundColor="{StaticResource SystemTrayColor}">
 
+
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator IsIndeterminate="False" 
+                                 IsVisible="True" 
+                                 Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
+                                  />
+    </shell:SystemTray.ProgressIndicator>
+    
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
-
+    <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
         <phone:Pivot Grid.Row="0"
-            Title="{Binding LocalizedResources.HelpTitle, Source={StaticResource LocalizedStrings}}"
                      x:Name="MainPivotControl">
-            <phone:PivotItem Header="{Binding LocalizedResources.HelpHowToHeader, Source={StaticResource LocalizedStrings}}">
+            
+            <phone:Pivot.Title>
+                <TextBlock Text="{Binding LocalizedResources.HelpTitle, Source={StaticResource LocalizedStrings}}"
+                                FontSize="20"
+                           FontWeight="Bold"
+                           Margin="0,-8,0,0"/>
+            </phone:Pivot.Title>
+
+            <phone:Pivot.Background>
+                <ImageBrush ImageSource="{Binding Source={StaticResource AppSettings}, Path=BackgroundUri, Converter={StaticResource ImageSourceConverter}}"
+                            Stretch="None"
+                            AlignmentX="Center"
+                            AlignmentY="Top"
+                            Opacity="{Binding Source={StaticResource AppSettings}, Path=BackgroundOpacity}"/>
+            </phone:Pivot.Background>
+
+            <phone:PivotItem  Margin="12,18, 12, 0">
+                <phone:PivotItem.Header>
+                    <TextBlock Text="{Binding LocalizedResources.HelpHowToHeader, Source={StaticResource LocalizedStrings}}"
+                               Style="{StaticResource MyTitle1Style}" />
+                </phone:PivotItem.Header>
+                
                 <!--ContentPanel - place additional content here-->
                 <ListBox Margin="12,0,12,0">
 
@@ -35,7 +63,7 @@
                             <TextBlock Text="{Binding Path=LocalizedResources.HelpImportSkyDriveHeader, Source={StaticResource LocalizedStrings}}" 
                                        TextWrapping="Wrap" Margin="0,0,0,10" FontSize="22" />
                             <TextBlock Text="{Binding Path=LocalizedResources.HelpImportSkyDriveText, Source={StaticResource LocalizedStrings}}" 
-                                       TextWrapping="Wrap" Margin="0,0,0,10" />
+                                       TextWrapping="Wrap" Margin="0,0,0,10" Name="importSkydriveText" />
                         </StackPanel>
                     </ListBoxItem>
 
@@ -44,7 +72,7 @@
                             <TextBlock Text="{Binding Path=LocalizedResources.HelpImportEmailHeader, Source={StaticResource LocalizedStrings}}" 
                                        TextWrapping="Wrap" Margin="0,0,0,10" FontSize="22" />
                             <TextBlock Text="{Binding Path=LocalizedResources.HelpImportEmailText, Source={StaticResource LocalizedStrings}}" 
-                                       TextWrapping="Wrap" Margin="0,0,0,10" />
+                                       TextWrapping="Wrap" Margin="0,0,0,10" Name="importEmailText" />
                         </StackPanel>
                     </ListBoxItem>
 
@@ -53,21 +81,27 @@
                             <TextBlock Text="{Binding Path=LocalizedResources.HelpImportWebHeader, Source={StaticResource LocalizedStrings}}" 
                                        TextWrapping="Wrap" Margin="0,0,0,10" FontSize="22" />
                             <TextBlock Text="{Binding Path=LocalizedResources.HelpImportWebText, Source={StaticResource LocalizedStrings}}" 
-                                       TextWrapping="Wrap" Margin="0,0,0,10" />
+                                       TextWrapping="Wrap" Margin="0,0,0,10" Name="importWebText"/>
                         </StackPanel>
                     </ListBoxItem>
+
                     <ListBoxItem HorizontalContentAlignment="Stretch" IsHitTestVisible="False" Margin="0,20,0,0">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
-                            <TextBlock Text="Alternative 4: importing from SD card" 
+                            <TextBlock Text="{Binding Path=LocalizedResources.HelpImportSDCardHeader, Source={StaticResource LocalizedStrings}}" 
                                        TextWrapping="Wrap" Margin="0,0,0,10" FontSize="22" />
-                            <TextBlock Text="In the import&amp;export tab of the main page, click on Import ROMs from SD card and follow the instruction" 
+                            <TextBlock Text="{Binding Path=LocalizedResources.HelpImportSDCardText, Source={StaticResource LocalizedStrings}}" 
                                        TextWrapping="Wrap" Margin="0,0,0,10" />
                         </StackPanel>
                     </ListBoxItem>
                 </ListBox>
             </phone:PivotItem>
 
-            <phone:PivotItem Header="{Binding LocalizedResources.HelpTipsHeader, Source={StaticResource LocalizedStrings}}">
+            <phone:PivotItem 
+                             Margin="12,18, 12, 0">
+                <phone:PivotItem.Header>
+                    <TextBlock Text="{Binding LocalizedResources.HelpTipsHeader, Source={StaticResource LocalizedStrings}}"
+                               Style="{StaticResource MyTitle1Style}" />
+                </phone:PivotItem.Header>
                 <ListBox Margin="12,0,12,0">
 
                     <ListBoxItem HorizontalContentAlignment="Stretch" IsHitTestVisible="False">
@@ -99,7 +133,12 @@
                 </ListBox>
             </phone:PivotItem>
 
-            <phone:PivotItem Header="{Binding LocalizedResources.HelpIssuesHeader, Source={StaticResource LocalizedStrings}}">
+            <phone:PivotItem 
+                            Margin="12,18, 12, 0">
+                <phone:PivotItem.Header>
+                    <TextBlock Text="{Binding LocalizedResources.HelpIssuesHeader, Source={StaticResource LocalizedStrings}}"
+                               Style="{StaticResource MyTitle1Style}" />
+                </phone:PivotItem.Header>
                 <ListBox Margin="12,0,12,0">
                     <ListBoxItem HorizontalContentAlignment="Stretch" IsHitTestVisible="False">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
@@ -119,7 +158,6 @@
                                         Text="{Binding LocalizedResources.AboutContact, Source={StaticResource LocalizedStrings}}" />
                         </StackPanel>
                     </ListBoxItem>
-
                 </ListBox>
             </phone:PivotItem>
         </phone:Pivot>

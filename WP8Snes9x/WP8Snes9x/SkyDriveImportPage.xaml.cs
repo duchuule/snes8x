@@ -263,34 +263,7 @@ namespace PhoneDirect3DXamlAppInterop
                         if ((dotIndex = name.LastIndexOf('.')) != -1)
                         {
                             String substrName = name.Substring(dotIndex).ToLower();
-                            if (substrName.Equals(".smc") || substrName.Equals(".sfc") )
-                            {
-                                type = SkyDriveItemType.ROM;
-                            }
-                            else if (substrName.Equals(".srm"))
-                            {
-                                type = SkyDriveItemType.SRAM;
-                            }
-                            else
-                            {
-                                for (int i = 0; i <= 10; i++)
-                                {
-                                    String ext;
-                                    if (i <= 9)
-                                    {
-                                        ext = ".00" + i;
-                                    }
-                                    else
-                                    {
-                                        ext = ".0" + i;
-                                    }
-                                    if (substrName.Equals(ext))
-                                    {
-                                        type = SkyDriveItemType.Savestate;
-                                        break;
-                                    }
-                                }
-                            }
+                            type = GetSkyDriveItemType( substrName);
                         }
 
                         if (type == SkyDriveItemType.File)
@@ -319,6 +292,52 @@ namespace PhoneDirect3DXamlAppInterop
             }
 
             return listItems;
+        }
+
+        public static SkyDriveItemType GetSkyDriveItemType( String substrName)
+        {
+            if (substrName.Equals(".zip") || substrName.Equals(".zib"))
+            {
+                return SkyDriveItemType.Zip;
+            }
+            else if (substrName.Equals(".rar"))
+            {
+                return SkyDriveItemType.Rar;
+            }
+            else if (substrName.Equals(".7z"))
+            {
+                return SkyDriveItemType.SevenZip;
+            }
+            else if (substrName.Equals(".smc") || substrName.Equals(".sfc"))
+            {
+                return SkyDriveItemType.ROM;
+            }
+            else if (substrName.Equals(".srm"))
+            {
+                return SkyDriveItemType.SRAM;
+            }
+            else
+            {
+                for (int i = 0; i <= 10; i++)
+                {
+                    String ext;
+                    if (i <= 9)
+                    {
+                        ext = ".00" + i;
+                    }
+                    else
+                    {
+                        ext = ".0" + i;
+                    }
+                    if (substrName.Equals(ext))
+                    {
+                        return SkyDriveItemType.Savestate;
+
+                    }
+                }
+            }
+            return SkyDriveItemType.File;
+
         }
 
 
@@ -633,46 +652,8 @@ namespace PhoneDirect3DXamlAppInterop
                         if ((dotIndex = name.LastIndexOf('.')) != -1)
                         {
                             String substrName = name.Substring(dotIndex).ToLower();
-                            if (substrName.Equals(".zip") || substrName.Equals(".zib"))
-                            {
-                                type = SkyDriveItemType.Zip;
-                            }
-                            else if (substrName.Equals(".rar"))
-                            {
-                                type = SkyDriveItemType.Rar;
-                            }
-                            else if (substrName.Equals(".7z"))
-                            {
-                                type = SkyDriveItemType.SevenZip;
-                            }
-                            else if (substrName.Equals(".smc") || substrName.Equals(".sfc"))
-                            {
-                                type = SkyDriveItemType.ROM;
-                            }
-                            else if (substrName.Equals(".srm"))
-                            {
-                                type = SkyDriveItemType.SRAM;
-                            }
-                            else
-                            {
-                                for (int i = 0; i <= 10; i++)
-                                {
-                                    String ext;
-                                    if (i <= 9)
-                                    {
-                                        ext = ".00" + i;
-                                    }
-                                    else
-                                    {
-                                        ext = ".0" + i;
-                                    }
-                                    if (substrName.Equals(ext))
-                                    {
-                                        type = SkyDriveItemType.Savestate;
-                                        break;
-                                    }
-                                }
-                            }
+
+                            type = GetSkyDriveItemType(substrName);
                         }
                     }
 

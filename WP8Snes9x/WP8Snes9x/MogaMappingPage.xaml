@@ -12,7 +12,15 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.BackgroundColor="{StaticResource SystemTrayColor}">
+
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator IsIndeterminate="False" 
+                                 IsVisible="True" 
+                                 Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
+                                  />
+    </shell:SystemTray.ProgressIndicator>
 
     <!--app bar -->
     <phone:PhoneApplicationPage.ApplicationBar>
@@ -49,7 +57,17 @@
     </FrameworkElement.Resources>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneBackgroundBrush}">
+        <Grid>
+            <Grid.Background>
+
+                <ImageBrush ImageSource="{Binding Source={StaticResource AppSettings}, Path=BackgroundUri, Converter={StaticResource ImageSourceConverter}}"
+                        Stretch="None"
+                        AlignmentX="Center"
+                        AlignmentY="Top"
+                        Opacity="{Binding Source={StaticResource AppSettings}, Path=BackgroundOpacity}"/>
+
+            </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -57,13 +75,13 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="MOGA mapping" 
+                <TextBlock Text="{Binding Path=LocalizedResources.MogaMappingTitle, Source={StaticResource LocalizedStrings}}" 
                        Margin="9,-7,0,0" Style="{StaticResource MyTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                      Grid.Row="1" Margin="12,0,12,0">
+                      Grid.Row="1" Margin="24,0,24,0">
             <Grid x:Name="ContentPanel" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -86,11 +104,11 @@
 
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="MOGA BUTTON" 
+                    <TextBlock Text="{Binding Path=LocalizedResources.MogaButtonText, Source={StaticResource LocalizedStrings}}" 
                        Margin="0,0,0,12"
                        FontSize="26"/>
 
-                <TextBlock Text="APP FUNCTION"
+                    <TextBlock Text="{Binding Path=LocalizedResources.AppFunctionText, Source={StaticResource LocalizedStrings}}" 
                         Grid.Column="1"
                         Margin="0,0,0,12"
                        FontSize="26"/>
@@ -245,7 +263,7 @@
 
                 </toolkit:ListPicker>
 
-                <TextBlock Text="Note: Emulator Menu function will be implemented at a later date." 
+                    <TextBlock Text="{Binding Path=LocalizedResources.EmulatorMenuText, Source={StaticResource LocalizedStrings}}" 
                            Grid.Row="11"
                            FontSize="20"
                            TextWrapping="Wrap"
@@ -258,7 +276,7 @@
 
         </ScrollViewer>
 
-
+        </Grid>
 
     </Grid>
 

@@ -118,8 +118,13 @@ namespace PhoneDirect3DXamlAppInterop
 
         }
 
+
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
+            //set indicator to let the user know we are working on something
+            //var indicator = SystemTray.GetProgressIndicator(this);
+            //indicator.IsIndeterminate = true;
+
             //set app bar color in case the user return from setting page
             if (ApplicationBar != null)
             {
@@ -367,6 +372,22 @@ namespace PhoneDirect3DXamlAppInterop
             {
             }
 
+            //else if (firstLaunch) //show toast notifications
+            //{
+            //    firstLaunch = false;
+
+            //    ToastPrompt toast = new ToastPrompt();
+
+            //    toast.Title = "Tips: ";
+            //    toast.Message = "Some message";
+
+            //    toast.Show();
+
+            //}
+
+
+
+
             //== auto back up
             try
             {
@@ -376,8 +397,12 @@ namespace PhoneDirect3DXamlAppInterop
             {
             }
 
-            SystemTray.GetProgressIndicator(this).Text = AppResources.ApplicationTitle;
 
+
+            //set indicator after everything is done
+            //indicator.IsIndeterminate = false;
+
+            SystemTray.GetProgressIndicator(this).Text = AppResources.ApplicationTitle;
             return;
         }
 
@@ -847,6 +872,9 @@ namespace PhoneDirect3DXamlAppInterop
 
 
 
+
+
+
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             //FileHandler.UpdateLiveTile();
@@ -866,6 +894,7 @@ namespace PhoneDirect3DXamlAppInterop
                 StorageFile file = await StorageFile.GetFileFromPathAsync("Assets/Airwolf 92 (Demo).smc");
                 await file.CopyAsync(romFolder);
 
+                
                 isoSettings["DEMOCOPIED"] = true;
                 isoSettings.Save();
 
@@ -873,6 +902,8 @@ namespace PhoneDirect3DXamlAppInterop
 
                 this.RefreshRecentROMList();
             }
+
+            
         }
 
         public static void LoadInitialSettings()
@@ -899,18 +930,11 @@ namespace PhoneDirect3DXamlAppInterop
                 //{
                 //    isoSettings[SettingsPage.LowFreqModeMeasuredKey] = false;
                 //}
-                if (!isoSettings.Contains(SettingsPage.VControllerSizeKey))
-                {
-                    isoSettings[SettingsPage.VControllerSizeKey] = false;
-                }
                 if (!isoSettings.Contains(SettingsPage.VControllerButtonStyleKey))
                 {
                     isoSettings[SettingsPage.VControllerButtonStyleKey] = false;
                 }
-                if (!isoSettings.Contains(SettingsPage.StretchKey))
-                {
-                    isoSettings[SettingsPage.StretchKey] = false;
-                }
+
                 if (!isoSettings.Contains(SettingsPage.OrientationKey))
                 {
                     isoSettings[SettingsPage.OrientationKey] = 0;
@@ -926,6 +950,10 @@ namespace PhoneDirect3DXamlAppInterop
                 if (!isoSettings.Contains(SettingsPage.OpacityKey))
                 {
                     isoSettings[SettingsPage.OpacityKey] = 30;
+                }
+                if (!isoSettings.Contains(SettingsPage.StretchKey))
+                {
+                    isoSettings[SettingsPage.StretchKey] = false;
                 }
                 if (!isoSettings.Contains(SettingsPage.SkipFramesKey))
                 {
@@ -975,6 +1003,10 @@ namespace PhoneDirect3DXamlAppInterop
                 {
                     isoSettings[SettingsPage.SelectLastState] = true;
                 }
+                //if (!isoSettings.Contains(SettingsPage.RestoreCheatKey))
+                //{
+                //    isoSettings[SettingsPage.RestoreCheatKey] = false;
+                //}
                 if (!isoSettings.Contains(SettingsPage.CreateManualSnapshotKey))
                 {
                     isoSettings[SettingsPage.CreateManualSnapshotKey] = false;
@@ -999,7 +1031,37 @@ namespace PhoneDirect3DXamlAppInterop
                 {
                     isoSettings[SettingsPage.BgcolorBKey] = 210;
                 }
+                if (!isoSettings.Contains(SettingsPage.AutoSaveLoadKey))
+                {
+                    isoSettings[SettingsPage.AutoSaveLoadKey] = App.metroSettings.LoadLastState;  //this is for compability with a faulty update (2.9.0)
+                }
+                if (!isoSettings.Contains(SettingsPage.VibrationEnabledKey))
+                {
+                    isoSettings[SettingsPage.VibrationEnabledKey] = false;
+                }
+                if (!isoSettings.Contains(SettingsPage.VibrationDurationKey))
+                {
+                    isoSettings[SettingsPage.VibrationDurationKey] = 0.02; //in seconds
+                }
+                if (!isoSettings.Contains(SettingsPage.EnableAutoFireKey))
+                {
+                    isoSettings[SettingsPage.EnableAutoFireKey] = false; 
+                }
+                if (!isoSettings.Contains(SettingsPage.MapABLRTurboKey))
+                {
+                    isoSettings[SettingsPage.MapABLRTurboKey] = true; 
+                }
+                if (!isoSettings.Contains(SettingsPage.FullPressStickABLRKey))
+                {
+                    isoSettings[SettingsPage.FullPressStickABLRKey] = true;
+                }
+                if (!isoSettings.Contains(SettingsPage.UseMotionControlKey))
+                {
+                    isoSettings[SettingsPage.UseMotionControlKey] = 0;
+                }
 
+                if (!isoSettings.Contains(SettingsPage.UseTurboKey))
+                    isoSettings[SettingsPage.UseTurboKey] = false;
 
                 //get default controller position
                 int[] cpos = CustomizeControllerPage.GetDefaultControllerPosition();
@@ -1196,13 +1258,33 @@ namespace PhoneDirect3DXamlAppInterop
                     isoSettings[SettingsPage.MogaRightJoystickKey] = 64;
                 }
 
+                //motion mapping
+                if (!isoSettings.Contains(SettingsPage.MotionLeftKey))
+                    isoSettings[SettingsPage.MotionLeftKey] = 1;
+                if (!isoSettings.Contains(SettingsPage.MotionRightKey))
+                    isoSettings[SettingsPage.MotionRightKey] = 2;
+                if (!isoSettings.Contains(SettingsPage.MotionUpKey))
+                    isoSettings[SettingsPage.MotionUpKey] = 4;
+                if (!isoSettings.Contains(SettingsPage.MotionDownKey))
+                    isoSettings[SettingsPage.MotionDownKey] = 8;
+
+                if (!isoSettings.Contains(SettingsPage.RestAngleXKey))
+                    isoSettings[SettingsPage.RestAngleXKey] = 0.0;
+                if (!isoSettings.Contains(SettingsPage.RestAngleYKey))
+                    isoSettings[SettingsPage.RestAngleYKey] =  -0.70711;
+                if (!isoSettings.Contains(SettingsPage.RestAngleZKey))
+                    isoSettings[SettingsPage.RestAngleZKey] = -0.70711;
+                if (!isoSettings.Contains(SettingsPage.MotionDeadzoneHKey))
+                    isoSettings[SettingsPage.MotionDeadzoneHKey] = 10.0;
+                if (!isoSettings.Contains(SettingsPage.MotionDeadzoneVKey))
+                    isoSettings[SettingsPage.MotionDeadzoneVKey] = 10.0;
+                if (!isoSettings.Contains(SettingsPage.MotionAdaptOrientationKey))
+                    isoSettings[SettingsPage.MotionAdaptOrientationKey] = true;
+
                 isoSettings.Save();
 
                 settings.LowFrequencyMode = (bool)isoSettings[SettingsPage.LowFreqModeKey];
                 settings.SoundEnabled = (bool)isoSettings[SettingsPage.EnableSoundKey];
-                settings.VirtualControllerOnTop = (bool)isoSettings[SettingsPage.VControllerPosKey];
-                //settings.LowFrequencyModeMeasured = (bool)isoSettings[SettingsPage.LowFreqModeMeasuredKey];
-                settings.LargeVController = (bool)isoSettings[SettingsPage.VControllerSizeKey];
                 settings.GrayVControllerButtons = (bool)isoSettings[SettingsPage.VControllerButtonStyleKey];
                 settings.Orientation = (int)isoSettings[SettingsPage.OrientationKey];
                 settings.FullscreenStretch = (bool)isoSettings[SettingsPage.StretchKey];
@@ -1227,6 +1309,15 @@ namespace PhoneDirect3DXamlAppInterop
                 settings.BgcolorR = (int)isoSettings[SettingsPage.BgcolorRKey];
                 settings.BgcolorG = (int)isoSettings[SettingsPage.BgcolorGKey];
                 settings.BgcolorB = (int)isoSettings[SettingsPage.BgcolorBKey];
+                settings.AutoSaveLoad = (bool)isoSettings[SettingsPage.AutoSaveLoadKey];
+                settings.VibrationEnabled = (bool)isoSettings[SettingsPage.VibrationEnabledKey];
+                settings.VibrationDuration = (double)isoSettings[SettingsPage.VibrationDurationKey];
+                settings.EnableAutoFire = (bool)isoSettings[SettingsPage.EnableAutoFireKey];
+                settings.MapABLRTurbo = (bool)isoSettings[SettingsPage.MapABLRTurboKey];
+                settings.FullPressStickABLR = (bool)isoSettings[SettingsPage.FullPressStickABLRKey];
+                settings.UseMotionControl = (int)isoSettings[SettingsPage.UseMotionControlKey];
+                settings.UseTurbo = (bool)isoSettings[SettingsPage.UseTurboKey];
+
 
                 settings.PadCenterXP = (int)isoSettings[SettingsPage.PadCenterXPKey];
                 settings.PadCenterYP = (int)isoSettings[SettingsPage.PadCenterYPKey];
@@ -1279,33 +1370,43 @@ namespace PhoneDirect3DXamlAppInterop
                 settings.MogaLeftJoystick = (int)isoSettings[SettingsPage.MogaLeftJoystickKey];
                 settings.MogaRightJoystick = (int)isoSettings[SettingsPage.MogaRightJoystickKey];
 
+                settings.MotionLeft = (int)isoSettings[SettingsPage.MotionLeftKey];
+                settings.MotionRight = (int)isoSettings[SettingsPage.MotionRightKey];
+                settings.MotionUp = (int)isoSettings[SettingsPage.MotionUpKey];
+                settings.MotionDown = (int)isoSettings[SettingsPage.MotionDownKey];
+                settings.RestAngleX = (double)isoSettings[SettingsPage.RestAngleXKey];
+                settings.RestAngleY = (double)isoSettings[SettingsPage.RestAngleYKey];
+                settings.RestAngleZ = (double)isoSettings[SettingsPage.RestAngleZKey];
+
+                settings.MotionDeadzoneH = (double)isoSettings[SettingsPage.MotionDeadzoneHKey];
+                settings.MotionDeadzoneV = (double)isoSettings[SettingsPage.MotionDeadzoneVKey];
+                settings.MotionAdaptOrientation = (bool)isoSettings[SettingsPage.MotionAdaptOrientationKey];
+
+
                 settings.SettingsChanged = MainPage.SettingsChangedDelegate;
-
-
             }
         }
 
-        private static void SettingsChangedDelegate()
+        
+
+        public static void SettingsChangedDelegate()
         {
             EmulatorSettings settings = EmulatorSettings.Current;
             IsolatedStorageSettings isoSettings = IsolatedStorageSettings.ApplicationSettings;
 
             isoSettings[SettingsPage.EnableSoundKey] = settings.SoundEnabled;
-            isoSettings[SettingsPage.VControllerPosKey] = settings.VirtualControllerOnTop;
             isoSettings[SettingsPage.LowFreqModeKey] = settings.LowFrequencyMode;
-            //isoSettings[SettingsPage.LowFreqModeMeasuredKey] = settings.LowFrequencyModeMeasured;
-            isoSettings[SettingsPage.VControllerSizeKey] = settings.LargeVController;
             isoSettings[SettingsPage.VControllerButtonStyleKey] = settings.GrayVControllerButtons;
             isoSettings[SettingsPage.OrientationKey] = settings.Orientation;
-            isoSettings[SettingsPage.StretchKey] = settings.FullscreenStretch;
             isoSettings[SettingsPage.ControllerScaleKey] = settings.ControllerScale;
             isoSettings[SettingsPage.ButtonScaleKey] = settings.ButtonScale;
             isoSettings[SettingsPage.OpacityKey] = settings.ControllerOpacity;
+            isoSettings[SettingsPage.SkipFramesKey] = settings.FrameSkip;            isoSettings[SettingsPage.ImageScalingKey] = settings.ImageScaling;
+            isoSettings[SettingsPage.StretchKey] = settings.FullscreenStretch;            isoSettings[SettingsPage.TurboFrameSkipKey] = settings.TurboFrameSkip;
             isoSettings[SettingsPage.ImageScalingKey] = settings.ImageScaling;
             isoSettings[SettingsPage.TurboFrameSkipKey] = settings.TurboFrameSkip;
             isoSettings[SettingsPage.SyncAudioKey] = settings.SynchronizeAudio;
             isoSettings[SettingsPage.PowerSaverKey] = settings.PowerFrameSkip;
-            isoSettings[SettingsPage.SkipFramesKey] = settings.FrameSkip;
             isoSettings[SettingsPage.DPadStyleKey] = settings.DPadStyle;
             isoSettings[SettingsPage.DeadzoneKey] = settings.Deadzone;
             isoSettings[SettingsPage.CameraAssignKey] = settings.CameraButtonAssignment;
@@ -1319,9 +1420,16 @@ namespace PhoneDirect3DXamlAppInterop
             isoSettings[SettingsPage.BgcolorRKey] = settings.BgcolorR;
             isoSettings[SettingsPage.BgcolorGKey] = settings.BgcolorG;
             isoSettings[SettingsPage.BgcolorBKey] = settings.BgcolorB;
+            isoSettings[SettingsPage.AutoSaveLoadKey] = settings.AutoSaveLoad;
+             isoSettings[SettingsPage.VibrationEnabledKey] = settings.VibrationEnabled;
+            isoSettings[SettingsPage.VibrationDurationKey] = settings.VibrationDuration;
+            isoSettings[SettingsPage.EnableAutoFireKey] = settings.EnableAutoFire;
+            isoSettings[SettingsPage.MapABLRTurboKey] = settings.MapABLRTurbo;
+            isoSettings[SettingsPage.FullPressStickABLRKey] = settings.FullPressStickABLR;
+            isoSettings[SettingsPage.UseMotionControlKey] = settings.UseMotionControl;
+
             isoSettings.Save();
         }
-
 
         private void RefreshRecentROMList()
         {

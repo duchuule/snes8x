@@ -130,6 +130,12 @@ namespace PhoneDirect3DXamlAppComponent
 		}
 	}
 
+	int Direct3DBackground::GetCurrentSaveSlot(void)
+	{
+		return SavestateSlot;
+
+	}
+
 	void Direct3DBackground::SaveState(void)
 	{
 		this->m_renderer->should_show_resume_text = false;
@@ -153,11 +159,11 @@ namespace PhoneDirect3DXamlAppComponent
 		this->ContinueEmulationNotifier();
 	}
 
-	void Direct3DBackground::LoadState(void)
+	void Direct3DBackground::LoadState(int slot)
 	{
 		this->m_renderer->should_show_resume_text = false;
 
-		LoadStateAsync().then([this]()
+		LoadStateAsync(slot).then([this]()
 		{
 			this->emulator->Unpause();
 		});

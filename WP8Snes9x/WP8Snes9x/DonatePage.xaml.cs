@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Microsoft.Phone.Tasks;
 
 using System.Collections.ObjectModel;
 
@@ -14,8 +15,14 @@ using System.Threading.Tasks;
 
 using Windows.ApplicationModel.Store;
 using Store = Windows.ApplicationModel.Store;
+using PhoneDirect3DXamlAppComponent;
 
-
+using PhoneDirect3DXamlAppInterop.Resources;
+using Microsoft.Phone.Info;
+using System.Security.Cryptography;
+using System.Text;
+using System.IO;
+using Telerik.Windows.Controls;
 
 
 

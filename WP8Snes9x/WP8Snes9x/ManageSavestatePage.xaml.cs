@@ -9,6 +9,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using PhoneDirect3DXamlAppInterop.Resources;
 using PhoneDirect3DXamlAppInterop.Database;
+using System.Windows.Media;
 
 namespace PhoneDirect3DXamlAppInterop
 {
@@ -25,9 +26,10 @@ namespace PhoneDirect3DXamlAppInterop
             if (PhoneDirect3DXamlAppComponent.EmulatorSettings.Current.ShouldShowAds)
             {
                 AdControl adControl = new AdControl();
-                LayoutRoot.Children.Add(adControl);
+                ((Grid)(LayoutRoot.Children[0])).Children.Add(adControl);
                 adControl.SetValue(Grid.RowProperty, 2);
             }
+
 
             db = ROMDatabase.Current;
 
@@ -49,6 +51,8 @@ namespace PhoneDirect3DXamlAppInterop
         {
             ApplicationBar = new ApplicationBar();
             ApplicationBar.IsVisible = true;
+            ApplicationBar.BackgroundColor = (Color)App.Current.Resources["CustomChromeColor"];
+            ApplicationBar.ForegroundColor = (Color)App.Current.Resources["CustomForegroundColor"];
 
             var removeButton = new ApplicationBarIconButton(new Uri("/Assets/Icons/delete.png", UriKind.Relative))
             {

@@ -1043,16 +1043,16 @@ Device model: {0}</value>
     <value>Product is not available at the moment.</value>
   </data>
   <data name="PurchaseButtonText" xml:space="preserve">
-    <value>Purchase</value>
+    <value>Donate</value>
   </data>
   <data name="PurchasedThankYouText" xml:space="preserve">
-    <value>Purchased, thank you!</value>
+    <value>Donated, thank you!</value>
   </data>
   <data name="PurchaseSuccessNoAdsText" xml:space="preserve">
-    <value>Purchase successful, ads will not be shown the next time you start the app.</value>
+    <value>Donate successful.</value>
   </data>
   <data name="PurchaseSuccessText" xml:space="preserve">
-    <value>Purchase successful.</value>
+    <value>Donate successful.</value>
   </data>
   <data name="ResetImageText" xml:space="preserve">
     <value>Reset image</value>
@@ -1372,5 +1372,11 @@ Device model: {0}</value>
   </data>
   <data name="UseGameboyColorText" xml:space="preserve">
     <value>Use dimmed Gameboy colors (GBC)</value>
+  </data>
+  <data name="CameraAssignX" xml:space="preserve">
+    <value>X-Button</value>
+  </data>
+  <data name="CameraAssignY" xml:space="preserve">
+    <value>Y-Button</value>
   </data>
 </root>

@@ -720,6 +720,24 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to X-Button.
+        /// </summary>
+        public static string CameraAssignX {
+            get {
+                return ResourceManager.GetString("CameraAssignX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Y-Button.
+        /// </summary>
+        public static string CameraAssignY {
+            get {
+                return ResourceManager.GetString("CameraAssignY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assign to camera button.
         /// </summary>
         public static string CameraButtonAssignment {
@@ -2634,7 +2652,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Purchase.
+        ///   Looks up a localized string similar to Donate.
         /// </summary>
         public static string PurchaseButtonText {
             get {
@@ -2643,7 +2661,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Purchased, thank you!.
+        ///   Looks up a localized string similar to Donated, thank you!.
         /// </summary>
         public static string PurchasedThankYouText {
             get {
@@ -2652,7 +2670,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Purchase successful, ads will not be shown the next time you start the app..
+        ///   Looks up a localized string similar to Donate successful..
         /// </summary>
         public static string PurchaseSuccessNoAdsText {
             get {
@@ -2661,7 +2679,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Purchase successful..
+        ///   Looks up a localized string similar to Donate successful..
         /// </summary>
         public static string PurchaseSuccessText {
             get {

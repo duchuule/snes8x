@@ -9,6 +9,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Live;
 using Microsoft.Live.Controls;
+using PhoneDirect3DXamlAppInterop.Resources;
 
 namespace PhoneDirect3DXamlAppInterop
 {
@@ -19,7 +20,6 @@ namespace PhoneDirect3DXamlAppInterop
         public ImportPage()
         {
             InitializeComponent();
-
             //create ad control
             if (PhoneDirect3DXamlAppComponent.EmulatorSettings.Current.ShouldShowAds)
             {
