@@ -1345,7 +1345,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Camera button auto fires A/B/L/R.
+        ///   Looks up a localized string similar to Camera button auto fires A/B/X/Y/L/R.
         /// </summary>
         public static string EnableAutoFireText {
             get {
@@ -1624,7 +1624,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Camera full press makes A/B/L/R stick.
+        ///   Looks up a localized string similar to Camera full press makes A/B/X/Y/L/R stick.
         /// </summary>
         public static string FullPressButtonStickText {
             get {

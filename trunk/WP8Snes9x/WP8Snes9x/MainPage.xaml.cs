@@ -40,7 +40,7 @@ using System.Text;
 
 
 
-//"C:\Program Files (x86)\Microsoft SDKs\Windows Phone\v8.0\Tools\IsolatedStorageExplorerTool\ISETool.exe" ts xd ed3cc816-1ab0-418a-9bb8-11505804f6b4 "D:\Duc\Documents\Visual Studio 2012\Projects\WP8Snes8x\trunk"
+//"C:\Program Files (x86)\Microsoft SDKs\Windows Phone\v8.1\Tools\IsolatedStorageExplorerTool\ISETool.exe" ts xd ed3cc816-1ab0-418a-9bb8-11505804f6b4 "D:\Duc\Documents\Visual Studio 2012\Projects\WP8Snes8x\trunk"
 
 
 namespace PhoneDirect3DXamlAppInterop
@@ -1396,13 +1396,12 @@ namespace PhoneDirect3DXamlAppInterop
 
             isoSettings[SettingsPage.EnableSoundKey] = settings.SoundEnabled;
             isoSettings[SettingsPage.LowFreqModeKey] = settings.LowFrequencyMode;
-            isoSettings[SettingsPage.VControllerButtonStyleKey] = settings.GrayVControllerButtons;
             isoSettings[SettingsPage.OrientationKey] = settings.Orientation;
             isoSettings[SettingsPage.ControllerScaleKey] = settings.ControllerScale;
             isoSettings[SettingsPage.ButtonScaleKey] = settings.ButtonScale;
             isoSettings[SettingsPage.OpacityKey] = settings.ControllerOpacity;
-            isoSettings[SettingsPage.SkipFramesKey] = settings.FrameSkip;            isoSettings[SettingsPage.ImageScalingKey] = settings.ImageScaling;
-            isoSettings[SettingsPage.StretchKey] = settings.FullscreenStretch;            isoSettings[SettingsPage.TurboFrameSkipKey] = settings.TurboFrameSkip;
+            isoSettings[SettingsPage.SkipFramesKey] = settings.FrameSkip;
+            isoSettings[SettingsPage.StretchKey] = settings.FullscreenStretch;
             isoSettings[SettingsPage.ImageScalingKey] = settings.ImageScaling;
             isoSettings[SettingsPage.TurboFrameSkipKey] = settings.TurboFrameSkip;
             isoSettings[SettingsPage.SyncAudioKey] = settings.SynchronizeAudio;
@@ -1421,6 +1420,7 @@ namespace PhoneDirect3DXamlAppInterop
             isoSettings[SettingsPage.BgcolorGKey] = settings.BgcolorG;
             isoSettings[SettingsPage.BgcolorBKey] = settings.BgcolorB;
             isoSettings[SettingsPage.AutoSaveLoadKey] = settings.AutoSaveLoad;
+            isoSettings[SettingsPage.VControllerButtonStyleKey] = settings.GrayVControllerButtons;
              isoSettings[SettingsPage.VibrationEnabledKey] = settings.VibrationEnabled;
             isoSettings[SettingsPage.VibrationDurationKey] = settings.VibrationDuration;
             isoSettings[SettingsPage.EnableAutoFireKey] = settings.EnableAutoFire;
