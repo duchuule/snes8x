@@ -25,7 +25,11 @@ namespace PhoneDirect3DXamlAppInterop
                 LayoutRoot.Children.Add(adControl);
                 adControl.SetValue(Grid.RowProperty, 1);
             }
+
+
+
         }
+
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -42,9 +46,11 @@ namespace PhoneDirect3DXamlAppInterop
         private void contactBlock_Tap_1(object sender, System.Windows.Input.GestureEventArgs e)
         {
             EmailComposeTask emailcomposer = new EmailComposeTask();
+
             emailcomposer.To = AppResources.AboutContact;
-            emailcomposer.Subject = "Snes8x bug report or feature suggestion";
-            emailcomposer.Body = "Insert your bug report or feature request here.";
+
+            emailcomposer.Subject = AppResources.EmailSubjectText;
+            emailcomposer.Body = String.Format(AppResources.EmailBodyText, Microsoft.Phone.Info.DeviceStatus.DeviceName);
             emailcomposer.Show();
         }
     }

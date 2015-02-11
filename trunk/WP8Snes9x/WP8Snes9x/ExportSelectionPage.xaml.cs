@@ -31,7 +31,6 @@ namespace PhoneDirect3DXamlAppInterop
 
         private const string EXPORT_FOLDER = "Snes8x export";
 
-
         public ExportSelectionPage()
         {
             InitializeComponent();
@@ -76,7 +75,7 @@ namespace PhoneDirect3DXamlAppInterop
                 int index = currentEntry.FileName.LastIndexOf('.');
                 int diff = currentEntry.FileName.Length - 1 - index;
 
-                String sramName = currentEntry.FileName.Substring(0, currentEntry.FileName.Length - diff) + "sav";
+                String sramName = currentEntry.FileName.Substring(0, currentEntry.FileName.Length - diff) + "srm";
                 String sramPath = FileHandler.ROM_DIRECTORY + "/" + FileHandler.SAVE_DIRECTORY + "/" + sramName;
 
                 if (iso.FileExists(sramPath))

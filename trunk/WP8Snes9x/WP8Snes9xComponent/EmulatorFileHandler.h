@@ -19,7 +19,7 @@ namespace Emulator
 
 	Platform::Array<unsigned short> ^GetSnapshotBuffer(uint16 *backbuffer, size_t pitch, int imageWidth, int imageHeight);
 	task<void> SaveStateAsync(void);
-	task<void> LoadStateAsync(void);
+	task<void> LoadStateAsync(int slot);
 	task<void> LoadROMAsync(StorageFile ^file, StorageFolder ^folder);
 	task<void> ResetAsync(void);
 	task<ROMData> GetROMBytesFromFileAsync(StorageFile ^file);

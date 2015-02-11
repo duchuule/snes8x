@@ -44,6 +44,7 @@ namespace PhoneDirect3DXamlAppInterop.Database
             }
         }
 
+
         private class ROMDataContext : DataContext
         {
             public Table<ROMDBEntry> ROMTable { get; set; }
@@ -57,7 +58,7 @@ namespace PhoneDirect3DXamlAppInterop.Database
             }
         }
 
-        public event CommitDelegate Commit = delegate { };
+        //public event CommitDelegate Commit = delegate { };
 
         private ROMDataContext context;
         private bool disposed = false;
@@ -97,6 +98,7 @@ namespace PhoneDirect3DXamlAppInterop.Database
             return dbCreated;
         }
 
+
         private void UpdateDatabase()
         {
             // Check whether a database update is needed.
@@ -135,7 +137,6 @@ namespace PhoneDirect3DXamlAppInterop.Database
             AllROMDBEntries = new TrulyObservableCollection<ROMDBEntry>(ROMEntriesInDB);
 
         }
-
         public void Add(ROMDBEntry entry)
         {
             if (!context.DatabaseExists())
@@ -147,6 +148,15 @@ namespace PhoneDirect3DXamlAppInterop.Database
 
             //add to list
             AllROMDBEntries.Add(entry);
+        }
+
+        public int GetNumberOfROMs()
+        {
+            if (!context.DatabaseExists())
+            {
+                throw new InvalidOperationException("Database does not exist.");
+            }
+            return this.context.ROMTable.Count();
         }
 
         public bool IsDisplayNameUnique(string displayName)
@@ -189,6 +199,7 @@ namespace PhoneDirect3DXamlAppInterop.Database
             {
                 throw new InvalidOperationException("Database does not exist.");
             }
+
             romFilename = romFilename.ToLower();
             return this.context.SavestateTable
                 .Where(s => (s.ROMFileName.ToLower().Equals(romFilename)) && (s.Slot == slot))
@@ -204,7 +215,7 @@ namespace PhoneDirect3DXamlAppInterop.Database
             return this.context.ROMTable
                 .Where(r => !r.SnapshotURI.Equals(FileHandler.DEFAULT_SNAPSHOT))
                 .OrderByDescending(r => r.LastPlayed)
-                .Take(3)
+                .Take(9)
                 .Select(r => r.SnapshotURI)
                 .ToArray();
         }
@@ -222,6 +233,8 @@ namespace PhoneDirect3DXamlAppInterop.Database
                 .FirstOrDefault();
         }
 
+
+       
         public void Add(SavestateEntry entry)
         {
             if (!context.DatabaseExists())
@@ -238,12 +251,35 @@ namespace PhoneDirect3DXamlAppInterop.Database
             {
                 throw new InvalidOperationException("Database does not exist.");
             }
+
+            
             fileName = fileName.ToLower();
+
+            //first try file name
             ROMDBEntry entry = this.context.ROMTable
                 .Where(f => f.FileName.ToLower().Equals(fileName))
                 .FirstOrDefault();
+
+            //then try display name
+            
+
+
+            if (entry == null)
+            {
+                ROMDBEntry[] entries = this.context.ROMTable.ToArray();
+                foreach (ROMDBEntry anentry in entries)
+                {
+                    if (Regex.Replace(anentry.DisplayName, @"[^\w\s]+", "").ToLower().Equals(fileName))
+                        entry = anentry;
+                }
+            }
+
+
+
             return entry;
         }
+
+
 
         public ROMDBEntry GetROMFromSavestateName(string savestateName)
         {
@@ -265,9 +301,8 @@ namespace PhoneDirect3DXamlAppInterop.Database
                 .Where(r => (r.DisplayName.ToLower().Equals(name)))
                 .FirstOrDefault();
             }
+
         }
-
-
 
         public ROMDBEntry GetROMFromSRAMName(string savestateName)
         {
@@ -292,6 +327,11 @@ namespace PhoneDirect3DXamlAppInterop.Database
             }
         }
 
+        
+
+
+      
+
         public int GetLastSavestateSlotByFileNameExceptAuto(string filename)
         {
             if (!context.DatabaseExists())
@@ -301,6 +341,24 @@ namespace PhoneDirect3DXamlAppInterop.Database
             filename = filename.ToLower();
             SavestateEntry save = this.context.SavestateTable
                 .Where(s => s.ROMFileName.ToLower().Equals(filename) && s.Slot != 10)
+                .OrderByDescending(s => s.Savetime)
+                .FirstOrDefault();
+            if (save != null)
+            {
+                return save.Slot;
+            }
+            return 0;
+        }
+
+        public int GetLastSavestateSlotByFileNameIncludingAuto(string filename)
+        {
+            if (!context.DatabaseExists())
+            {
+                throw new InvalidOperationException("Database does not exist.");
+            }
+            filename = filename.ToLower();
+            SavestateEntry save = this.context.SavestateTable
+                .Where(s => s.ROMFileName.ToLower().Equals(filename) && s.Savetime != FileHandler.DEFAULT_DATETIME)
                 .OrderByDescending(s => s.Savetime)
                 .FirstOrDefault();
             if (save != null)
@@ -336,11 +394,20 @@ namespace PhoneDirect3DXamlAppInterop.Database
 
         public IEnumerable<ROMDBEntry> GetRecentlyPlayed()
         {
+            //ROMDBEntry last = this.context.ROMTable
+            //    .Where(r => (r.LastPlayed != FileHandler.DEFAULT_DATETIME))
+            //    .OrderByDescending(f => f.LastPlayed)
+            //    .FirstOrDefault();
+
             return this.context.ROMTable
                 .Where(r => (r.LastPlayed != FileHandler.DEFAULT_DATETIME))
                 .OrderByDescending(f => f.LastPlayed)
                 .Take(5)
+                //.Where(r => (r.FileName != last.FileName))
                 .ToArray();
+
+           
+          
         }
 
         public ROMDBEntry GetLastPlayed()
@@ -358,6 +425,8 @@ namespace PhoneDirect3DXamlAppInterop.Database
             return this.context.ROMTable
                 .OrderBy(f => f.DisplayName)
                 .ToArray();
+
+
         }
 
         public IEnumerable<SavestateEntry> GetSavestatesForROM(ROMDBEntry entry)
@@ -388,6 +457,7 @@ namespace PhoneDirect3DXamlAppInterop.Database
             this.context.Dispose();
         }
 
+
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -401,5 +471,5 @@ namespace PhoneDirect3DXamlAppInterop.Database
             }
         }
         #endregion
+    } //end class
     }
-}

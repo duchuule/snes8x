@@ -123,8 +123,14 @@ namespace Emulator
 		});
 	}
 
-	task<void> LoadStateAsync(void)
+	task<void> LoadStateAsync(int slot)
 	{
+		int whichslot;
+		if (slot <0)
+			whichslot = LoadstateSlot;
+		else
+			whichslot = slot;
+
 		EmulatorGame *emulator = EmulatorGame::GetInstance();
 		return create_task([]()
 		{
@@ -133,17 +139,17 @@ namespace Emulator
 				throw ref new Exception(E_FAIL, "No ROM loaded.");
 			}
 			return ROMFolder->GetFolderAsync(SAVE_FOLDER);
-		}).then([emulator](StorageFolder ^folder)
+		}).then([emulator, whichslot](StorageFolder ^folder)
 		{
 			emulator->Pause();
 			wstringstream extension;
 			extension << L".0";
-			if(LoadstateSlot >= 10)
+			if(whichslot >= 10)
 			{
-				extension << LoadstateSlot;
+				extension << whichslot;
 			}else
 			{
-				extension << 0 << LoadstateSlot;
+				extension << 0 << whichslot;
 			}
 			Platform::String ^nameWithoutExtension = ref new Platform::String(ROMFile->Name->Data(), ROMFile->Name->Length() - 4);			
 			Platform::String ^statePath = folder->Path + "\\" + nameWithoutExtension + ref new Platform::String(extension.str().c_str());

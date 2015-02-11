@@ -19,13 +19,11 @@ namespace PhoneDirect3DXamlAppInterop
         {
             InitializeComponent();
 
-            tileColorPicker.Color = new Color
-            {
+            tileColorPicker.Color = new Color{
                 R = (byte)EmulatorSettings.Current.BgcolorR,
                 G = (byte)EmulatorSettings.Current.BgcolorG,
                 B = (byte)EmulatorSettings.Current.BgcolorB,
-                A = 255
-            };
+                A = 255};
         }
 
 

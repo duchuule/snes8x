@@ -9,8 +9,11 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
 
+
 namespace PhoneDirect3DXamlAppInterop.Database
 {
+    
+
     [Table(Name = "ROMs")]
     public class ROMDBEntry : INotifyPropertyChanged, INotifyPropertyChanging
     {
@@ -100,6 +103,7 @@ namespace PhoneDirect3DXamlAppInterop.Database
             }
         }
 
+
         [Column]
         public int? AutoSaveIndex
         {
@@ -116,6 +120,7 @@ namespace PhoneDirect3DXamlAppInterop.Database
 
             }
         }
+
 
         [Association(Name = "FK_ROM_SAVESTATES", Storage = "savestateRefs", ThisKey = "FileName", OtherKey = "ROMFileName")]
         public EntitySet<SavestateEntry> Savestates

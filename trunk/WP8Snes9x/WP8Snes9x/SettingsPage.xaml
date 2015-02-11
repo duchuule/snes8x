@@ -7,30 +7,86 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:telerikInput="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Input" 
+    xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
+    xmlns:local="clr-namespace:PhoneDirect3DXamlAppInterop"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.BackgroundColor="{StaticResource SystemTrayColor}">
+
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator IsIndeterminate="False" 
+                                 IsVisible="True" 
+                                 Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
+                                  />
+
+    </shell:SystemTray.ProgressIndicator>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent" >
+    <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneBackgroundBrush}">
+
+
           <Grid.RowDefinitions>
         <RowDefinition Height="*" />
         <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <phone:Pivot Title="{Binding Path=LocalizedResources.SettingsPageTitle, Source={StaticResource LocalizedStrings}}"
-                     Grid.Row="0">
+            <phone:Pivot Name="pivot">
 
-            <phone:PivotItem Margin="12,0, 0, 0">
+
+                <phone:Pivot.Title>
+                    <TextBlock Text="{Binding Path=LocalizedResources.SettingsPageTitle, Source={StaticResource LocalizedStrings}}"
+                                FontSize="20"
+                           FontWeight="Bold"
+                           Margin="0,-8,0,0"/>
+                </phone:Pivot.Title>
+
+
+                <phone:Pivot.Background>
+                    <ImageBrush ImageSource="{Binding Source={StaticResource AppSettings}, Path=BackgroundUri, Converter={StaticResource ImageSourceConverter}}"
+                            Stretch="None"
+                            AlignmentX="Center"
+                            AlignmentY="Top"
+                            Opacity="{Binding Source={StaticResource AppSettings}, Path=BackgroundOpacity}"/>
+                </phone:Pivot.Background>
+
+                <phone:PivotItem Name="inputPivot"
+                             Margin="12,18, 12, 0">
                 <phone:PivotItem.Header>
                     <TextBlock Text="{Binding Path=LocalizedResources.InputSettingsPageTitle, Source={StaticResource LocalizedStrings}}"
                                Style="{StaticResource MyTitle1Style}" />
                 </phone:PivotItem.Header>
                 
+                    
                 <ListBox>
+
+
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <toolkit:ListPicker Header="{Binding Path=LocalizedResources.MotionControlHeader, Source={StaticResource LocalizedStrings}}" 
+                                        FullModeHeader="{Binding Path=LocalizedResources.MotionControlHeader, Source={StaticResource LocalizedStrings}}" 
+                                        SelectionChanged="motionControlBox_SelectionChanged"
+                                            x:Name="motionControlBox" 
+                                            SelectedIndex="0">
+                            <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.NoneButtonText, Source={StaticResource LocalizedStrings}}" />
+                            <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.AccelerometerText, Source={StaticResource LocalizedStrings}}" />
+                            <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.InclinometerText, Source={StaticResource LocalizedStrings}}" />
+                        </toolkit:ListPicker>
+                    </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <Button x:Name="MotionSettingBtn"
+                                Content="{Binding Path=LocalizedResources.MotionControlSettingsText, Source={StaticResource LocalizedStrings}}"
+                                    Click="MotionSettingBtn_Click"
+                                Visibility="Collapsed"
+                                />
+                    </ListBoxItem>
+
+
                     <ListBoxItem HorizontalContentAlignment="Stretch">
                         <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.UseMogaControllerText, Source={StaticResource LocalizedStrings}}"
                                             Name="toggleUseMogaController" 
@@ -40,16 +96,16 @@
 
                     <ListBoxItem HorizontalContentAlignment="Stretch"
                                  Margin="0,0,0,0">
-                        <Button Content="Customize button mapping..."
+                        <Button Content="{Binding Path=LocalizedResources.CustomizeButtonMappingText, Source={StaticResource LocalizedStrings}}"
                                 Name="MappingBtn" Click="MappingBtn_Click"
                                 Visibility="Collapsed"/>
                     </ListBoxItem>
 
 
                     <TextBlock TextWrapping="Wrap" Margin="12,0,12,0"
-                                   Text="Note: MOGA controller requires GDR3 to work."
+                                   Text="{Binding Path=LocalizedResources.MogaGDR3Note, Source={StaticResource LocalizedStrings}}"
                                    />
-                    <TextBlock Text="Tap here for MOGA controller instruction" 
+                    <TextBlock Text="{Binding Path=LocalizedResources.TapMogaInstructionText, Source={StaticResource LocalizedStrings}}"
                        TextWrapping="Wrap"
                        Margin="12,0,12,12"
                             TextDecorations="Underline" Tap="TextBlock_Tap_1" 
@@ -60,27 +116,85 @@
                     
                     
                     <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ListPicker Header="{Binding Path=LocalizedResources.CameraButtonAssignment, Source={StaticResource LocalizedStrings}}" 
-                                            FullModeHeader="{Binding Path=LocalizedResources.CameraButtonAssignment, Source={StaticResource LocalizedStrings}}" 
-                                            SelectionChanged="assignPicker_SelectionChanged_1" 
-                                            Name="assignPicker" 
-                                            SelectedIndex="0">
-                            <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.CameraAssignTurbo, Source={StaticResource LocalizedStrings}}" />
-                            <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.CameraAssignR, Source={StaticResource LocalizedStrings}}" />
-                            <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.CameraAssignL, Source={StaticResource LocalizedStrings}}" />
-                            <!--<toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.CameraAssignLR, Source={StaticResource LocalizedStrings}}" />-->                            
-                        </toolkit:ListPicker>
-                    </ListBoxItem>
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <TextBlock TextWrapping="Wrap" Margin="12,0,12,20"
-                                   Text="{Binding Path=LocalizedResources.TurboModeTip, Source={StaticResource LocalizedStrings}}" />
+                        <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.VibrationSettingText, Source={StaticResource LocalizedStrings}}"
+                                                x:Name="toggleVibration" 
+                                                  Tap="toggleVibration_Tap"
+                                                  Margin="0,0,0,-24"/>
                     </ListBoxItem>
 
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <telerikPrimitives:RadTextBox x:Name="txtVibrationDuration"
+                                 Header="{Binding Path=LocalizedResources.VibrationDurationText, Source={StaticResource LocalizedStrings}}" 
+                                Visibility="Collapsed" 
+                                 TextChanged="txtVibrationDuration_TextChanged" 
+                                  Margin="0,-12,0,12"/>
+                    </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <telerikInput:RadListPicker Header="{Binding Path=LocalizedResources.CameraButtonAssignment, Source={StaticResource LocalizedStrings}}" 
+                                            SelectionChanged="assignPicker_SelectionChanged_1" 
+                                            Name="assignPicker" 
+                                            SelectedIndex="0"
+                                                    InlineModeThreshold="20">
+                            <telerikInput:RadListPickerItem Content="{Binding Path=LocalizedResources.CameraAssignTurbo, Source={StaticResource LocalizedStrings}}" />
+                            <telerikInput:RadListPickerItem Content="{Binding Path=LocalizedResources.CameraAssignR, Source={StaticResource LocalizedStrings}}" />
+                            <telerikInput:RadListPickerItem Content="{Binding Path=LocalizedResources.CameraAssignL, Source={StaticResource LocalizedStrings}}" />
+                            <telerikInput:RadListPickerItem Content="{Binding Path=LocalizedResources.CameraAssignA, Source={StaticResource LocalizedStrings}}" />
+                            <telerikInput:RadListPickerItem Content="{Binding Path=LocalizedResources.CameraAssignB, Source={StaticResource LocalizedStrings}}" />
+                            <telerikInput:RadListPickerItem Content="{Binding Path=LocalizedResources.CameraAssignX, Source={StaticResource LocalizedStrings}}" />
+                            <telerikInput:RadListPickerItem Content="{Binding Path=LocalizedResources.CameraAssignY, Source={StaticResource LocalizedStrings}}" />
+                            <!--<toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.CameraAssignLR, Source={StaticResource LocalizedStrings}}" />-->
+                        </telerikInput:RadListPicker>
+                    </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox IsChecked="true" 
+                                            Name="mapABLRTurboSwitch" 
+                                    Click="mapABLRTurboSwitch_Click"
+                                            Visibility="Collapsed" 
+                                  >
+                            <TextBlock Text="{Binding Path=LocalizedResources.MapABLRTurboText, Source={StaticResource LocalizedStrings}}" 
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+
+                    </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox IsChecked="true" 
+                                            Name="fullPressStickABRLSwitch" 
+                                    Click="fullPressStickABRLSwitch_Click"
+                                            Visibility="Collapsed" 
+                                  >
+                            <TextBlock Text="{Binding Path=LocalizedResources.FullPressButtonStickText, Source={StaticResource LocalizedStrings}}" 
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+
+                    </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox IsChecked="false" 
+                                            Name="autoFireSwitch" 
+                                  Click="autoFireSwitch_Click"
+                                            Visibility="Collapsed" 
+                                  >
+                            <TextBlock Text="{Binding Path=LocalizedResources.EnableAutoFireText, Source={StaticResource LocalizedStrings}}" 
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+
+                    </ListBoxItem>
+
+                    <!--<ListBoxItem HorizontalContentAlignment="Stretch">
+                        <TextBlock TextWrapping="Wrap" Margin="12,0,12,20"
+                                Text="{Binding Path=LocalizedResources.TurboModeTip2, Source={StaticResource LocalizedStrings}}" />
+                    </ListBoxItem>-->
 
                     <ListBoxItem HorizontalContentAlignment="Stretch">
                         <toolkit:ListPicker Header="{Binding Path=LocalizedResources.DPadStyleHeader, Source={StaticResource LocalizedStrings}}" 
                                             FullModeHeader="{Binding Path=LocalizedResources.DPadStyleHeader, Source={StaticResource LocalizedStrings}}" 
-                                            SelectionChanged="dpadStyleBox_SelectionChanged_1" Name="dpadStyleBox" SelectedIndex="0">
+                                        SelectionChanged="dpadStyleBox_SelectionChanged_1"
+                                            Name="dpadStyleBox" 
+                                            SelectedIndex="0">
                             <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.DPadStandard, Source={StaticResource LocalizedStrings}}" />
                             <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.DPad8way, Source={StaticResource LocalizedStrings}}" />
                             <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.DPadAnalogueFixed, Source={StaticResource LocalizedStrings}}" />
@@ -99,14 +213,20 @@
                                             />
                     </ListBoxItem>
 
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <Button x:Name="CustomizeBgcolorBtn"
-                                Content="Choose portrait background color..." 
-                                Click="CustomizeBgcolorBtn_Click"
-                                />
-                    </ListBoxItem>
+
                     
-                    
+                        <!--<ListBoxItem HorizontalContentAlignment="Stretch">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Path=LocalizedResources.DPadStyleHeader, Source={StaticResource LocalizedStrings}}" 
+                                       FontSize="26"/>
+                            <RadioButton GroupName="dpadGroup" Name="dpadStandardRadio" Checked="dpadStandardRadio_Checked"
+                                         Content="{Binding Path=LocalizedResources.DPadStandard, Source={StaticResource LocalizedStrings}}" />
+                            <RadioButton GroupName="dpadGroup" Name="dpadFixedRadio" IsChecked="true" Checked="dpadFixedRadio_Checked"
+                                         Content="{Binding Path=LocalizedResources.DPadAnalogueFixed, Source={StaticResource LocalizedStrings}}" />
+                            <RadioButton GroupName="dpadGroup" Name="dpadDynamicRadio" Checked="dpadDynamicRadio_Checked"
+                                         Content="{Binding Path=LocalizedResources.DPadAnalogueDynamic, Source={StaticResource LocalizedStrings}}" />
+                        </StackPanel>
+                    </ListBoxItem>-->
                     <ListBoxItem HorizontalContentAlignment="Stretch">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
                             <TextBlock Text="{Binding Path=LocalizedResources.DeadzoneHeader, Source={StaticResource LocalizedStrings}}" Margin="10,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" />
@@ -139,6 +259,8 @@
                                                 Fill="{StaticResource PhoneContrastBackgroundBrush}"
                                                 Grid.Column="1" 
                                                 x:Name="deadzoneLock" Tap="deadzoneLock_Tap"
+                                                
+                                            
                                             >
                                     <Rectangle.OpacityMask>
                                         <ImageBrush Stretch="UniformToFill" 
@@ -208,8 +330,7 @@
                                 <StackPanel Grid.Column="0">
 
 
-                                    <Slider Minimum="30" Maximum="150" Value="100" 
-                                            ValueChanged="ButtonScaleSlider_ValueChanged_1" 
+                                        <Slider Minimum="30" Maximum="150" Value="100" ValueChanged="ButtonScaleSlider_ValueChanged_1" 
                                             Name="buttonScaleSlider"
                                             IsEnabled="False"/>
                                     <Grid>
@@ -287,129 +408,342 @@
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </Grid>
-                            
                          </StackPanel>
                     </ListBoxItem>
                     
-               
-                    
-
                     <ListBoxItem HorizontalContentAlignment="Stretch">
                         <Button x:Name="CPositionPortraitBtn"
-                                Content="Customize Portrait Control Position" Click="CPositionPortraitBtn_Click"
+                                Content="{Binding Path=LocalizedResources.CustomizePortraitControlText, Source={StaticResource LocalizedStrings}}"
+                                    Click="CPositionPortraitBtn_Click"
                                 />
                     </ListBoxItem>
 
                     <ListBoxItem HorizontalContentAlignment="Stretch">
                         <Button x:Name="CPositionLandscapeBtn"
-                                Content="Customize Landscape Control Position" Click="CPositionLandscapeBtn_Click"
+                                Content="{Binding Path=LocalizedResources.CustomizeLandscapeControlText, Source={StaticResource LocalizedStrings}}"
+                                    Click="CPositionLandscapeBtn_Click"
                                 />
                     </ListBoxItem>
+
+                        <!--<ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox Content="{Binding Path=LocalizedResources.VControllerPosSetting, Source={StaticResource LocalizedStrings}}"
+                                          Checked="vcontrollerPosSwitch_Checked_1" Unchecked="vcontrollerPosSwitch_Unchecked_1"
+                                          Name="vcontrollerPosSwitch"/>
+                    </ListBoxItem>-->
+
                 </ListBox>
             </phone:PivotItem>
 
-
-
-            <phone:PivotItem Margin="12,0, 0, 0">
+                <phone:PivotItem Name="videoPivot"
+                             Margin="12,18, 12, 0">
                 <phone:PivotItem.Header >
                     <TextBlock Text="{Binding Path=LocalizedResources.VideoSettingsPageTitle, Source={StaticResource LocalizedStrings}}"
                                Style="{StaticResource MyTitle1Style}" />
                 </phone:PivotItem.Header>
-                <ListBox>
                     
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
-					                            FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
-                                            Header="{Binding Path=LocalizedResources.FrameSkipSetting, Source={StaticResource LocalizedStrings}}" 
-                                            FullModeHeader="{Binding Path=LocalizedResources.FrameSkipSetting, Source={StaticResource LocalizedStrings}}" 
-                                            SelectionChanged="frameSkipPicker_SelectionChanged_1" 
-                                            Name="frameSkipPicker" SelectedIndex="0">
-                        </toolkit:ListPicker>
-                    </ListBoxItem>
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
-					                            FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
-                            Header="{Binding Path=LocalizedResources.PowerFrameSkipText, Source={StaticResource LocalizedStrings}}" 
-                                            FullModeHeader="{Binding Path=LocalizedResources.PowerFrameSkipText, Source={StaticResource LocalizedStrings}}" 
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel>
+
+                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                            <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.TurboModeText, Source={StaticResource LocalizedStrings}}"
+                                            Name="toggleTurbo" 
+                                              Tap="toggleTurbo_Tap"
+                                              Margin="0,0,0,-24"/>
+                        </ListBoxItem>
+
+
+                        <telerikInput:RadListPicker  Header="{Binding Path=LocalizedResources.FrameSkipSetting, Source={StaticResource LocalizedStrings}}" 
+                                               SelectionChanged="frameSkipPicker_SelectionChanged_1" 
+                                             Name="frameSkipPicker" 
+                                                     InlineModeThreshold="20"
+                                             >
+
+                            </telerikInput:RadListPicker>
+
+                            <!--<telerikInput:RadListPicker Header="{Binding Path=LocalizedResources.PowerFrameSkipText, Source={StaticResource LocalizedStrings}}" 
                                             SelectionChanged="powerFrameSkipPicker_SelectionChanged_1" 
-                                            Name="powerFrameSkipPicker" SelectedIndex="0">
+                                            Name="powerFrameSkipPicker"
+                                            InlineModeThreshold="20"
+                                            >
 
-                        </toolkit:ListPicker>
-                    </ListBoxItem>
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ListPicker ItemTemplate="{StaticResource ListPickerTemplate}"
-					                            FullModeItemTemplate="{StaticResource ListPickerFullTemplate}"
-                                            Header="{Binding Path=LocalizedResources.TurboFrameSkipText, Source={StaticResource LocalizedStrings}}" 
-                                            FullModeHeader="{Binding Path=LocalizedResources.TurboFrameSkipText, Source={StaticResource LocalizedStrings}}" 
-                                            SelectionChanged="turboFrameSkipPicker_SelectionChanged_1" Name="turboFrameSkipPicker" SelectedIndex="0">
+                            </telerikInput:RadListPicker>-->
 
-                        </toolkit:ListPicker>
-                    </ListBoxItem>
+                            <telerikInput:RadListPicker Header="{Binding Path=LocalizedResources.TurboFrameSkipText, Source={StaticResource LocalizedStrings}}"
+                                            SelectionChanged="turboFrameSkipPicker_SelectionChanged_1" 
+                                             Name="turboFrameSkipPicker" 
+                                              InlineModeThreshold="20">
 
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ListPicker Header="{Binding Path=LocalizedResources.OrientationSettingText, Source={StaticResource LocalizedStrings}}" 
-                                            SelectionChanged="ListPicker_SelectionChanged_1" Name="orientationPicker" SelectedIndex="0">
-                            <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.OrientationBoth, Source={StaticResource LocalizedStrings}}" />
-                            <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.OrientationLandscape, Source={StaticResource LocalizedStrings}}" />
-                            <toolkit:ListPickerItem Content="{Binding Path=LocalizedResources.OrientationPortrait, Source={StaticResource LocalizedStrings}}" />
-                        </toolkit:ListPicker>
-                    </ListBoxItem>
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                            </telerikInput:RadListPicker>
+
+
+                            <telerikInput:RadListPicker Header="{Binding Path=LocalizedResources.OrientationSettingText, Source={StaticResource LocalizedStrings}}"
+                                                    SelectionChanged="orientationPicker_SelectionChanged_1" 
+                                                    Name="orientationPicker" 
+                                                    InlineModeThreshold="20">
+
+                            </telerikInput:RadListPicker>
+
+
+
+
+
+
                         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
-                            <TextBlock Text="{Binding Path=LocalizedResources.ImageScaleSetting, Source={StaticResource LocalizedStrings}}" Margin="10,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" />
+                                <TextBlock Text="{Binding Path=LocalizedResources.ImageScaleSetting, Source={StaticResource LocalizedStrings}}" Margin="12,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" />
                             <Slider Minimum="50" Maximum="100" Value="100" ValueChanged="imageScaleSlider_ValueChanged_1" Name="imageScaleSlider"/>
                             <Grid>
                                 <TextBlock Margin="10,-40,0,0" HorizontalAlignment="Left"  Text="50%" Foreground="{StaticResource PhoneSubtleBrush}" />
                                 <TextBlock Margin="10,-40,0,0" HorizontalAlignment="Right" Text="100%" Foreground="{StaticResource PhoneSubtleBrush}" />
                             </Grid>
                         </StackPanel>
-                    </ListBoxItem>
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.FullscreenStretchOption, Source={StaticResource LocalizedStrings}}" 
-                                          Checked="stretchToggle_Checked_1" Unchecked="stretchToggle_Unchecked_1"
-                                          Name="stretchToggle"/>
-                    </ListBoxItem>
 
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.LowFreqModeSetting, Source={StaticResource LocalizedStrings}}" 
+                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                            <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.FullscreenStretchOption, Source={StaticResource LocalizedStrings}}" 
+                                              Checked="stretchToggle_Checked_1" Unchecked="stretchToggle_Unchecked_1"
+                                              Name="stretchToggle"/>
+                        </ListBoxItem>
+
+                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                            <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.LowFreqModeSetting, Source={StaticResource LocalizedStrings}}" 
                                           Checked="lowFreqSwitch_Checked_1" Unchecked="lowFreqSwitch_Unchecked_1"
                                           Name="lowFreqSwitch" Content="{Binding Path=LocalizedResources.RefreshRate60, Source={StaticResource LocalizedStrings}}"/>
-                    </ListBoxItem>
+                        </ListBoxItem>
 
 
 
-                    <!--<ListBoxItem HorizontalContentAlignment="Stretch">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="{Binding Path=LocalizedResources.BackgroundImageSetting, Source={StaticResource LocalizedStrings}}" Margin="10,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" />
-                            <Grid Grid.Row="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50*" />
-                                    <ColumnDefinition Width="50*" />                                    
-                                </Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" 
-                                        Name="chooseBackgroundButton" 
-                                        Click="chooseBackgroundButton_Click_1"
-                                        Content="{Binding Path=LocalizedResources.ChooseBackgroundButtonText, Source={StaticResource LocalizedStrings}}" />
-                                <Button Grid.Column="1" 
-                                        Name="clearBackgroundButton" 
-                                        Click="clearBackgroundButton_Click_1"
-                                        Content="{Binding Path=LocalizedResources.ClearBackgroundButtonText, Source={StaticResource LocalizedStrings}}" />
-                            </Grid>
-                        </Grid>
-                    </ListBoxItem>-->
-                </ListBox>
+
+                    </StackPanel>
+                </ScrollViewer>
             </phone:PivotItem>
 
-            <phone:PivotItem Margin="12,0, 0, 0">
+            <phone:PivotItem Name="gameplayPivot"
+                             Margin="12,18, 12, 0">
                 <phone:PivotItem.Header >
-                    <TextBlock Text="{Binding Path=LocalizedResources.GeneralSettingsTitle, Source={StaticResource LocalizedStrings}}"
+                    <TextBlock Text="{Binding Path=LocalizedResources.GameplaySettingsTitle, Source={StaticResource LocalizedStrings}}"
                                Style="{StaticResource MyTitle1Style}" />
                 </phone:PivotItem.Header>
                 <ListBox>
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox IsChecked="false" 
+                                              Name="showAdsSwitch" 
+                                              Tap="showAdsSwitch_Tap"
+                                           >
+                            <TextBlock Text="Show ads to support developer" 
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+                    </ListBoxItem>
+
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox IsChecked="true" 
+                                            Name="loadLastStateSwitch" Click="loaLastStateSwitch_Click"
+                                                >
+                            <TextBlock Text="{Binding Path=LocalizedResources.AutoLoadLastStateText, Source={StaticResource LocalizedStrings}}" 
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+
+                   </ListBoxItem>
+
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox IsChecked="false" 
+                                      Name="autoBackupSwitch"
+                                      Click="autoBackupSwitch_Click"
+                                                >
+                            <TextBlock Text="{Binding Path=LocalizedResources.AutoBackupText, Source={StaticResource LocalizedStrings}}" 
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+                    </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <Button x:Name="SetupAutoBackupBtn"
+                                Content="{Binding Path=LocalizedResources.SetupAutoBackupText, Source={StaticResource LocalizedStrings}}"
+                                Click="SetupAutoBackupBtn_Click"
+                                />
+                    </ListBoxItem>
+
+
+
+                    
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+
+                        <CheckBox Checked="enableSoundSwitch_Checked_1" Unchecked="enableSoundSwitch_Unchecked_1"
+                                            IsChecked="true" Name="enableSoundSwitch"
+                                            >
+                            <TextBlock Text="{Binding Path=LocalizedResources.EnableSoundSetting, Source={StaticResource LocalizedStrings}}" 
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+                    </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox Checked="syncSoundSwitch_Checked_1" Unchecked="syncSoundSwitch_Unchecked_1"
+                                            IsChecked="true" Name="syncSoundSwitch"
+                                            >
+                            <TextBlock Text="{Binding Path=LocalizedResources.SyncSoundSetting, Source={StaticResource LocalizedStrings}}" 
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+                    </ListBoxItem>
+
+
+
+
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox Checked="confirmationSwitch_Checked_1" Unchecked="confirmationSwitch_Unchecked_1"
+                                IsChecked="false" Name="confirmationSwitch"
+                                        >
+                            <TextBlock Text="{Binding Path=LocalizedResources.HideConfirmationSetting, Source={StaticResource LocalizedStrings}}"
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+                    </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox Checked="confirmationLoadSwitch_Checked_1" Unchecked="confirmationLoadSwitch_Unchecked_1"
+                                          IsChecked="false" Name="confirmationLoadSwitch"
+                                          >
+                            <TextBlock Text="{Binding Path=LocalizedResources.HideConfirmationLoadSetting, Source={StaticResource LocalizedStrings}}"
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+                    </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox Checked="autoIncSwitch_Checked_1" Unchecked="autoIncSwitch_Unchecked_1"
+                                            IsChecked="false" Name="autoIncSwitch"
+                                            >
+                            <TextBlock Text="{Binding Path=LocalizedResources.AutoIncSavestateSetting, Source={StaticResource LocalizedStrings}}"
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+                    </ListBoxItem>
+                    <!--<ListBoxItem HorizontalContentAlignment="Stretch">
+                            <CheckBox Content="{Binding Path=LocalizedResources.RestoreLastStateSetting, Source={StaticResource LocalizedStrings}}"
+                                            Checked="restoreLastStateSwitch_Checked_1" Unchecked="restoreLastStateSwitch_Unchecked_1"
+                                            IsChecked="true" Name="restoreLastStateSwitch"
+                                            />
+
+                        </ListBoxItem>-->
+
+
+                    <!--<ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox Checked="cheatRestoreSwitch_Checked" Unchecked="cheatRestoreSwitch_Unchecked"
+                                          IsChecked="false" Name="cheatRestoreSwitch"
+                                           >
+                            <TextBlock Text="{Binding Path=LocalizedResources.CheatRestoreValuesOption, Source={StaticResource LocalizedStrings}}"
+                                       TextWrapping="Wrap"/>
+
+                        </CheckBox>
+
+                    </ListBoxItem>-->
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <Button x:Name="ChangeVoiceCommandPrefixBtn"
+                                Content="{Binding Path=LocalizedResources.ChangeVoicePrefixText, Source={StaticResource LocalizedStrings}}"
+                                Click="ChangeVoiceCommandPrefixBtn_Click"
+                                />
+                    </ListBoxItem>
+                </ListBox>
+
+            </phone:PivotItem>
+
+            <phone:PivotItem Name="appearancePivot"
+                             Margin="12,18, 12, 0">
+                <phone:PivotItem.Header >
+                    <TextBlock Text="{Binding Path=LocalizedResources.AppearanceSettingsTitle, Source={StaticResource LocalizedStrings}}"
+                               Style="{StaticResource MyTitle1Style}" />
+                </phone:PivotItem.Header>
+                
+                
+                <ListBox>
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <telerikInput:RadListPicker Header="{Binding Path=LocalizedResources.ThemeText, Source={StaticResource LocalizedStrings}}" 
+                                        SelectionChanged="themePicker_SelectionChanged_1" 
+                                                Name="themePicker" >
+                            <telerikInput:RadListPickerItem Content="{Binding Path=LocalizedResources.LightText, Source={StaticResource LocalizedStrings}}" />
+                            <telerikInput:RadListPickerItem Content="{Binding Path=LocalizedResources.DarkText, Source={StaticResource LocalizedStrings}}" />
+                        </telerikInput:RadListPicker>
+                    </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <CheckBox 
+                                  Name="useBackgroundImageSwitch"
+                                Click="useBackgroundImageSwitch_Click"
+                                  >
+                            <TextBlock Text="{Binding Path=LocalizedResources.UseBackgroundImageSetting, Source={StaticResource LocalizedStrings}}" 
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
+                    </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <Grid x:Name="ChooseBackgroundImageGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="ChooseBackgroundImageBtn"
+                                        Content="{Binding Path=LocalizedResources.ChooseImageText, Source={StaticResource LocalizedStrings}}"
+                                        Click="ChooseBackgroundImageBtn_Click"
+                                        />
+
+                            <Button x:Name="ResetBackgroundImageBtn"
+                                        Content="{Binding Path=LocalizedResources.ResetImageText, Source={StaticResource LocalizedStrings}}"
+                                        Click="ResetBackgroundImageBtn_Click"
+                                        Grid.Column="1"
+                                        />
+                        </Grid>
+                    </ListBoxItem>
+
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch"
+                                        x:Name="backgroundOpacityPanel"
+                                        >
+                            <TextBlock Text="{Binding Path=LocalizedResources.BackgroundOpacitySetting, Source={StaticResource LocalizedStrings}}" 
+                                           Margin="10,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="50" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+
+
+                                    <Slider Minimum="0" 
+                                                Maximum="100" 
+                                                Value="30" 
+                                                ValueChanged="backgroundOpacitySlider_ValueChanged_1" 
+                                                Name="backgroundOpacitySlider"
+                                                IsEnabled="False"
+                                        />
+                                    <Grid>
+                                        <TextBlock Margin="10,-40,0,0" HorizontalAlignment="Left"  Text="0%" Foreground="{StaticResource PhoneSubtleBrush}" />
+                                        <TextBlock Margin="10,-40,0,0" HorizontalAlignment="Center" 
+                                               Text="{Binding Value, ElementName=backgroundOpacitySlider, StringFormat='{}{0:#}'}" 
+                                               Foreground="{StaticResource PhoneSubtleBrush}"/>
+                                        <TextBlock Margin="10,-40,0,0" HorizontalAlignment="Right" Text="100%" Foreground="{StaticResource PhoneSubtleBrush}" />
+                                    </Grid>
+                                </StackPanel>
+
+                                <Rectangle  Width="50" 
+                                                    Height="50"
+                                                    HorizontalAlignment="Right"
+                                                VerticalAlignment="Top"
+                                                    Fill="{StaticResource PhoneContrastBackgroundBrush}"
+                                                    Grid.Column="1" 
+                                                    x:Name="backgroundOpacityLock" 
+                                                Tap="backgroundOpacityLock_Tap"
+                                                
+                                            
+                                                >
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush Stretch="UniformToFill" 
+                                                        x:Name="backgroundOpacityImage"
+                                                        ImageSource="/Assets/Icons/appbar.lock.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Grid>
+                        </StackPanel>
+                    </ListBoxItem>
+                    
                     <ListBoxItem HorizontalContentAlignment="Stretch">
                         <CheckBox x:Name="chkUseAccentColor" 
                                           Tap="chkUseAccentColor_Tap" >
@@ -417,67 +751,100 @@
                                        TextWrapping="Wrap"/>
                         </CheckBox>
                     </ListBoxItem>
+
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <Button x:Name="PinSecondaryTileBtn"
+                                Content="{Binding Path=LocalizedResources.PinSecondaryTileText, Source={StaticResource LocalizedStrings}}"
+                                Click="PinSecondaryTileBtn_Click"
+                                />
+                    </ListBoxItem>
+                   
+
+                   
+                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <Grid Margin="0,0,10,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="48" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Checked="manualSnapshotSwitch_Checked" Unchecked="manualSnapshotSwitch_Unchecked"
+                                Name="manualSnapshotSwitch" IsChecked="false"
+                                >
+                                <TextBlock Text="{Binding Path=LocalizedResources.ManualSnapshotSetting, Source={StaticResource LocalizedStrings}}" 
+                                       TextWrapping="Wrap"/>
+                            </CheckBox>
+                            <Rectangle  Width="48" 
+                                Height="48"
+                                Grid.Column="1"
+                                Fill="{StaticResource PhoneContrastBackgroundBrush}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Margin="0,0,0,0"
+                            
+                                telerikPrimitives:RadToolTipService.ShowGesture="Tap"
+                                >
+                                <telerikPrimitives:RadToolTipService.ToolTip>
+                                    <TextBlock Text="{Binding Path=LocalizedResources.ManualSnapshotHelp, Source={StaticResource LocalizedStrings}}"
+                                        TextWrapping="Wrap"
+                                        Width="460"/>
+
+                                </telerikPrimitives:RadToolTipService.ToolTip>
+
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/Icons/information.circle.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Grid>
+                    </ListBoxItem>
+
                     
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.EnableSoundSetting, Source={StaticResource LocalizedStrings}}"
-                                        Checked="enableSoundSwitch_Checked_1" Unchecked="enableSoundSwitch_Unchecked_1"
-                                        IsChecked="true" Name="enableSoundSwitch"
-                                        />
-                    </ListBoxItem>
+
+
 
                     <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="{Binding Path=LocalizedResources.SyncSoundSetting, Source={StaticResource LocalizedStrings}}" 
-                                    Margin="11,0,0,-8" Foreground="{StaticResource PhoneSubtleBrush}" />
-                            <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.SyncSoundSetting2, Source={StaticResource LocalizedStrings}}"
-                                            Checked="syncSoundSwitch_Checked_1" Unchecked="syncSoundSwitch_Unchecked_1"
-                                            IsChecked="true" Name="syncSoundSwitch"
-                                            />
-                        </StackPanel>
+                        <CheckBox Name="showLastPlayedGameSwitch"
+                            Click="showLastPlayedGameSwitch_Click"
+                                  >
+                            <TextBlock Text="{Binding Path=LocalizedResources.ShowLastPlayedGameText, Source={StaticResource LocalizedStrings}}" 
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
                     </ListBoxItem>
 
 
                     <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ToggleSwitch Header="Show ads to support developer"
-                                          IsChecked="false" 
-                                              Name="showAdsSwitch" 
-                                              Tap="showAdsSwitch_Tap"
-                                           />
+                        <CheckBox 
+                                  Name="showThreeDotsSwitch"
+                                    Click="showThreeDotsSwitch_Click"
+                                  >
+                            <TextBlock Text="{Binding Path=LocalizedResources.ShowThreeDotsSetting, Source={StaticResource LocalizedStrings}}" 
+                                       TextWrapping="Wrap"/>
+                        </CheckBox>
                     </ListBoxItem>
 
                     <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.ManualSnapshotSetting, Source={StaticResource LocalizedStrings}}"
-                                          Checked="manualSnapshotSwitch_Checked" Unchecked="manualSnapshotSwitch_Unchecked"
-                                          IsChecked="false" Name="manualSnapshotSwitch"
-                                           />
-                    </ListBoxItem>
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.HideConfirmationSetting, Source={StaticResource LocalizedStrings}}"
-                                          Checked="confirmationSwitch_Checked_1" Unchecked="confirmationSwitch_Unchecked_1"
-                                          IsChecked="false" Name="confirmationSwitch"
-                                           />
-                    </ListBoxItem>
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.HideConfirmationLoadSetting, Source={StaticResource LocalizedStrings}}"
-                                          Checked="confirmationLoadSwitch_Checked_1" Unchecked="confirmationLoadSwitch_Unchecked_1"
-                                          IsChecked="false" Name="confirmationLoadSwitch"
-                                           />
-                    </ListBoxItem>
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.AutoIncSavestateSetting, Source={StaticResource LocalizedStrings}}"
-                                            Checked="autoIncSwitch_Checked_1" Unchecked="autoIncSwitch_Unchecked_1"
-                                            IsChecked="false" Name="autoIncSwitch"
-                                            />
-                    </ListBoxItem>
-                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.RestoreLastStateSetting, Source={StaticResource LocalizedStrings}}"
-                                            Checked="restoreLastStateSwitch_Checked_1" Unchecked="restoreLastStateSwitch_Unchecked_1"
-                                            IsChecked="true" Name="restoreLastStateSwitch"
-                                            />
+                        <Button x:Name="CustomizeBgcolorBtn"
+                                Content="{Binding Path=LocalizedResources.ChoosePortraitBackgroundColorText, Source={StaticResource LocalizedStrings}}"
+                                Click="CustomizeBgcolorBtn_Click"
+                                />
                     </ListBoxItem>
                 </ListBox>
+
+                
+                
             </phone:PivotItem>
+
+  
+
         </phone:Pivot>
+
     </Grid>
+        <!--<Image Source="/Assets/AlignmentGrid.png" 
+               VerticalAlignment="Top" 
+               Height="800" 
+               Width="480" 
+               Margin="0" 
+               Grid.Row="0" 
+               Grid.RowSpan="2" 
+               IsHitTestVisible="False" />-->
 
 </phone:PhoneApplicationPage>
