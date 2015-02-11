@@ -13,7 +13,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Landscape"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True"
     shell:SystemTray.BackgroundColor="{StaticResource SystemTrayColor}">
@@ -488,14 +488,7 @@
 
 
 
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
-                                <TextBlock Text="{Binding Path=LocalizedResources.ImageScaleSetting, Source={StaticResource LocalizedStrings}}" Margin="12,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" />
-                            <Slider Minimum="50" Maximum="100" Value="100" ValueChanged="imageScaleSlider_ValueChanged_1" Name="imageScaleSlider"/>
-                            <Grid>
-                                <TextBlock Margin="10,-40,0,0" HorizontalAlignment="Left"  Text="50%" Foreground="{StaticResource PhoneSubtleBrush}" />
-                                <TextBlock Margin="10,-40,0,0" HorizontalAlignment="Right" Text="100%" Foreground="{StaticResource PhoneSubtleBrush}" />
-                            </Grid>
-                        </StackPanel>
+                        
 
                         <ListBoxItem HorizontalContentAlignment="Stretch">
                             <toolkit:ToggleSwitch Header="{Binding Path=LocalizedResources.FullscreenStretchOption, Source={StaticResource LocalizedStrings}}" 
@@ -509,7 +502,14 @@
                                           Name="lowFreqSwitch" Content="{Binding Path=LocalizedResources.RefreshRate60, Source={StaticResource LocalizedStrings}}"/>
                         </ListBoxItem>
 
-
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
+                            <TextBlock Text="{Binding Path=LocalizedResources.ImageScaleSetting, Source={StaticResource LocalizedStrings}}" Margin="12,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" />
+                            <Slider Minimum="50" Maximum="100" Value="100" ValueChanged="imageScaleSlider_ValueChanged_1" Name="imageScaleSlider"/>
+                            <Grid>
+                                <TextBlock Margin="10,-40,0,0" HorizontalAlignment="Left"  Text="50%" Foreground="{StaticResource PhoneSubtleBrush}" />
+                                <TextBlock Margin="10,-40,0,0" HorizontalAlignment="Right" Text="100%" Foreground="{StaticResource PhoneSubtleBrush}" />
+                            </Grid>
+                        </StackPanel>
 
 
                     </StackPanel>

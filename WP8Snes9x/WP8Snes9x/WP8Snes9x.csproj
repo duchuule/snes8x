@@ -202,8 +202,8 @@
       <DependentUpon>MogaMappingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RenameBox.xaml.cs">
-      <DependentUpon>RenameBox.xaml</DependentUpon>
+    <Compile Include="RenamePage.xaml.cs">
+      <DependentUpon>RenamePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Resources\AppResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -211,9 +211,6 @@
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Database\ROMDatabase.cs" />
-    <Compile Include="RestorePage.xaml.cs">
-      <DependentUpon>RestorePage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SavestateConverter.cs" />
     <Compile Include="SDCardImportPage.xaml.cs">
       <DependentUpon>SDCardImportPage.xaml</DependentUpon>
@@ -239,6 +236,8 @@
     <Content Include="Assets\Icons\selectall.png" />
     <Content Include="Assets\Icons\selectnone.png" />
     <Content Include="Assets\SNES_PAL.jpg" />
+    <Content Include="SplashScreenImage.screen-720p.jpg" />
+    <Content Include="SplashScreenImage.screen-WVGA.jpg" />
     <Content Include="VoiceCommandDefinitions.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -324,13 +323,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RenameBox.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="RenamePage.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RestorePage.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <DesignData Include="SampleData\MainViewModelSampleData.xaml">
       <SubType>Designer</SubType>
@@ -474,7 +469,7 @@
     <Content Include="Assets\Icons\transport.play.png" />
     <Content Include="Assets\Icons\transport.rew.png" />
     <Content Include="Assets\Icons\upload.png" />
-    <Content Include="SplashScreenImage.jpg" />
+    <Content Include="SplashScreenImage.screen-WXGA.jpg" />
     <Content Include="Assets\Icons\AlignmentGrid.png" />
     <Content Include="Assets\Icons\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

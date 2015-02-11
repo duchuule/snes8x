@@ -30,16 +30,14 @@ namespace PhoneDirect3DXamlAppInterop
         public static bool shouldUpdateBackgroud = false;
 
         public const String VControllerPosKey = "VirtualControllerOnTop";
-        public const String VControllerSizeKey = "VirtualControllerLarge";
         public const String EnableSoundKey = "EnableSound";
         public const String LowFreqModeKey = "LowFrequencyModeNew";
-        //public const String LowFreqModeMeasuredKey = "LowFrequencyModeMeasured";
-        public const String VControllerButtonStyleKey = "VirtualControllerStyle";
         public const String OrientationKey = "Orientation";
         public const String ControllerScaleKey = "ControllerScale";
         public const String ButtonScaleKey = "ButtonScale";
         public const String StretchKey = "FullscreenStretch";
         public const String OpacityKey = "ControllerOpacity";
+        public const String VControllerButtonStyleKey = "VirtualControllerStyle";
         public const String SkipFramesKey = "SkipFramesKey2";
         public const String ImageScalingKey = "ImageScalingKey";
         public const String TurboFrameSkipKey = "TurboSkipFramesKey";
@@ -206,6 +204,7 @@ namespace PhoneDirect3DXamlAppInterop
         {
             EmulatorSettings emuSettings = EmulatorSettings.Current;
 
+
             this.enableSoundSwitch.IsChecked = emuSettings.SoundEnabled;
             this.lowFreqSwitch.IsChecked = emuSettings.LowFrequencyMode;
             this.stretchToggle.IsChecked = emuSettings.FullscreenStretch;
@@ -221,6 +220,7 @@ namespace PhoneDirect3DXamlAppInterop
             //this.restoreLastStateSwitch.IsChecked = emuSettings.SelectLastState;
             this.manualSnapshotSwitch.IsChecked = emuSettings.ManualSnapshots;
             this.useColorButtonSwitch.IsChecked = !emuSettings.GrayVControllerButtons;
+
 
             this.showThreeDotsSwitch.IsChecked = App.metroSettings.ShowThreeDots;
             this.showLastPlayedGameSwitch.IsChecked = App.metroSettings.ShowLastPlayedGame;
@@ -278,7 +278,7 @@ namespace PhoneDirect3DXamlAppInterop
 
             this.Loaded += (o, e) =>
             {
-                this.turboFrameSkipPicker.SelectedIndex = Math.Min(emuSettings.TurboFrameSkip, this.turboFrameSkipPicker.Items.Count - 1);
+                this.turboFrameSkipPicker.SelectedIndex = emuSettings.TurboFrameSkip;
                 //this.powerFrameSkipPicker.SelectedIndex = emuSettings.PowerFrameSkip;
                 this.frameSkipPicker.SelectedIndex = Math.Min(emuSettings.FrameSkip + 1, this.frameSkipPicker.Items.Count - 1);
 
@@ -322,23 +322,6 @@ namespace PhoneDirect3DXamlAppInterop
 
         }
 
-        //private void vcontrollerPosSwitch_Checked_1(object sender, RoutedEventArgs e)
-        //{
-        //    this.vcontrollerPosSwitch.Content = AppResources.VControllerTopSetting;
-        //    if (this.initdone)
-        //    {
-        //        EmulatorSettings.Current.VirtualControllerOnTop = true;
-        //    }
-        //}
-
-        //private void vcontrollerPosSwitch_Unchecked_1(object sender, RoutedEventArgs e)
-        //{
-        //    this.vcontrollerPosSwitch.Content = AppResources.VControllerBottomSetting;
-        //    if (this.initdone)
-        //    {
-        //        EmulatorSettings.Current.VirtualControllerOnTop = false;
-        //    }
-        //}
 
         private void enableSoundSwitch_Checked_1(object sender, RoutedEventArgs e)
         {
