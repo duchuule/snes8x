@@ -522,7 +522,7 @@ namespace PhoneDirect3DXamlAppInterop
             }
         }
 
-        private void DrawingSurfaceBackground_Loaded(object sender, RoutedEventArgs e)
+        private async void DrawingSurfaceBackground_Loaded(object sender, RoutedEventArgs e)
         {
              if (m_d3dBackground == null)
             {
@@ -590,7 +590,7 @@ namespace PhoneDirect3DXamlAppInterop
 
                     // Load new ROM
 
-                    this.m_d3dBackground.LoadROMAsync(EmulatorPage.cache.file, EmulatorPage.cache.folder);
+                    await this.m_d3dBackground.LoadROMAsync(EmulatorPage.cache.file, EmulatorPage.cache.folder);
                     //if (EmulatorSettings.Current.SelectLastState)
                     {
                         RestoreLastSavestate(EmulatorPage.cache.file.Name);

@@ -191,9 +191,13 @@ namespace PhoneDirect3DXamlAppComponent
 		}
 	}
 
-	void Direct3DBackground::LoadROMAsync(StorageFile ^file, StorageFolder ^folder)
+	Windows::Foundation::IAsyncAction^  Direct3DBackground::LoadROMAsync(StorageFile ^file, StorageFolder ^folder)
 	{
-		Emulator::LoadROMAsync(file, folder);
+		return create_async([this, file, folder]
+		{
+			Emulator::LoadROMAsync(file, folder).wait();
+
+		});
 	}
 
 	// Interface With Direct3DContentProvider
