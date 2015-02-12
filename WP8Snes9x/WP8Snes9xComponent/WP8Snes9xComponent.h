@@ -78,7 +78,7 @@ public:
 	bool IsROMLoaded(void);
 	void PauseEmulation(void);
 	void UnpauseEmulation(void);
-	void LoadROMAsync(Windows::Storage::StorageFile ^file, Windows::Storage::StorageFolder ^folder);
+	Windows::Foundation::IAsyncAction^  LoadROMAsync(Windows::Storage::StorageFile ^file, Windows::Storage::StorageFolder ^folder);
 
 	static Moga::Windows::Phone::ControllerManager^ getController() {
 		return mogacontroller;
