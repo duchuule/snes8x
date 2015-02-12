@@ -43,6 +43,8 @@ using namespace PhoneDirect3DXamlAppComponent;
 #define STICK_CENTER_TEXTURE_FILE_NAME				L"Assets/ThumbStickCenter.dds"
 #define RESUME_TEXTURE_FILE_NAME					L"Assets/resumetext.dds"
 
+#define AUTOSAVE_INTERVAL			60.0f
+
 // This class renders a simple spinning cube.
 ref class Renderer abstract : public Direct3DBase
 {
