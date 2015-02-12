@@ -16,12 +16,15 @@ using namespace Windows::UI::Core;
 using namespace Microsoft::WRL;
 using namespace Windows::Phone::Graphics::Interop;
 using namespace Windows::Phone::Input::Interop;
+using namespace Windows::ApplicationModel::Core;
 
 Moga::Windows::Phone::ControllerManager^ Direct3DBackground::mogacontroller;
+Windows::Devices::Sensors::Accelerometer^ Direct3DBackground::m_accelerometer;
+Windows::Devices::Sensors::Inclinometer^ Direct3DBackground::m_inclinometer;
 
-extern bool enableTurboMode;
 
-HANDLE waitHandle;
+
+extern bool cameraPressed;
 
 namespace PhoneDirect3DXamlAppComponent
 {
@@ -35,7 +38,10 @@ namespace PhoneDirect3DXamlAppComponent
 	{
 		ComPtr<Direct3DContentProvider> provider = Make<Direct3DContentProvider>(this);
 		return reinterpret_cast<IDrawingSurfaceBackgroundContentProvider^>(provider.Get());
+
 	}
+
+
 
 	// IDrawingSurfaceManipulationHandler
 	void Direct3DBackground::SetManipulationHost(DrawingSurfaceManipulationHost^ manipulationHost)
@@ -71,6 +77,9 @@ namespace PhoneDirect3DXamlAppComponent
 		this->ContinueEmulationNotifier = notifier;
 	}
 
+
+
+
 	void Direct3DBackground::ChangeOrientation(int orientation)
 	{
 #if _DEBUG
@@ -86,19 +95,19 @@ namespace PhoneDirect3DXamlAppComponent
 		}
 	}
 
-	void Direct3DBackground::ToggleTurboMode(void)
+	void Direct3DBackground::ToggleCameraPress(void)
 	{
-		enableTurboMode = !enableTurboMode;
+		cameraPressed = !cameraPressed;
 	}
 
-	void Direct3DBackground::StartTurboMode(void)
+	void Direct3DBackground::StartCameraPress(void)
 	{
-		enableTurboMode = true;
+		cameraPressed = true;
 	}
 
-	void Direct3DBackground::StopTurboMode(void)
+	void Direct3DBackground::StopCameraPress(void)
 	{
-		enableTurboMode = false;
+		cameraPressed = false;
 	}
 
 	bool Direct3DBackground::IsROMLoaded(void)
@@ -116,7 +125,6 @@ namespace PhoneDirect3DXamlAppComponent
 	{
 		this->m_renderer->should_show_resume_text = false;
 		this->emulator->Unpause();
-
 	}
 
 	void Direct3DBackground::SelectSaveState(int slot)
@@ -126,7 +134,7 @@ namespace PhoneDirect3DXamlAppComponent
 		LoadstateSlot = SavestateSlot;
 		if(this->SavestateSelected)
 		{
-			this->SavestateSelected(SavestateSlot, oldSlot);
+			this->SavestateSelected(SavestateSlot, oldSlot);  //call the c# code to change the UI about selected save state
 		}
 	}
 
@@ -156,6 +164,7 @@ namespace PhoneDirect3DXamlAppComponent
 				}
 			}
 		});
+		
 		this->ContinueEmulationNotifier();
 	}
 
@@ -176,7 +185,8 @@ namespace PhoneDirect3DXamlAppComponent
 
 		if(emulator->IsROMLoaded())
 		{
-			Emulator::ResetAsync();
+			//Emulator::ResetAsync();
+			Emulator::ResetSync();
 			this->ContinueEmulationNotifier();
 		}
 	}
@@ -198,6 +208,7 @@ namespace PhoneDirect3DXamlAppComponent
 		m_renderer->UpdateForWindowSizeChange(WindowBounds.Width, WindowBounds.Height);
 
 		//moga controler
+		//NOTE: NEED TO ENABLE CAPABILITY PROXIMITY!!!!!!
 		if (EmulatorSettings::Current->UseMogaController)
 		{
 			if (mogacontroller == nullptr)
@@ -212,19 +223,47 @@ namespace PhoneDirect3DXamlAppComponent
 				}
 			}
 		}
+		//motion control
+		if (EmulatorSettings::Current->UseMotionControl == 1)
+		{
+			if (m_accelerometer == nullptr)
+			{
+				try
+				{
+					m_accelerometer = Windows::Devices::Sensors::Accelerometer::GetDefault();
+				}
+				catch (Platform::Exception^ ex)
+				{
+				}
+			}
+		}
+		else if (EmulatorSettings::Current->UseMotionControl == 2)
+		{
+			if (m_inclinometer == nullptr)
+			{
+				try
+				{
+					m_inclinometer = Windows::Devices::Sensors::Inclinometer::GetDefault();
+				}
+				catch (Platform::Exception^ ex)
+				{
+				}
+			}
+		}
 
 		Settings.Mute = !EmulatorSettings::Current->SoundEnabled;
 		this->emulator = EmulatorGame::GetInstance();
 		this->emulator->Resume();
 		if(this->emulator->IsROMLoaded())
 		{
+
 			this->emulator->Unpause();
 		}else
 		{
 			SavestateSlot = 0;
+			LoadstateSlot = 0;
 		}
 
-		vController->VirtualControllerOnTop(EmulatorSettings::Current->VirtualControllerOnTop);
 
 		this->m_renderer->ChangeOrientation(orientation);
 
@@ -250,10 +289,15 @@ namespace PhoneDirect3DXamlAppComponent
 		{
 			this->emulator->Pause();
 			SaveSRAMAsync().wait();
+
+
 			int oldstate = SavestateSlot;
 			SavestateSlot = AUTOSAVE_SLOT;
 			SaveStateAsync().wait();
+			this->SavestateCreated(SavestateSlot, ROMFile->Name);
+
 			SavestateSlot = oldstate;
+			this->emulator->Unpause();
 		}).then([this]()
 		{
 			if(!EmulatorSettings::Current->ManualSnapshots)
@@ -265,6 +309,8 @@ namespace PhoneDirect3DXamlAppComponent
 			this->emulator->Suspend();
 			m_renderer = nullptr;
 			delete this->vController;
+
+
 
 			if(waitHandle)
 			{

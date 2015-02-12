@@ -190,10 +190,15 @@ namespace Emulator
 		this->DeInitSound();
 	}
 
+	void EmulatorGame::Reset(void)
+	{
+		S9xSoftReset();
+	}
 	EmulatorGame::~EmulatorGame(void)
 	{
 		// Terminate thread
 		this->DeInitThread();
+		
 
 		// Close handles
 		CloseHandle(this->sleepEvent);
@@ -216,16 +221,25 @@ namespace Emulator
 
 	void EmulatorGame::Pause(void)
 	{
-		EnterCriticalSection(&this->pauseSync);
-		Settings.StopEmulation = true;
-		LeaveCriticalSection(&this->pauseSync);
+		if (!Settings.StopEmulation)
+		{
+			EnterCriticalSection(&this->pauseSync);
+			Settings.StopEmulation = true;
+		}
+
+		//LeaveCriticalSection(&this->pauseSync);
 	}
 
 	void EmulatorGame::Unpause(void)
 	{
-		EnterCriticalSection(&this->pauseSync);
-		Settings.StopEmulation = false;
-		LeaveCriticalSection(&this->pauseSync);
+		//EnterCriticalSection(&this->pauseSync);
+
+		if (Settings.StopEmulation)
+		{
+
+			Settings.StopEmulation = false;
+			LeaveCriticalSection(&this->pauseSync);
+		}
 	}
 	
 	bool EmulatorGame::IsROMLoaded(void)
@@ -240,13 +254,13 @@ namespace Emulator
 			if(this->IsROMLoaded())
 			{
 				this->Pause();
-				SaveSRAMAsync().wait();
-				int oldstate = SavestateSlot;
-				SavestateSlot = AUTOSAVE_SLOT;
-				SaveStateAsync().wait();
-				SavestateSlot = oldstate;
+				//SaveSRAMAsync().wait();
+				//int oldstate = SavestateSlot;
+				//SavestateSlot = AUTOSAVE_SLOT;
+				//SaveStateAsync().wait();
+				//SavestateSlot = oldstate;
 				this->InitSound();
-				Memory.ClearSRAM();
+				//Memory.ClearSRAM();
 				ROMFile = nullptr;
 				ROMFolder = nullptr;
 				updateCount = 0;

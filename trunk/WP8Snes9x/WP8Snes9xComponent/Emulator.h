@@ -43,7 +43,7 @@ namespace Emulator
 	{
 	public:
 		static EmulatorGame *GetInstance(void);
-
+		//:::snes9x has no EmulatedSystem class as VBA
 		static IS9xSoundOutput *Audio;
 		static int SnesImageWidth, SnesImageHeight;
 
@@ -60,6 +60,7 @@ namespace Emulator
 		void Pause(void);
 		void Unpause(void);
 		task<void> StopEmulationAsync(void);
+		void Reset(void);
 
 		void Resume(void);
 		void Suspend(void);

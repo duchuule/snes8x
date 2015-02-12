@@ -389,55 +389,90 @@ namespace PhoneDirect3DXamlAppInterop
             base.OnNavigatedTo(e);
         }
 
+        void ToggleTurboMode()
+        {
+            Deployment.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                //change turbo mode and save
+                EmulatorSettings.Current.UseTurbo = !(bool)IsolatedStorageSettings.ApplicationSettings[SettingsPage.UseTurboKey];
+                IsolatedStorageSettings.ApplicationSettings[SettingsPage.UseTurboKey] = EmulatorSettings.Current.UseTurbo;
+            }));
+        }
+
         private void CameraButtons_ShutterKeyReleased(object sender, EventArgs e)
         {
-            if (this.m_d3dBackground != null && (wasHalfPressed || EmulatorSettings.Current.CameraButtonAssignment != 0))
-            {
-                this.m_d3dBackground.StopTurboMode();
+            if (this.m_d3dBackground != null)
+            {   //if the camera button was half pressed, we stop the toggle for both cases
+                //if the camera button was full pressed, we stop the toggle only when the assignment is not turbo mode and it is not sticky
+                if (EmulatorSettings.Current.CameraButtonAssignment == 0)
+                {
+                    if (wasHalfPressed)
+                    {
+                        EmulatorSettings.Current.UseTurbo = false;
+                    }
+                }
+                else
+                {
+                    if (wasHalfPressed || EmulatorSettings.Current.FullPressStickABLR == false)
+                    {
+                        this.m_d3dBackground.StopCameraPress();
+
+                    }
+                }
+
                 wasHalfPressed = false;
+
             }
         }
 
         private void CameraButtons_ShutterKeyHalfPressed(object sender, EventArgs e)
         {
-            if (EmulatorSettings.Current.CameraButtonAssignment == 0)
-            {   // Turbo button
-                if (this.m_d3dBackground != null)
-                {
-                    wasHalfPressed = true;
-                    this.m_d3dBackground.StartTurboMode();
-                }
-            }
-            else
-            {   // L or R button
-                if (this.m_d3dBackground != null)
-                {
-                    wasHalfPressed = true;
-                    this.m_d3dBackground.StartTurboMode();
-                }
+            if (this.m_d3dBackground != null)
+            {
+                wasHalfPressed = true;
+
+                if (EmulatorSettings.Current.CameraButtonAssignment == 0)
+                    EmulatorSettings.Current.UseTurbo = true;
+                else
+                    this.m_d3dBackground.StartCameraPress();
             }
         }
 
         private void CameraButtons_ShutterKeyPressed(object sender, EventArgs e)
         {
             if (EmulatorSettings.Current.CameraButtonAssignment == 0)
-            {   // Turbo button
+            {   // Turbo button 
 
                 if (this.m_d3dBackground != null)
                 {
-                    if (!wasHalfPressed)
-                    {
-                        this.m_d3dBackground.ToggleTurboMode();
-                    }
+                    //change turbo mode and save
+                    EmulatorSettings.Current.UseTurbo = !(bool)IsolatedStorageSettings.ApplicationSettings[SettingsPage.UseTurboKey];
+                    IsolatedStorageSettings.ApplicationSettings[SettingsPage.UseTurboKey] = EmulatorSettings.Current.UseTurbo;
+
                     wasHalfPressed = false;
                 }
+
             }
             else
-            {   // L or R button
-                if (this.m_d3dBackground != null)
+            {
+                if (EmulatorSettings.Current.FullPressStickABLR == true) //button stick is on
                 {
-                    this.m_d3dBackground.StartTurboMode();
-                    wasHalfPressed = false;
+                    if (this.m_d3dBackground != null)
+                    {
+                        if (!wasHalfPressed)
+                        {
+                            this.m_d3dBackground.ToggleCameraPress();
+                        }
+                        wasHalfPressed = false;
+                    }
+                }
+                else
+                {   // A/B/L/R button and not stick
+                    if (this.m_d3dBackground != null)
+                    {
+                        this.m_d3dBackground.StartCameraPress();
+                        wasHalfPressed = false;
+                    }
                 }
             }
         }
@@ -498,7 +533,7 @@ namespace PhoneDirect3DXamlAppInterop
                 this.m_d3dBackground.SavestateCreated = FileHandler.CreateSavestate;
                 this.m_d3dBackground.SavestateSelected = this.savestateSelected;
                 //Direct3DBackground.WrongCheatVersion = this.wrongCheatVersion;
-                //Direct3DBackground.ToggleTurboMode = this.ToggleTurboMode;
+                Direct3DBackground.ToggleTurboMode = this.ToggleTurboMode;
 
                 this.InitAppBar();
 

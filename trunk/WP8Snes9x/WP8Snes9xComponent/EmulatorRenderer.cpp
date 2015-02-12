@@ -9,9 +9,14 @@ using namespace Microsoft::WRL;
 using namespace Windows::Foundation;
 using namespace Windows::UI::Core;
 using namespace Windows::Graphics::Display;
+using namespace PhoneDirect3DXamlAppComponent;
 
 
-#define AUTOSAVE_INTERVAL			60.0f
+
+
+bool cameraPressed = false;
+bool autoFireToggle = false;
+int mappedButton = 0;
 
 float lastElapsed = 0.0f;
 int framesNotRendered = 0;

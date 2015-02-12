@@ -22,6 +22,7 @@ namespace Emulator
 	task<void> LoadStateAsync(int slot);
 	task<void> LoadROMAsync(StorageFile ^file, StorageFolder ^folder);
 	task<void> ResetAsync(void);
+	void ResetSync(void);
 	task<ROMData> GetROMBytesFromFileAsync(StorageFile ^file);
 	task<void> SaveSRAMAsync(void);
 	task<void> LoadSRAMAsync(void);

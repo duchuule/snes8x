@@ -406,6 +406,20 @@ namespace Emulator
 		});
 	}
 	
+	void ResetSync(void)
+	{
+
+
+		if (!ROMFile || !ROMFolder)
+			return;
+
+		EmulatorGame *emulator = EmulatorGame::GetInstance();
+		emulator->Pause();
+
+		emulator->Reset();
+		emulator->Unpause();
+	}
+
 	task<void> ResetAsync(void)
 	{
 		if(!ROMFile || !ROMFolder)

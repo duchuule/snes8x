@@ -9,6 +9,7 @@
 #include <DrawingSurfaceNative.h>
 
 using namespace Emulator;
+using namespace Windows::ApplicationModel;
 
 namespace PhoneDirect3DXamlAppComponent
 {
@@ -17,6 +18,7 @@ public delegate void ContinueEmulationNotifier(void);
 public delegate void SnapshotCallback(const Platform::Array<unsigned short> ^pixelData, int pitch, Platform::String ^fileName);
 public delegate void SavestateCreatedCallback(int slot, Platform::String ^romFileName);
 public delegate void SavestateSelectedCallback(int newSlot, int oldSlot);
+public delegate void ToggleTurboModeCallback();
 
 [Windows::Foundation::Metadata::WebHostHidden]
 public ref class Direct3DBackground sealed : public Windows::Phone::Input::Interop::IDrawingSurfaceManipulationHandler
@@ -50,13 +52,16 @@ public:
 	property SavestateSelectedCallback ^SavestateSelected;
 	property SnapshotCallback ^SnapshotAvailable;
 	property SavestateCreatedCallback ^SavestateCreated;
+	property static ToggleTurboModeCallback ^ToggleTurboMode;
+
 	property Windows::Foundation::Size WindowBounds;
 	property Windows::Foundation::Size NativeResolution;
 	property Windows::Foundation::Size RenderResolution;
 
-	void ToggleTurboMode(void);
-	void StartTurboMode(void);
-	void StopTurboMode(void);
+
+	void ToggleCameraPress(void);
+	void StartCameraPress(void);
+	void StopCameraPress(void);
 
 	void TriggerSnapshot(void);
 
@@ -68,6 +73,7 @@ public:
 	void Reset(void);
 	void SetContinueNotifier(ContinueEmulationNotifier ^notifier);
 
+
 	void ChangeOrientation(int orientation);
 	bool IsROMLoaded(void);
 	void PauseEmulation(void);
@@ -77,6 +83,17 @@ public:
 	static Moga::Windows::Phone::ControllerManager^ getController() {
 		return mogacontroller;
 	};
+
+	static Windows::Devices::Sensors::Accelerometer^ getAccelormeter()
+	{
+		return m_accelerometer;
+	};
+
+	static Windows::Devices::Sensors::Inclinometer^ getInclinometer()
+	{
+		return m_inclinometer;
+	};
+	
 
 protected:
 	// Event Handlers
@@ -99,6 +116,11 @@ private:
 	VirtualController *vController;
 	static Moga::Windows::Phone::ControllerManager^ mogacontroller;
 	int orientation;
+	HANDLE waitHandle;
+	static Windows::Devices::Sensors::Accelerometer^ m_accelerometer;
+	static Windows::Devices::Sensors::Inclinometer^ m_inclinometer;
+	
+	
 };
 
 }
