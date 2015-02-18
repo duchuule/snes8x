@@ -340,7 +340,7 @@ namespace PhoneDirect3DXamlAppInterop.Database
             }
             filename = filename.ToLower();
             SavestateEntry save = this.context.SavestateTable
-                .Where(s => s.ROMFileName.ToLower().Equals(filename) && s.Slot != 10)
+                .Where(s => s.ROMFileName.ToLower().Equals(filename) && s.Slot != 9 && s.Savetime != FileHandler.DEFAULT_DATETIME)
                 .OrderByDescending(s => s.Savetime)
                 .FirstOrDefault();
             if (save != null)
