@@ -167,27 +167,27 @@ namespace PhoneDirect3DXamlAppInterop
             }
 
 
-            //ask to enable turbo mode
-            if (!App.metroSettings.FirstTurboPrompt)
-            {
-                RadMessageBox.Show(AppResources.EnableTurboPromptTitle, MessageBoxButtons.YesNo, AppResources.EnableTurboPromptText,
-                    closedHandler: (args) =>
-                    {
-                        DialogResult result = args.Result;
-                        if (result == DialogResult.OK)
-                        {
-                            EmulatorSettings.Current.UseTurbo = true;
-                            //save to disk
-                            //do this here instead of SettingsChangedDelegate() so that we don't always save to disk when camera is half press
-                            IsolatedStorageSettings.ApplicationSettings[SettingsPage.UseTurboKey] = true;
-                        }
+            //ask to enable turbo mode, currently disable because it's bugy
+            //if (!App.metroSettings.FirstTurboPrompt)
+            //{
+            //    RadMessageBox.Show(AppResources.EnableTurboPromptTitle, MessageBoxButtons.YesNo, AppResources.EnableTurboPromptText,
+            //        closedHandler: (args) =>
+            //        {
+            //            DialogResult result = args.Result;
+            //            if (result == DialogResult.OK)
+            //            {
+            //                EmulatorSettings.Current.UseTurbo = true;
+            //                //save to disk
+            //                //do this here instead of SettingsChangedDelegate() so that we don't always save to disk when camera is half press
+            //                IsolatedStorageSettings.ApplicationSettings[SettingsPage.UseTurboKey] = true;
+            //            }
 
-                        App.metroSettings.FirstTurboPrompt = true;
+            //            App.metroSettings.FirstTurboPrompt = true;
 
 
-                    });
+            //        });
                 
-            }
+            //}
 
             
 

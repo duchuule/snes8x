@@ -85,7 +85,8 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         ///
         ///Credits:
         ///- Eddi Bento for logo design.
-        ///- MOGA company for the surprised gift..
+        ///- MOGA company for the surprised gift.
+        ///- Donators: Marcelo Farias, 葉 思成, Ben Norris..
         /// </summary>
         public static string AboutSnes9x {
             get {
