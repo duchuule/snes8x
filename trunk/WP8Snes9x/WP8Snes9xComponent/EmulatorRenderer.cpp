@@ -12,7 +12,7 @@ using namespace Windows::Graphics::Display;
 using namespace PhoneDirect3DXamlAppComponent;
 
 
-
+typedef uint8_t u8;
 
 bool cameraPressed = false;
 bool autoFireToggle = false;
@@ -21,7 +21,347 @@ int mappedButton = 0;
 float lastElapsed = 0.0f;
 int framesNotRendered = 0;
 extern bool turbo;
-extern bool enableTurboMode;
+
+
+double SolveForAngle(double a, double b, double c)
+{
+	const double epsilon = 0.0000000000000001;
+	double x = -1001.0, x2 = -1001.0;
+	//solve the function A cos(x) + B sin(x) = C
+	if (abs(a + c) < epsilon) //when a + c = 0
+	{
+		x = (-2 * atan(a / b)) / 3.14159265 * 180;
+	}
+	else
+	{
+		double check = a*a + b*b + a*c - b*sqrt(a*a + b*b - c*c);
+		if (abs(check) > epsilon)
+		{
+			//2 ArcTan[(b - Sqrt[a ^ 2 + b ^ 2 - c ^ 2]) / (a + c)]
+			x = (2 * atan((b - sqrt(a*a + b*b - c*c)) / (a + c))) / 3.14159265 * 180;
+		}
+
+		check = a*a + b*b + a*c + b*sqrt(a*a + b*b - c*c);
+		if (abs(check > epsilon))
+		{
+			//x == 2 ArcTan[(b + Sqrt[a^2 + b^2 - c^2])/(a + c)]
+			x2 = (2 * atan((b + sqrt(a*a + b*b - c*c)) / (a + c))) / 3.14159265 * 180;
+		}
+	}
+
+	if (x < -1000 && x2 > -1000)
+		x = x2;
+
+	if (x > -1000 && x2 > -1000) //2 solutions, choose the most likely one
+	{
+		if (abs(x2) < abs(x))
+			x = x2;
+	}
+
+	return x;
+}
+
+double deg2rad(double deg)
+{
+	return deg / 180.0 * 3.14159265;
+}
+
+u8 getMotionInput()
+{
+	//bit order: left: 1, right: 2, up: 4, down: 8
+	int ret = 0;
+
+
+	VirtualController *controller = VirtualController::GetInstance();
+	if (!controller)
+		return ret;
+
+	bool left = false;
+	bool right = false;
+	bool up = false;
+	bool down = false;
+
+	EmulatorSettings ^settings = EmulatorSettings::Current;
+
+	Windows::Devices::Sensors::Accelerometer^ accl = Direct3DBackground::getAccelormeter();
+	Windows::Devices::Sensors::Inclinometer^ incl = Direct3DBackground::getInclinometer();
+
+	//Motion Control
+	//see Tilt Sensing Using a Three-Axis Accelerometer for complete equations
+	//[Gx, Gy, Gz]^T = Rx(phi) Ry(theta) [Gx0, Gy0, Gz0]^T
+	// Combined rotation matrix: [Gx0*cos(theta) - Gz0*sin(theta), Gx0*sin(theta)*sin(phi)+Gy0*cos(phi) + cos(theta)*sin(phi)*Gz0,
+	//							Gx0*cos(phi)*sin(theta) + Gy0*(-sin(phi)) + cos(theta)*cos(phi)*Gz0 ]
+
+	double rotationDeadZone = 10;
+	double g0[3] = { settings->RestAngleX, settings->RestAngleY, settings->RestAngleZ };
+
+
+	//correct for orientation if needed
+	if (settings->MotionAdaptOrientation)
+	{
+		if (settings->UseMotionControl == 1)
+		{
+			if (controller->GetOrientation() == ORIENTATION_PORTRAIT)
+			{
+				if (abs(settings->RestAngleX) < abs(settings->RestAngleY)) //phone is calibrated in portrait, RestAngleX = 0, Y = -0.7
+				{
+					g0[0] = settings->RestAngleX;
+					g0[1] = settings->RestAngleY;
+
+				}
+				else //phone is calibrated in landscape left
+				{
+					if (settings->RestAngleX < 0)  //calibrated in landscape left
+					{
+						g0[0] = settings->RestAngleY;
+						g0[1] = settings->RestAngleX;
+					}
+					else  //calibrated in landscape right
+					{
+						g0[0] = -settings->RestAngleY;
+						g0[1] = -settings->RestAngleX;
+					}
+				}
+			}
+			else if (controller->GetOrientation() == ORIENTATION_LANDSCAPE) //current orientation is landscape left
+			{
+				if (abs(settings->RestAngleX) < abs(settings->RestAngleY)) //phone is calibrated in portrait, RestAngleX = 0, Y = -0.7
+				{
+					g0[0] = settings->RestAngleY;
+					g0[1] = -settings->RestAngleX;
+				}
+				else //phone is calibrated in landscape left
+				{
+					if (settings->RestAngleX < 0)  //calibrated in landscape left
+					{
+						g0[0] = settings->RestAngleX;
+						g0[1] = settings->RestAngleY;
+					}
+					else  //calibrated in landscape right
+					{
+						g0[0] = -settings->RestAngleX;
+						g0[1] = -settings->RestAngleY;
+					}
+				}
+			}
+			else //current orientation is landscape right
+			{
+				if (abs(settings->RestAngleX) < abs(settings->RestAngleY)) //phone is calibrated in portrait, RestAngleX = 0, Y = -0.7
+				{
+					g0[0] = -settings->RestAngleY;
+					g0[1] = settings->RestAngleX;
+				}
+				else //phone is calibrated in landscape left
+				{
+					if (settings->RestAngleX < 0)  //calibrated in landscape left
+					{
+						g0[0] = -settings->RestAngleX;
+						g0[1] = -settings->RestAngleY;
+					}
+					else  //calibrated in landscape right
+					{
+						g0[0] = settings->RestAngleX;
+						g0[1] = settings->RestAngleY;
+					}
+				}
+			}
+		}
+		else if (settings->UseMotionControl == 2) //inclinometer
+		{
+			if (controller->GetOrientation() == ORIENTATION_PORTRAIT) //RestAngleX = 0, Y = 45
+			{
+				if (abs(settings->RestAngleX) < abs(settings->RestAngleY)) //phone is calibrated in portrait, RestAngleX = 0, Y = 45
+				{
+					g0[0] = settings->RestAngleX;
+					g0[1] = settings->RestAngleY;
+
+				}
+				else //phone is calibrated in landscape 
+				{
+					if (settings->RestAngleX < 0)  //calibrated in landscape left
+					{
+						g0[0] = settings->RestAngleY;
+						g0[1] = -settings->RestAngleX;
+					}
+					else  //calibrated in landscape right
+					{
+						g0[0] = -settings->RestAngleY;
+						g0[1] = settings->RestAngleX;
+					}
+				}
+			}
+			else if (controller->GetOrientation() == ORIENTATION_LANDSCAPE) //current orientation is landscape left, RestAngleX = -45, Y = 0
+			{
+				if (abs(settings->RestAngleX) < abs(settings->RestAngleY)) //phone is calibrated in portrait, RestAngleX = 0, Y = 45
+				{
+					g0[0] = -settings->RestAngleY;
+					g0[1] = settings->RestAngleX;
+				}
+				else //phone is calibrated in landscape left
+				{
+					if (settings->RestAngleX < 0)  //calibrated in landscape left
+					{
+						g0[0] = settings->RestAngleX;
+						g0[1] = settings->RestAngleY;
+					}
+					else  //calibrated in landscape right
+					{
+						g0[0] = -settings->RestAngleX;
+						g0[1] = -settings->RestAngleY;
+					}
+				}
+			}
+			else //current orientation is landscape right, RestAngleX = 45, Y = 0
+			{
+				if (abs(settings->RestAngleX) < abs(settings->RestAngleY)) //phone is calibrated in portrait, RestAngleX = 0, Y = 45
+				{
+					g0[0] = settings->RestAngleY;
+					g0[1] = -settings->RestAngleX;
+				}
+				else //phone is calibrated in landscape left
+				{
+					if (settings->RestAngleX < 0)  //calibrated in landscape left
+					{
+						g0[0] = -settings->RestAngleX;
+						g0[1] = -settings->RestAngleY;
+					}
+					else  //calibrated in landscape right
+					{
+						g0[0] = settings->RestAngleX;
+						g0[1] = settings->RestAngleY;
+					}
+				}
+			}
+
+		}
+
+	}
+
+
+
+	double g[3];
+
+	//NOTE: x is phone's short edge, y is phone's long endge, z is phone's thickness
+	if (settings->UseMotionControl == 1 && accl != nullptr)
+	{
+		Windows::Devices::Sensors::AccelerometerReading^ reading = accl->GetCurrentReading();
+
+		g[0] = reading->AccelerationX;
+		g[1] = reading->AccelerationY;
+		g[2] = reading->AccelerationZ;
+
+		double theta = SolveForAngle(g0[0], -g0[2], g[0]);
+
+
+
+		double phi = SolveForAngle(g0[1], g0[0] * sin(deg2rad(theta)) + g0[2] * cos(deg2rad(theta)), g[1]);
+
+		//account for different orientation
+
+		if (controller->GetOrientation() == ORIENTATION_PORTRAIT)
+		{
+
+			if (theta < -settings->MotionDeadzoneH)
+				left = true;
+			else if (theta > settings->MotionDeadzoneH)
+				right = true;
+
+
+			if (phi < -settings->MotionDeadzoneV)
+				up = true;
+			else if (phi > settings->MotionDeadzoneV)
+				down = true;
+		}
+		else if (controller->GetOrientation() == ORIENTATION_LANDSCAPE)
+		{
+			if (theta < -settings->MotionDeadzoneH)
+				down = true;
+			else if (theta > settings->MotionDeadzoneH)
+				up = true;
+
+
+			if (phi < -settings->MotionDeadzoneV)
+				left = true;
+			else if (phi > settings->MotionDeadzoneV)
+				right = true;
+
+		}
+		else
+		{
+			if (theta < -settings->MotionDeadzoneH)
+				up = true;
+			else if (theta > settings->MotionDeadzoneH)
+				down = true;
+
+
+			if (phi < -settings->MotionDeadzoneV)
+				right = true;
+			else if (phi > settings->MotionDeadzoneV)
+				left = true;
+		}
+	}
+	else if (settings->UseMotionControl == 2 && incl != nullptr)
+	{
+		Windows::Devices::Sensors::InclinometerReading^ reading = incl->GetCurrentReading();
+
+
+		//account for different orientation
+
+		if (controller->GetOrientation() == ORIENTATION_PORTRAIT)
+		{
+			if (reading->RollDegrees - g0[0] < -settings->MotionDeadzoneH)
+				left = true;
+			else if (reading->RollDegrees - g0[0] > settings->MotionDeadzoneH)
+				right = true;
+
+			if (reading->PitchDegrees - g0[1] < -settings->MotionDeadzoneV)
+				up = true;
+			else if (reading->PitchDegrees - g0[1] > settings->MotionDeadzoneV)
+				down = true;
+		}
+		else if (controller->GetOrientation() == ORIENTATION_LANDSCAPE)
+		{
+			if (reading->RollDegrees - g0[0] < -settings->MotionDeadzoneH)
+				down = true;
+			else if (reading->RollDegrees - g0[0] > settings->MotionDeadzoneH)
+				up = true;
+
+			if (reading->PitchDegrees - g0[1] < -settings->MotionDeadzoneV)
+				left = true;
+			else if (reading->PitchDegrees - g0[1] > settings->MotionDeadzoneV)
+				right = true;
+
+		}
+		else
+		{
+
+			if (reading->RollDegrees - g0[0] < -settings->MotionDeadzoneH)
+				up = true;
+			else if (reading->RollDegrees - g0[0] > settings->MotionDeadzoneH)
+				down = true;
+
+			if (reading->PitchDegrees - g0[1] < -settings->MotionDeadzoneV)
+				right = true;
+			else if (reading->PitchDegrees - g0[1] > settings->MotionDeadzoneV)
+				left = true;
+		}
+
+
+	}
+
+	if (left)
+		ret |= 1;
+	if (right)
+		ret |= 2;
+	if (up)
+		ret |= 4;
+	if (down)
+		ret |= 8;
+
+	return ret;
+
+}
+
 
 EmulatorRenderer::EmulatorRenderer()
 { 
@@ -131,6 +471,7 @@ void EmulatorRenderer::ChangeOrientation(int orientation)
 }
 
 
+
 void EmulatorRenderer::Update(float timeTotal, float timeDelta)
 {
 	lastElapsed = timeDelta;
@@ -189,6 +530,18 @@ void EmulatorRenderer::Update(float timeTotal, float timeDelta)
 	bool r = false;
 	turbo = false;
 		
+	u8 motionInput = getMotionInput();
+
+	if (motionInput & 1)
+		GetMotionMapping(settings->MotionLeft, &left, &right, &up, &down, &a, &b, &x, &y, &l, &r);
+	else if (motionInput & 2)
+		GetMotionMapping(settings->MotionRight, &left, &right, &up, &down, &a, &b, &x, &y, &l, &r);
+
+	if (motionInput & 4)
+		GetMotionMapping(settings->MotionUp, &left, &right, &up, &down, &a, &b, &x, &y, &l, &r);
+	else if (motionInput & 8)
+		GetMotionMapping(settings->MotionDown, &left, &right, &up, &down, &a, &b, &x, &y, &l, &r);
+
 	//Moga
 	using namespace Moga::Windows::Phone;
 	Moga::Windows::Phone::ControllerManager^ ctrl = Direct3DBackground::getController();
@@ -348,59 +701,182 @@ void EmulatorRenderer::Update(float timeTotal, float timeDelta)
 		down |= state->DownPressed;
 		start |= state->StartPressed;
 		select |= state->SelectPressed;
-		a |= state->APressed;
-		b |= state->BPressed;
-		x |= state->XPressed;
-		y |= state->YPressed;
-/*
-		this->emulator->SetButtonState(JOYPAD_LEFT, state->LeftPressed);
-		this->emulator->SetButtonState(JOYPAD_UP, state->UpPressed);
-		this->emulator->SetButtonState(JOYPAD_RIGHT, state->RightPressed);
-		this->emulator->SetButtonState(JOYPAD_DOWN, state->DownPressed);
-		this->emulator->SetButtonState(JOYPAD_START, state->StartPressed);
-		this->emulator->SetButtonState(JOYPAD_SELECT, state->SelectPressed);
-		this->emulator->SetButtonState(JOYPAD_A, state->APressed);
-		this->emulator->SetButtonState(JOYPAD_B, state->BPressed);
-		this->emulator->SetButtonState(JOYPAD_X, state->XPressed);
-		this->emulator->SetButtonState(JOYPAD_Y, state->YPressed);*/
-		if(settings->CameraButtonAssignment == 0)
-		{
-			/*this->emulator->SetButtonState(JOYPAD_L, state->LPressed);
-			this->emulator->SetButtonState(JOYPAD_R, state->RPressed);*/
+		
 
+
+		if(settings->CameraButtonAssignment == 0) //camera is turbo
+		{
 			l |= state->LPressed;
 			r |= state->RPressed;
-		}else if(settings->CameraButtonAssignment == 1)
+			a |= state->APressed;
+			b |= state->BPressed;
+			x |= state->XPressed;
+			y |= state->YPressed;
+			//note: turbo is set in Emulator.cpp/UpdateAsync
+		}
+		else if(settings->CameraButtonAssignment == 1) //camera is R button
 		{
-			// R Button
-			/*this->emulator->SetButtonState(JOYPAD_L, state->LPressed);
-			this->emulator->SetButtonState(JOYPAD_R, enableTurboMode);
-			turbo = state->RPressed;*/
-
 			l |= state->LPressed;
-			r |= enableTurboMode;
+
+			a |= state->APressed;
+			b |= state->BPressed;
+			x |= state->XPressed;
+			y |= state->YPressed;
+
 			turbo |= state->RPressed;
-		}else if(settings->CameraButtonAssignment == 2)
+
+			if (cameraPressed) //this is true when camera button is pressed
+			{
+				if (settings->EnableAutoFire)
+				{
+					if (autoFireToggle)
+						r = true;
+					autoFireToggle = !autoFireToggle;
+				}
+				else //no autofire, just keep pressing the button
+				{
+					r = true;
+				}
+
+			}
+		}
+		else if(settings->CameraButtonAssignment == 2) //camera is L buttion
 		{
-			// L Button
-			/*this->emulator->SetButtonState(JOYPAD_R, state->RPressed);
-			this->emulator->SetButtonState(JOYPAD_L, enableTurboMode);
-			turbo = state->LPressed;*/
 
 			r |= state->RPressed;
-			l |= enableTurboMode;
-			turbo |= state->LPressed;
-		}else if(settings->CameraButtonAssignment == 3)
-		{
-			/*this->emulator->SetButtonState(JOYPAD_L, enableTurboMode);
-			this->emulator->SetButtonState(JOYPAD_R, enableTurboMode);
-			turbo = state->RPressed || state->LPressed;*/
+			a |= state->APressed;
+			b |= state->BPressed;
+			x |= state->XPressed;
+			y |= state->YPressed;
 
-			l |= enableTurboMode;
-			r |= enableTurboMode;
-			turbo |= state->RPressed || state->LPressed;
+			turbo |= state->LPressed;
+
+			if (cameraPressed) //this is true when camera button is pressed
+			{
+				if (settings->EnableAutoFire)
+				{
+					if (autoFireToggle)
+						l = true;
+					autoFireToggle = !autoFireToggle;
+				}
+				else //no autofire, just keep pressing the button
+				{
+					l = true;
+				}
+
+			}
+		}
+		else if (settings->CameraButtonAssignment == 3) //camera is A buttion
+		{
+			l |= state->LPressed;
+			r |= state->RPressed;
+
+			b |= state->BPressed;
+			x |= state->XPressed;
+			y |= state->YPressed;
+
+			turbo |= state->APressed;
+
+			if (cameraPressed) //this is true when camera button is pressed
+			{
+				if (settings->EnableAutoFire)
+				{
+					if (autoFireToggle)
+						a = true;
+					autoFireToggle = !autoFireToggle;
+				}
+				else //no autofire, just keep pressing the button
+				{
+					a = true;
+				}
+
+			}
+		}
+		else if (settings->CameraButtonAssignment == 4) //camera is B buttion
+		{
+			l |= state->LPressed;
+			r |= state->RPressed;
+			a |= state->APressed;
+
+			x |= state->XPressed;
+			y |= state->YPressed;
+
+			turbo |= state->BPressed;
+
+			if (cameraPressed) //this is true when camera button is pressed
+			{
+				if (settings->EnableAutoFire)
+				{
+					if (autoFireToggle)
+						b = true;
+					autoFireToggle = !autoFireToggle;
+				}
+				else //no autofire, just keep pressing the button
+				{
+					b = true;
+				}
+
+			}
+		}
+		else if (settings->CameraButtonAssignment == 5) //camera is X buttion
+		{
+			l |= state->LPressed;
+			r |= state->RPressed;
+			a |= state->APressed;
+			b |= state->BPressed;
+
+			y |= state->YPressed;
+
+			turbo |= state->XPressed;
+
+			if (cameraPressed) //this is true when camera button is pressed
+			{
+				if (settings->EnableAutoFire)
+				{
+					if (autoFireToggle)
+						x = true;
+					autoFireToggle = !autoFireToggle;
+				}
+				else //no autofire, just keep pressing the button
+				{
+					x = true;
+				}
+
+			}
+		}
+		else if (settings->CameraButtonAssignment == 6) //camera is Y buttion
+		{
+			l |= state->LPressed;
+			r |= state->RPressed;
+			a |= state->APressed;
+			b |= state->BPressed;
+			x |= state->XPressed;
+
+			turbo |= state->YPressed;
+
+			if (cameraPressed) //this is true when camera button is pressed
+			{
+				if (settings->EnableAutoFire)
+				{
+					if (autoFireToggle)
+						y = true;
+					autoFireToggle = !autoFireToggle;
+				}
+				else //no autofire, just keep pressing the button
+				{
+					y = true;
+				}
+
+			}
 		}
 	}
+
+
+
+
+
+
+
 
 	this->emulator->SetButtonState(JOYPAD_LEFT, left);
 	this->emulator->SetButtonState(JOYPAD_UP, up);
@@ -462,6 +938,31 @@ void EmulatorRenderer::GetMogaMapping(int pressedButton, bool* a, bool* b, bool*
 	if (pressedButton & 32)
 		*r = true;
 	
+}
+
+void EmulatorRenderer::GetMotionMapping(int tiltDirection, bool* left, bool* right, bool* up, bool* down, bool* a, bool* b, bool* x, bool* y, bool* l, bool* r)
+{
+	if (tiltDirection & 1)
+		*left = true;
+	if (tiltDirection & 2)
+		*right = true;
+	if (tiltDirection & 4)
+		*up = true;
+	if (tiltDirection & 8)
+		*down = true;
+	if (tiltDirection & 16)
+		*a = true;
+	if (tiltDirection & 32)
+		*b = true;
+	if (tiltDirection & 64)
+		*x = true;
+	if (tiltDirection & 128)
+		*y = true;
+	if (tiltDirection & 256)
+		*l = true;
+	if (tiltDirection & 512)
+		*r = true;
+
 }
 
 void EmulatorRenderer::Render()
@@ -634,3 +1135,4 @@ void *EmulatorRenderer::MapBuffer(int index, size_t *rowPitch)
 	*rowPitch = map.RowPitch;
 	return map.pData;
 }
+

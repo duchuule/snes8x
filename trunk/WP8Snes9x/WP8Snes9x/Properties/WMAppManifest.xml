@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{ed3cc816-1ab0-418a-9bb8-11505804f6b4}" Title="Snes8x" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Duc Le" Description="" Publisher="Duc Le" PublisherID="{6ddcac5e-af3e-44d1-b0d2-c0c7ad221852}">
+  <App xmlns="" ProductID="{ed3cc816-1ab0-418a-9bb8-11505804f6b5}" Title="Snes8x" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Duc Le" Description="" Publisher="Duc Le" PublisherID="{6ddcac5e-af3e-44d1-b0d2-c0c7ad221852}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />

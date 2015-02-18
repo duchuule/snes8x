@@ -18,7 +18,7 @@ namespace PhoneDirect3DXamlAppInterop
 {
     public partial class MotionMappingPage : PhoneApplicationPage
     {
-        private String[] appFunctionList = {"Left", "Right", "Up", "Down", "A", "B", "L", "R", AppResources.NoneButtonText };
+        private String[] appFunctionList = {"Left", "Right", "Up", "Down", "A", "B", "X", "Y", "L", "R", AppResources.NoneButtonText };
 
         public MotionMappingPage()
         {

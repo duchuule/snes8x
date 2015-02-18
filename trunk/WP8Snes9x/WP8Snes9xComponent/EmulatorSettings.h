@@ -55,7 +55,6 @@ namespace PhoneDirect3DXamlAppComponent
 			}
 		}
 
-
 		property bool UseMogaController
 		{
 			bool get() { return this->useMogaController; }
@@ -70,31 +69,18 @@ namespace PhoneDirect3DXamlAppComponent
 		}
 
 
-		property bool VirtualControllerOnTop
-		{
-			bool get() { return this->vcontrollerOnTop; }
-			void set(bool value) 
-			{ 
-				this->vcontrollerOnTop = value; 
-				if(this->SettingsChanged)
-				{
-					this->SettingsChanged();
-				}
-			}
-		}
-
-		property bool LargeVController
-		{
-			bool get() { return this->vcontrollerLarge; }
-			void set(bool value) 
-			{ 
-				this->vcontrollerLarge = value; 
-				if(this->SettingsChanged)
-				{
-					this->SettingsChanged();
-				}
-			}
-		}
+		//property bool VirtualControllerOnTop
+		//{
+		//	bool get() { return this->vcontrollerOnTop; }
+		//	void set(bool value) 
+		//	{ 
+		//		this->vcontrollerOnTop = value; 
+		//		if(this->SettingsChanged)
+		//		{
+		//			this->SettingsChanged();
+		//		}
+		//	}
+		//}
 
 		property bool LowFrequencyMode
 		{
@@ -121,19 +107,6 @@ namespace PhoneDirect3DXamlAppComponent
 				}
 			}
 		}*/
-
-		property bool GrayVControllerButtons
-		{
-			bool get() { return this->grayButtons; }
-			void set(bool value)
-			{
-				this->grayButtons = value;
-				if(this->SettingsChanged)
-				{
-					this->SettingsChanged();
-				}
-			}
-		}
 
 		property bool FullscreenStretch
 		{
@@ -228,49 +201,10 @@ namespace PhoneDirect3DXamlAppComponent
 
 		property int PowerFrameSkip
 		{
-			int get() { return this->powerFrameSkip; }
+			int get() { return 0; } //set this to 0 because this value is useless
 			void set(int value) 
 			{
 				this->powerFrameSkip = value;
-				if(this->SettingsChanged)
-				{
-					this->SettingsChanged();
-				}
-			}
-		}
-
-		property int DPadStyle
-		{
-			int get() { return this->dpadStyle; }
-			void set(int value) 
-			{
-				this->dpadStyle = value;
-				if(this->SettingsChanged)
-				{
-					this->SettingsChanged();
-				}
-			}
-		}
-
-		property bool SynchronizeAudio
-		{
-			bool get() { return this->syncAudio; }
-			void set(bool value)
-			{
-				this->syncAudio = value;
-				if(this->SettingsChanged)
-				{
-					this->SettingsChanged();
-				}
-			}
-		}
-
-		property float Deadzone
-		{
-			float get() { return this->deadzone; }
-			void set(float value) 
-			{
-				this->deadzone = value;
 				if(this->SettingsChanged)
 				{
 					this->SettingsChanged();
@@ -291,6 +225,32 @@ namespace PhoneDirect3DXamlAppComponent
 			}
 		}
 
+		property bool GrayVControllerButtons
+		{
+			bool get() { return this->grayButtons; }
+			void set(bool value)
+			{
+				this->grayButtons = value;
+				if(this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
+		property int DPadStyle
+		{
+			int get() { return this->dpadStyle; }
+			void set(int value) 
+			{
+				this->dpadStyle = value;
+				if(this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
 		property int CameraButtonAssignment
 		{
 			int get() { return this->cameraAssignment; }
@@ -304,6 +264,31 @@ namespace PhoneDirect3DXamlAppComponent
 			}
 		}
 
+		property float Deadzone
+		{
+			float get() { return this->deadzone; }
+			void set(float value) 
+			{
+				this->deadzone = value;
+				if(this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
+		property bool SynchronizeAudio
+		{
+			bool get(void) { return this->synchronizeAudio; }
+			void set(bool value)
+			{
+				this->synchronizeAudio = value; 
+				if(this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
 		property bool HideConfirmationDialogs
 		{
 			bool get(void) { return this->hideConfirmations; }
@@ -356,6 +341,19 @@ namespace PhoneDirect3DXamlAppComponent
 			}
 		}
 
+		property bool ShouldShowAds
+		{
+			bool get(void) { return this->shouldShowAds; }
+			void set(bool value) 
+			{ 
+				this->shouldShowAds = value; 
+				if(this->SettingsChanged)
+				{
+					this->SettingsChanged();
+				}
+			}
+		}
+
 		property bool ManualSnapshots
 		{
 			bool get(void) { return this->manualSnapshots; }
@@ -369,18 +367,8 @@ namespace PhoneDirect3DXamlAppComponent
 			}
 		}
 
-		property bool ShouldShowAds
-		{
-			bool get(void) { return this->shouldShowAds; }
-			void set(bool value) 
-			{ 
-				this->shouldShowAds = value; 
-				if(this->SettingsChanged)
-				{
-					this->SettingsChanged();
-				}
-			}
-		}
+
+
 
 		property int BgcolorR
 		{
@@ -582,6 +570,16 @@ namespace PhoneDirect3DXamlAppComponent
 		property int RRightL;
 		property int RTopL;
 
+		//turbo button is added later, so it stay separate
+		property int TurboLeftP;
+		property int TurboTopP;
+		property int TurboLeftL;
+		property int TurboTopL;
+
+		property int ComboLeftP;
+		property int ComboTopP;
+		property int ComboLeftL;
+		property int ComboTopL;
 
 		property int MogaA;
 		property int MogaB;
@@ -609,6 +607,7 @@ namespace PhoneDirect3DXamlAppComponent
 		
 	private:
 		bool soundEnabled;
+		bool synchronizeAudio;
 		bool useMogaController;
 		bool vcontrollerOnTop;
 		bool lowFreqMode;
@@ -616,15 +615,15 @@ namespace PhoneDirect3DXamlAppComponent
 		bool vcontrollerLarge;
 		bool grayButtons;
 		bool fullscreenStretch;
-		int controllerScale;
-		int buttonScale;
+		int controllerScale; //scale of joystick
+		int buttonScale; //scale of button
 		int controllerOpacity;
 		int orientation;
 		int frameSkip;
+		int imageScale;
 		int turboFrameSkip;
 		int powerFrameSkip;
-		int imageScale;
-		bool syncAudio;
+
 		int dpadStyle;
 		float deadzone;
 		int cameraAssignment;
@@ -632,12 +631,11 @@ namespace PhoneDirect3DXamlAppComponent
 		bool hideLoadConfirmations;
 		bool autoIncSavestates;
 		bool selectLastState;
-		bool manualSnapshots;
 		bool shouldShowAds;
+		bool manualSnapshots;
 		int bgcolorR;
 		int bgcolorG;
 		int bgcolorB;
-
 		bool autoSaveLoad;
 		int virtualControllerStyle;
 		bool vibrationEnabled;
@@ -651,6 +649,9 @@ namespace PhoneDirect3DXamlAppComponent
 		static EmulatorSettings ^instance;
 
 
+
+
+		
 	};
 }
 

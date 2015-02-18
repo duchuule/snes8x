@@ -40,4 +40,5 @@ private:
 
 	void *MapBuffer(int index, size_t *rowPitch);
 	void GetMogaMapping(int pressedButton, bool* a, bool* b, bool* x, bool* y, bool* l, bool* r );
+	void GetMotionMapping(int tiltDirection, bool* left, bool* right, bool* up, bool* down, bool* a, bool* b, bool* x, bool* y, bool* l, bool* r);
 };

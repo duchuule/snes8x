@@ -132,6 +132,32 @@ namespace PhoneDirect3DXamlAppInterop
                 ApplicationBar.ForegroundColor = (Color)App.Current.Resources["CustomForegroundColor"];
             }
 
+
+
+            MainPage.LoadInitialSettings();
+
+            //if first launch the enable automatic save/load
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("DEMOCOPIED") == false) //this is the frist time we start the app
+            {
+                EmulatorSettings.Current.AutoSaveLoad = true;
+            }
+            else if (!App.metroSettings.FirstAutoSaveLoadPrompt && !EmulatorSettings.Current.AutoSaveLoad) //if not first time then ask if user want to enable automatic saveload)
+            {
+                RadMessageBox.Show(AppResources.EnableAutoSaveLoadPromptTitle, MessageBoxButtons.YesNo, AppResources.EnableAutoSaveLoadPromptText,
+                    closedHandler: (args) =>
+                    {
+                        DialogResult result = args.Result;
+                        if (result == DialogResult.OK)
+                        {
+                            EmulatorSettings.Current.AutoSaveLoad = true;
+
+                        }
+
+                        App.metroSettings.FirstAutoSaveLoadPrompt = true;
+                    });
+                
+            }
+
             //await this.createFolderTask;
             //await this.copyDemoTask;
             if (shouldInitialize)  //create folder structure and copy demon rom
@@ -140,7 +166,6 @@ namespace PhoneDirect3DXamlAppInterop
                 shouldInitialize = false;
             }
 
-            MainPage.LoadInitialSettings();
 
             //ask to enable turbo mode
             if (!App.metroSettings.FirstTurboPrompt)
@@ -157,10 +182,14 @@ namespace PhoneDirect3DXamlAppInterop
                             IsolatedStorageSettings.ApplicationSettings[SettingsPage.UseTurboKey] = true;
                         }
 
+                        App.metroSettings.FirstTurboPrompt = true;
+
 
                     });
-                App.metroSettings.FirstTurboPrompt = true;
+                
             }
+
+            
 
             if (shouldUpdateBackgroud)
             {
