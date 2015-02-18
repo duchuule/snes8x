@@ -3,9 +3,12 @@
 #include <D3D11.h>
 #include "defines.h"
 #include <collection.h>
+#include <math.h>
 
 using namespace Platform;
 using namespace Windows::UI::Input;
+using namespace Windows::Phone::Devices::Notification;
+
 
 namespace Emulator
 {
@@ -25,18 +28,23 @@ namespace Emulator
 		bool XPressed;
 		bool LPressed;
 		bool RPressed;
+		bool TurboPressed;
+		bool ComboPressed;
 	};
 
 
 	class VirtualController
 	{
 	public:
+		static VirtualController *GetInstance(void);
+
 		VirtualController(void);
 		~VirtualController(void);
 		void UpdateFormat(int format);
 		void VirtualControllerOnTop(bool onTop);	
 		void SetOrientation(int orientation);
-		virtual void SetControllerPositionFromSettings(void);
+		int GetOrientation();
+		int GetFormat(void);
 
 		void PointerPressed(PointerPoint ^point);
 		void PointerMoved(PointerPoint ^point);
@@ -55,6 +63,8 @@ namespace Emulator
 		void GetYRectangle(RECT *rect);
 		void GetStartRectangle(RECT *rect);
 		void GetSelectRectangle(RECT *rect);
+		void GetTurboRectangle(RECT *rect);
+		void GetComboRectangle(RECT *rect);
 		void GetLRectangle(RECT *rect);
 		void GetRRectangle(RECT *rect);
 
@@ -63,15 +73,23 @@ namespace Emulator
 		Platform::Collections::Map<unsigned int, Platform::String^> ^pointerDescriptions;
 
 	protected:
-		Platform::Collections::Map<unsigned int, PointerPoint^> ^pointers;
+		void SetControllerPositionFromSettings(void);
+		void CreateRenderRectangles(void);
+
+		void CreateTouchLandscapeRectangles(void);
+		void CreateTouchPortraitRectangles(void);
+		double CalculateDistanceDiff(Windows::Foundation::Point point1, Windows::Foundation::Point point2, Windows::Foundation::Point target);
+
 		
+
+		Platform::Collections::Map<unsigned int, Windows::UI::Input::PointerPoint ^> ^pointers;
 		CRITICAL_SECTION cs;
 		ControllerState state;
 		bool virtualControllerOnTop;
 		int orientation;
 		int format;
 		int width, height;
-		int touchWidth, touchHeight;
+		int touchWidth, touchHeight; //scaled, orientation-aware
 		float hscale;
 
 		bool stickFingerDown;
@@ -85,6 +103,8 @@ namespace Emulator
 		RECT padCrossRectangle;
 		RECT startRectangle;
 		RECT selectRectangle;
+		RECT turboRectangle;
+		RECT comboRectangle;
 		RECT aRectangle;
 		RECT bRectangle;
 		RECT xRectangle;
@@ -97,6 +117,8 @@ namespace Emulator
 		Windows::Foundation::Rect downRect;
 		Windows::Foundation::Rect startRect;
 		Windows::Foundation::Rect selectRect;
+		Windows::Foundation::Rect turboRect;
+		Windows::Foundation::Rect comboRect;
 		Windows::Foundation::Rect lRect;
 		Windows::Foundation::Rect rRect;
 		Windows::Foundation::Rect aRect;
@@ -118,17 +140,18 @@ namespace Emulator
 		int startTop;
 		int selectRight;
 		int selectTop;
+		int turboLeft;
+		int turboTop;
+		int comboLeft;
+		int comboTop;
 		int lLeft;
 		int lTop;
 		int rRight;
 		int rTop;
-		
-		void CreateRenderRectangles(void);
-		
-		void CreateTouchLandscapeRectangles(void);
-		void CreateTouchPortraitRectangles(void);
-
-		double CalculateDistanceDiff(Windows::Foundation::Point point1, Windows::Foundation::Point point2, Windows::Foundation::Point target);
+	private:
+		static VirtualController *singleton;
+		VibrationDevice ^vibrationDevice;
+		bool CheckTouchableArea(Windows::Foundation::Point p);
 		
 	};
 }

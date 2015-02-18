@@ -201,6 +201,9 @@
     <Compile Include="MogaMappingPage.xaml.cs">
       <DependentUpon>MogaMappingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MotionMappingPage.xaml.cs">
+      <DependentUpon>MotionMappingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenamePage.xaml.cs">
       <DependentUpon>RenamePage.xaml</DependentUpon>
@@ -322,6 +325,10 @@
     <Page Include="MogaMappingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MotionMappingPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="RenamePage.xaml">
       <Generator>MSBuild:Compile</Generator>

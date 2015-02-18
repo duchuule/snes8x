@@ -1260,7 +1260,7 @@ Device model: {0}</value>
     <value>Camera button auto fires A/B/X/Y/L/R</value>
   </data>
   <data name="MapABLRTurboText" xml:space="preserve">
-    <value>Use A/B/L/R for turbo</value>
+    <value>Use A/B/X/Y/L/R for turbo</value>
   </data>
   <data name="SaveSlotReservedText" xml:space="preserve">
     <value>This save slot is reserved for internal use. You can only load from but cannot save to this slot.</value>
@@ -1378,5 +1378,12 @@ Device model: {0}</value>
   </data>
   <data name="CameraAssignY" xml:space="preserve">
     <value>Y-Button</value>
+  </data>
+  <data name="EnableAutoSaveLoadPromptText" xml:space="preserve">
+    <value>WARNING: only choose Yes if you use quick save function. If you use in-game save function, please choose No to prevent data loss.
+You can  later change the setting by going to Settings -&gt; Gameplay.</value>
+  </data>
+  <data name="EnableAutoSaveLoadPromptTitle" xml:space="preserve">
+    <value>Enable automatic save/load?</value>
   </data>
 </root>

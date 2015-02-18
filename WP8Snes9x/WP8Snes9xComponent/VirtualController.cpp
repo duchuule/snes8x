@@ -1,22 +1,40 @@
 #include "pch.h"
 #include "VirtualController.h"
 #include "EmulatorSettings.h"
+#include "WP8Snes9xComponent.h"
+#include <string>
+#include <xstring>
+#include <sstream>
+
+using namespace std;
 
 using namespace PhoneDirect3DXamlAppComponent;
 	
 #define VCONTROLLER_Y_OFFSET_WVGA			218
 #define VCONTROLLER_Y_OFFSET_WXGA			348
 #define VCONTROLLER_Y_OFFSET_720P			308
+#define VCONTROLLER_BUTTON_Y_OFFSET_WVGA			303
+#define VCONTROLLER_BUTTON_Y_OFFSET_WXGA			498
+#define VCONTROLLER_BUTTON_Y_OFFSET_720P			428
 
 namespace Emulator
 {
-	VirtualController::VirtualController(void)
+	VirtualController *VirtualController::singleton = nullptr;
+
+	VirtualController *VirtualController::GetInstance(void)
 	{
-		virtualControllerOnTop = false;
-		stickFingerDown = false;
+		return singleton;
+	}
+
+	VirtualController::VirtualController(void)
+		: virtualControllerOnTop(false), stickFingerDown(false)
+	{
 		InitializeCriticalSectionEx(&this->cs, 0, 0);
 		this->pointers = ref new Platform::Collections::Map<unsigned int, PointerPoint^>();
-		this->pointerDescriptions = ref new Platform::Collections::Map<unsigned int, String^>();
+		this->pointerDescriptions = ref new Platform::Collections::Map<unsigned int, Platform::String^>();
+		vibrationDevice = VibrationDevice::GetDefault();
+
+		singleton = this;
 	}
 
 	VirtualController::~VirtualController(void)
@@ -24,54 +42,10 @@ namespace Emulator
 		DeleteCriticalSection(&this->cs);
 	}
 	
-	void VirtualController::SetControllerPositionFromSettings(void)
+	int VirtualController::GetFormat(void)
 	{
-		EmulatorSettings ^settings = EmulatorSettings::Current;
-
-		if(this->orientation != ORIENTATION_PORTRAIT)
-		{
-			padCenterX = settings->PadCenterXL;
-			padCenterY = settings->PadCenterYL;
-			aCenterX = settings->ACenterXL;
-			aCenterY = settings->ACenterYL;
-			bCenterX = settings->BCenterXL;
-			bCenterY = settings->BCenterYL;
-			xCenterX = settings->XCenterXL;
-			xCenterY = settings->XCenterYL;
-			yCenterX = settings->YCenterXL;
-			yCenterY = settings->YCenterYL;
-			startLeft = settings->StartLeftL;
-			startTop = settings->StartTopL;
-			selectRight = settings->SelectRightL;
-			selectTop = settings->SelectTopL;
-			lLeft = settings->LLeftL;
-			lTop = settings->LTopL;
-			rRight = settings->RRightL;
-			rTop = settings->RTopL;
-		}
-		else
-		{
-			padCenterX = settings->PadCenterXP;
-			padCenterY = settings->PadCenterYP;
-			aCenterX = settings->ACenterXP;
-			aCenterY = settings->ACenterYP;
-			bCenterX = settings->BCenterXP;
-			bCenterY = settings->BCenterYP;
-			xCenterX = settings->XCenterXP;
-			xCenterY = settings->XCenterYP;
-			yCenterX = settings->YCenterXP;
-			yCenterY = settings->YCenterYP;
-			startLeft = settings->StartLeftP;
-			startTop = settings->StartTopP;
-			selectRight = settings->SelectRightP;
-			selectTop = settings->SelectTopP;
-			lLeft = settings->LLeftP;
-			lTop = settings->LTopP;
-			rRight = settings->RRightP;
-			rTop = settings->RTopP;
-		}
+		return this->format;
 	}
-
 
 	void VirtualController::UpdateFormat(int format)
 	{
@@ -111,8 +85,65 @@ namespace Emulator
 
 	}
 
+	void VirtualController::SetControllerPositionFromSettings(void)
+	{
+		EmulatorSettings ^settings = EmulatorSettings::Current;
+
+		if(this->orientation != ORIENTATION_PORTRAIT)
+		{
+			padCenterX = settings->PadCenterXL;
+			padCenterY = settings->PadCenterYL;
+			aCenterX = settings->ACenterXL;
+			aCenterY = settings->ACenterYL;
+			bCenterX = settings->BCenterXL;
+			bCenterY = settings->BCenterYL;
+			xCenterX = settings->XCenterXL;
+			xCenterY = settings->XCenterYL;
+			yCenterX = settings->YCenterXL;
+			yCenterY = settings->YCenterYL;
+			startLeft = settings->StartLeftL;
+			startTop = settings->StartTopL;
+			selectRight = settings->SelectRightL;
+			selectTop = settings->SelectTopL;
+			lLeft = settings->LLeftL;
+			lTop = settings->LTopL;
+			rRight = settings->RRightL;
+			rTop = settings->RTopL;
+			turboLeft = settings->TurboLeftL;
+			turboTop = settings->TurboTopL;
+			comboLeft = settings->ComboLeftL;
+			comboTop = settings->ComboTopL;
+		}
+		else
+		{
+			padCenterX = settings->PadCenterXP;
+			padCenterY = settings->PadCenterYP;
+			aCenterX = settings->ACenterXP;
+			aCenterY = settings->ACenterYP;
+			bCenterX = settings->BCenterXP;
+			bCenterY = settings->BCenterYP;
+			xCenterX = settings->XCenterXP;
+			xCenterY = settings->XCenterYP;
+			yCenterX = settings->YCenterXP;
+			yCenterY = settings->YCenterYP;
+			startLeft = settings->StartLeftP;
+			startTop = settings->StartTopP;
+			selectRight = settings->SelectRightP;
+			selectTop = settings->SelectTopP;
+			lLeft = settings->LLeftP;
+			lTop = settings->LTopP;
+			rRight = settings->RRightP;
+			rTop = settings->RTopP;
+			turboLeft = settings->TurboLeftP;
+			turboTop = settings->TurboTopP;
+			comboLeft = settings->ComboLeftP;
+			comboTop = settings->ComboTopP;
+		}
+	}
+
 	void VirtualController::CreateRenderRectangles(void)
 	{
+
 		float value = EmulatorSettings::Current->ControllerScale / 100.0f;
 		float value2 = EmulatorSettings::Current->ButtonScale / 100.0f;
 
@@ -152,7 +183,15 @@ namespace Emulator
 		this->selectRectangle.top = selectTop; 
 		this->selectRectangle.bottom = this->selectRectangle.top + 50 * value2 * this->hscale;
 
+		this->turboRectangle.left = turboLeft;
+		this->turboRectangle.right = this->turboRectangle.left + 50 * value2 * this->hscale;
+		this->turboRectangle.top = turboTop;
+		this->turboRectangle.bottom = this->turboRectangle.top + 50 * value2 * this->hscale;
 
+		this->comboRectangle.left = comboLeft;
+		this->comboRectangle.right = this->comboRectangle.left + 50 * value2 * this->hscale;
+		this->comboRectangle.top = comboTop;
+		this->comboRectangle.bottom = this->comboRectangle.top + 50 * value2 * this->hscale;
 
 		this->lRectangle.left = lLeft;
 		this->lRectangle.right = this->lRectangle.left +  90 * value2 * this->hscale;
@@ -173,6 +212,8 @@ namespace Emulator
 
 		this->visibleStickOffset.x = 0;
 		this->visibleStickOffset.y = 0;
+
+		
 	}
 
 
@@ -252,7 +293,15 @@ namespace Emulator
 		this->startRect.Height = (this->startRectangle.bottom - this->startRectangle.top)  / touchVisualQuotient;
 
 
+		this->turboRect.X = this->turboRectangle.left / touchVisualQuotient;
+		this->turboRect.Y = (this->height - this->turboRectangle.bottom) / touchVisualQuotient;
+		this->turboRect.Width = (this->turboRectangle.right - this->turboRectangle.left) / touchVisualQuotient;
+		this->turboRect.Height = (this->turboRectangle.bottom - this->turboRectangle.top) / touchVisualQuotient;
 
+		this->comboRect.X = this->comboRectangle.left / touchVisualQuotient;
+		this->comboRect.Y = (this->height - this->comboRectangle.bottom) / touchVisualQuotient;
+		this->comboRect.Width = (this->comboRectangle.right - this->comboRectangle.left) / touchVisualQuotient;
+		this->comboRect.Height = (this->comboRectangle.bottom - this->comboRectangle.top) / touchVisualQuotient;
 
 		int dpad = settings->DPadStyle;
 
@@ -271,6 +320,9 @@ namespace Emulator
 			this->stickOffset.Y = 0.0f;
 		}
 	}
+
+
+	
 
 
 	
@@ -349,6 +401,16 @@ namespace Emulator
 		this->startRect.Height = (this->startRectangle.bottom - this->startRectangle.top) / touchVisualQuotient;
 		this->startRect.Width = (this->startRectangle.right - this->startRectangle.left) / touchVisualQuotient;
 
+		this->turboRect.Y = this->turboRectangle.top / touchVisualQuotient;
+		this->turboRect.X = this->turboRectangle.left / touchVisualQuotient;
+		this->turboRect.Height = (this->turboRectangle.bottom - this->turboRectangle.top) / touchVisualQuotient;
+		this->turboRect.Width = (this->turboRectangle.right - this->turboRectangle.left) / touchVisualQuotient;
+
+		this->comboRect.Y = this->comboRectangle.top / touchVisualQuotient;
+		this->comboRect.X = this->comboRectangle.left / touchVisualQuotient;
+		this->comboRect.Height = (this->comboRectangle.bottom - this->comboRectangle.top) / touchVisualQuotient;
+		this->comboRect.Width = (this->comboRectangle.right - this->comboRectangle.left) / touchVisualQuotient;
+
 		int dpad = EmulatorSettings::Current->DPadStyle;
 
 		this->stickBoundaries.X = this->padCrossRectangle.left / touchVisualQuotient;
@@ -379,13 +441,29 @@ namespace Emulator
 		this->UpdateFormat(this->format);
 	}
 
+	int VirtualController::GetOrientation()
+	{
+		return this->orientation;
+	}
+
+	bool VirtualController::CheckTouchableArea(Windows::Foundation::Point p)
+	{
+		if (this->stickBoundaries.Contains(p) || this->aRect.Contains(p) || this->bRect.Contains(p) || this->xRect.Contains(p) || this->yRect.Contains(p)
+			|| this->lRect.Contains(p)|| this->rRect.Contains(p) || this->startRect.Contains(p) || this->selectRect.Contains(p) 
+			||this->turboRect.Contains(p) ||this->comboRect.Contains(p))
+			return true;
+
+		else
+			return false;
+
+	}
+
 	void VirtualController::PointerPressed(PointerPoint ^point)
 	{
 		EnterCriticalSection(&this->cs);
 		this->pointers->Insert(point->PointerId, point);
 		this->pointerDescriptions->Insert(point->PointerId, "");
 		
-
 		Windows::Foundation::Point p;
 
 		if (this->orientation == ORIENTATION_PORTRAIT)
@@ -400,6 +478,16 @@ namespace Emulator
 				p.Y = this->touchHeight - p.Y;
 			}
 		}
+
+		if (EmulatorSettings::Current->VibrationEnabled && CheckTouchableArea(p))
+		{
+			Windows::Foundation::TimeSpan time;
+			time.Duration = 10000000 * EmulatorSettings::Current->VibrationDuration;
+
+			vibrationDevice->Vibrate( time);
+		}
+
+		
 
 
 		int dpad = EmulatorSettings::Current->DPadStyle;
@@ -490,7 +578,7 @@ namespace Emulator
 		if(this->pointers->HasKey(point->PointerId))
 		{
 			//get the description
-			String^ desc = pointerDescriptions->Lookup(point->PointerId);
+			Platform::String^ desc = pointerDescriptions->Lookup(point->PointerId);
 			unsigned int key2 = point->PointerId;
 
 			this->pointers->Remove(point->PointerId);
@@ -501,7 +589,7 @@ namespace Emulator
 			{
 				for (auto i = this->pointerDescriptions->First(); i->HasCurrent; i->MoveNext())
 				{
-					String ^desc2= i->Current->Value;
+					Platform::String ^desc2= i->Current->Value;
 					unsigned int key2 = i->Current->Key;
 
 
@@ -513,6 +601,14 @@ namespace Emulator
 						break; //has to break or the loop will cause Changed_state exception
 					}
 
+				}
+
+				if (desc == "turbo") //user just released the turbo button, so we toggle turbo mode
+				{
+					if (Direct3DBackground::ToggleTurboMode)
+					{
+						Direct3DBackground::ToggleTurboMode();
+					}
 				}
 			}
 			
@@ -550,6 +646,7 @@ namespace Emulator
 		{
 			PointerPoint ^p = i->Current->Value;
 			
+
 			Windows::Foundation::Point point;
 
 			if (this->orientation == ORIENTATION_PORTRAIT)
@@ -571,7 +668,6 @@ namespace Emulator
 					state.LeftPressed = true;
 					//add the description for this point
 					this->pointerDescriptions->Insert(i->Current->Key, "joystick");
-					
 				}
 				if(this->upRect.Contains(point))
 				{
@@ -636,6 +732,7 @@ namespace Emulator
 
 					}
 				}
+
 			}else
 			{
 				if (this->stickBoundaries.Contains(point))
@@ -701,6 +798,16 @@ namespace Emulator
 				state.SelectPressed = true;
 				this->pointerDescriptions->Insert(i->Current->Key, "select");
 			}
+			if (this->turboRect.Contains(point))
+			{
+				state.TurboPressed = true;
+				this->pointerDescriptions->Insert(i->Current->Key, "turbo");
+			}
+			if (this->comboRect.Contains(point))
+			{
+				state.ComboPressed = true;
+				this->pointerDescriptions->Insert(i->Current->Key, "combo");
+			}
 			if(this->lRect.Contains(point))
 			{
 				state.LPressed = true;
@@ -753,6 +860,7 @@ namespace Emulator
 	{
 		*rect = this->aRectangle;
 	}
+
 	void VirtualController::GetBRectangle(RECT *rect)
 	{
 		*rect = this->bRectangle;
@@ -766,6 +874,7 @@ namespace Emulator
 		*rect = this->yRectangle;
 	}
 
+
 	void VirtualController::GetStartRectangle(RECT *rect)
 	{
 		*rect = this->startRectangle;
@@ -775,6 +884,17 @@ namespace Emulator
 	{
 		*rect = this->selectRectangle;
 	}
+
+	void VirtualController::GetTurboRectangle(RECT *rect)
+	{
+		*rect = this->turboRectangle;
+	}
+
+	void VirtualController::GetComboRectangle(RECT *rect)
+	{
+		*rect = this->comboRectangle;
+	}
+
 
 	void VirtualController::GetLRectangle(RECT *rect)
 	{

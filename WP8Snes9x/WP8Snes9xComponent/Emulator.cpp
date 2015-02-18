@@ -298,10 +298,9 @@ namespace Emulator
 					int count = 1;
 					float targetFps = 55.0f;
 					int skip = settings->PowerFrameSkip;
-					if(settings->CameraButtonAssignment == 0)
-					{
-						turbo = enableTurboMode;
-					}
+
+					turbo |= settings->UseTurbo;
+
 					if(!turbo)
 					{
 						if(settings->LowFrequencyMode)
