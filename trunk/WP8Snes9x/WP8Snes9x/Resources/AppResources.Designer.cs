@@ -2087,7 +2087,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Savestate file format is invalid. The file name must end with a number from 0 to 9 (e.g. demo0.sgm)..
+        ///   Looks up a localized string similar to Savestate file format is invalid. The file name must end with .000 to .009 (e.g. demo.000)..
         /// </summary>
         public static string ImportSavestateInvalidFormat {
             get {
@@ -2510,7 +2510,7 @@ namespace PhoneDirect3DXamlAppInterop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are not signed in. Sign in first to import ROMs from SkyDrive..
+        ///   Looks up a localized string similar to You are not signed in. Sign in first to import ROMs from OneDrive..
         /// </summary>
         public static string NotSignedInError {
             get {

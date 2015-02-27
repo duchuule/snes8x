@@ -27,7 +27,7 @@ namespace PhoneDirect3DXamlAppInterop.Database
         private readonly EntitySet<SavestateEntry> savestateRefs = new EntitySet<SavestateEntry>();
         private string snapshotUri;
 
-        public bool SuspendAutoLoadLastState = false; //to suspend auto-load when import .sav file
+        public bool SuspendAutoLoadLastState = false; //to suspend auto-load when import ingame file
 
         public string Header; //the value of this will be set at run time
 

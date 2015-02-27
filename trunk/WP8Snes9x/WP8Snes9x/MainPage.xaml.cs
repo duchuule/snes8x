@@ -328,12 +328,14 @@ namespace PhoneDirect3DXamlAppInterop
 
 
                     //import file
-                    if (incomingFileType == ".gb" || incomingFileType == ".gbc" || incomingFileType == ".gba")
+                    if (incomingFileType == ".smc" || incomingFileType == ".sfc" )
                     {
                         await FileHandler.ImportRomBySharedID(fileID, incomingFileName, this);
                         this.RefreshRecentROMList();
                     }
-                    else if (incomingFileType == ".sgm" || incomingFileType == ".sav")
+                    else if (incomingFileType == ".srm" || incomingFileType == ".000" || incomingFileType == ".001" || incomingFileType == ".002" || incomingFileType == ".003"
+                        || incomingFileType == ".004" || incomingFileType == ".005" || incomingFileType == ".006" || incomingFileType == ".007"
+                        || incomingFileType == ".008" || incomingFileType == ".009")
                         await FileHandler.ImportSaveBySharedID(fileID, incomingFileName, this);
 
                     else //need to open cloudsix import page to show the content of zip file

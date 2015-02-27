@@ -371,7 +371,7 @@ namespace PhoneDirect3DXamlAppInterop
                         if (entry != null)
                         {
                             entry.SuspendAutoLoadLastState = true;
-                            destinationFile = await saveFolder.CreateFileAsync(Path.GetFileNameWithoutExtension(entry.FileName) + ".sav", CreationCollisionOption.ReplaceExisting);
+                            destinationFile = await saveFolder.CreateFileAsync(Path.GetFileNameWithoutExtension(entry.FileName) + ".srm", CreationCollisionOption.ReplaceExisting);
 
                         }
                         else

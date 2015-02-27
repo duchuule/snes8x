@@ -503,9 +503,10 @@ namespace PhoneDirect3DXamlAppInterop
             ROMDBEntry entry = null;
             string extension = Path.GetExtension(actualName).ToLower();
 
-            if (extension == ".sgm")
+            if (extension == ".000" || extension == ".001" || extension == ".002" || extension == ".003" || extension == ".004"
+                 || extension == ".005" || extension == ".006" || extension == ".007" || extension == ".008" || extension == ".009")
                 entry = db.GetROMFromSavestateName(actualName);
-            else if (extension == ".sav")
+            else if (extension == ".srm")
                 entry = db.GetROMFromSRAMName(actualName);
 
             if (entry == null) //no matching file name
@@ -515,9 +516,10 @@ namespace PhoneDirect3DXamlAppInterop
             }
 
             //check to make sure format is right
-            if (extension == ".sgm")
+            if (extension == ".000" || extension == ".001" || extension == ".002" || extension == ".003" || extension == ".004"
+                 || extension == ".005" || extension == ".006" || extension == ".007" || extension == ".008" || extension == ".009")
             {
-                string slot = actualName.Substring(actualName.Length - 5, 1);
+                string slot = actualName.Substring(actualName.Length - 1, 1);
                 int parsedSlot = 0;
                 if (!int.TryParse(slot, out parsedSlot))
                 {
@@ -542,18 +544,20 @@ namespace PhoneDirect3DXamlAppInterop
 
             //if arrive here, entry cannot be null, we can copy the file
             IStorageFile file = null;
-            if (extension == ".sgm")
-                file = await SharedStorageAccessManager.CopySharedFileAsync(saveFolder, Path.GetFileNameWithoutExtension(entry.FileName) + actualName.Substring(actualName.Length - 5), NameCollisionOption.ReplaceExisting, fileID);
-            else if (extension == ".sav")
+            if (extension == ".000" || extension == ".001" || extension == ".002" || extension == ".003" || extension == ".004"
+                 || extension == ".005" || extension == ".006" || extension == ".007" || extension == ".008" || extension == ".009")
+                file = await SharedStorageAccessManager.CopySharedFileAsync(saveFolder, Path.GetFileNameWithoutExtension(entry.FileName) + actualName.Substring(actualName.Length - 4), NameCollisionOption.ReplaceExisting, fileID);
+            else if (extension == ".srm")
             {
-                file = await SharedStorageAccessManager.CopySharedFileAsync(saveFolder, Path.GetFileNameWithoutExtension(entry.FileName) + ".sav", NameCollisionOption.ReplaceExisting, fileID);
+                file = await SharedStorageAccessManager.CopySharedFileAsync(saveFolder, Path.GetFileNameWithoutExtension(entry.FileName) + ".srm", NameCollisionOption.ReplaceExisting, fileID);
                 entry.SuspendAutoLoadLastState = true;
             }
 
             //update database
-            if (extension == ".sgm")
+            if (extension == ".000" || extension == ".001" || extension == ".002" || extension == ".003" || extension == ".004"
+                  || extension == ".005" || extension == ".006" || extension == ".007" || extension == ".008" || extension == ".009")
             {
-                String number = actualName.Substring(actualName.Length - 5, 1);
+                String number = actualName.Substring(actualName.Length - 1, 1);
                 int slot = int.Parse(number);
 
                 if (entry != null) //NULL = do nothing
