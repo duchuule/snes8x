@@ -385,18 +385,7 @@ namespace PhoneDirect3DXamlAppInterop
                         if ((dotIndex = name.LastIndexOf('.')) != -1)
                         {
                             String substrName = name.Substring(dotIndex).ToLower();
-                            if (substrName.Equals(".gb") || substrName.Equals(".gbc") || substrName.Equals(".gba"))
-                            {
-                                type = SkyDriveItemType.ROM;
-                            }
-                            else if (substrName.Equals(".sgm"))
-                            {
-                                type = SkyDriveItemType.Savestate;
-                            }
-                            else if (substrName.Equals(".sav"))
-                            {
-                                type = SkyDriveItemType.SRAM;
-                            }
+                            type = SkyDriveImportPage.GetSkyDriveItemType(substrName);
                         }
 
                         if (type == SkyDriveItemType.File)

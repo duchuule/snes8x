@@ -177,9 +177,9 @@
                                                 <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.ManageSavestateMenuItem, Source={StaticResource LocalizedStrings}}" 
                                                             Tapped="deleteManageBlock_Tap"
                                                                  />
-                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.CheatMenuItemText, Source={StaticResource LocalizedStrings}}"
+                                                <!--<telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.CheatMenuItemText, Source={StaticResource LocalizedStrings}}"
                                                                 Tapped="cheatBlock_Tap"
-                                                                 />
+                                                                 />-->
                                                 <telerikPrimitives:RadContextMenuItem Content=" "
                                                                 Tapped="cheatBlock_Tap"
                                                                  />
@@ -282,9 +282,9 @@
                                                     <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.ManageSavestateMenuItem, Source={StaticResource LocalizedStrings}}" 
                                                             Tapped="deleteManageBlock_Tap"
                                                                  />
-                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.CheatMenuItemText, Source={StaticResource LocalizedStrings}}"
+                                                    <!--<telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.CheatMenuItemText, Source={StaticResource LocalizedStrings}}"
                                                                 Tapped="cheatBlock_Tap"
-                                                                 />
+                                                                 />-->
                                                     <telerikPrimitives:RadContextMenuItem Content=" "
                                                                 Tapped="cheatBlock_Tap"
                                                                  />

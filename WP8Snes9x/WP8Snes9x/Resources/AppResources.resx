@@ -172,7 +172,7 @@
     <value>30 Hz Display Refresh Rate</value>
   </data>
   <data name="NotSignedInError" xml:space="preserve">
-    <value>You are not signed in. Sign in first to import ROMs from SkyDrive.</value>
+    <value>You are not signed in. Sign in first to import ROMs from OneDrive.</value>
   </data>
   <data name="RecentTitle" xml:space="preserve">
     <value>recently played</value>
@@ -403,7 +403,7 @@ Super NES and Super Nintendo Entertainment System are trademarks of Nintendo Co.
     <value>Error importing and opening ROM file.</value>
   </data>
   <data name="ImportSavestateInvalidFormat" xml:space="preserve">
-    <value>Savestate file format is invalid. The file name must end with a number from 0 to 9 (e.g. demo0.sgm).</value>
+    <value>Savestate file format is invalid. The file name must end with .000 to .009 (e.g. demo.000).</value>
   </data>
   <data name="TileOpenError" xml:space="preserve">
     <value>Error opening the ROM associated with the tile.</value>
